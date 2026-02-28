@@ -1,0 +1,27 @@
+---
+title: R语言介绍
+order: 1
+execute:
+  echo: true
+  cache: true
+  error: false
+  warning: false
+format: live-html
+---
+
+## 起源
+
+摘自[CRAN](https://www.r-project.org/about.html):
+
+> R is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.
+
+此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与"一切皆对象"的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:
+
+- 函数是一等公民
+- 所有语言结构都是函数调用, 函数调用以可操作的列表结构存储
+- 基于 symbol, eval 和 environment 运行
+
+[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:
+
+- 动态修改函数体内容
+- 基于 AST 将 R 语句翻译为其他语言语句 (如 [quickr](https://CRAN.R-project.org/package=quickr) 包)
