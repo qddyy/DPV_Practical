@@ -5,7 +5,7 @@ website:
   title: "title"
   page-navigation: true
   back-to-top-navigation: true
-  repo-url: https://github.com/quarto-dev/quarto-demo
+  repo-url: https://github.com/qddyy/DPV_Practical
   repo-actions: [edit, source, issue]
   navbar:
     search: true
