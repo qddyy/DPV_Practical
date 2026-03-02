@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-007a8609411f977ffbfe52380a417f90.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2184ee79b4189700a07fecab5507ffb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -74,9 +74,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed fullcontent quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -131,7 +132,9 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -160,21 +163,21 @@ ul.task-list li input[type="checkbox"] {
 </blockquote>
 <p>此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与”一切皆对象”的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:</p>
 <ul>
-<li><p>函数是一等公民 <code>khxith     f &lt;- function() print("Hello, World!")     typeof(f)</code></p></li>
+<li><p>函数是一等公民 <code>qhnlkm     f &lt;- function() print("Hello, World!")     typeof(f)</code></p></li>
 <li><p>所有语言结构都是函数调用</p>
 <ul>
-<li>例子: 赋值 <code>khxith       a &lt;- 1       a</code> <code>khxith       is.function(`&lt;-`)       `&lt;-`(a, 2)       a</code></li>
-<li>例子: for 循环 <code>khxith       for (i in 1:3) print(i)</code> <code>khxith       is.function(`for`)       `for`(a, 1:3, print(a))</code></li>
+<li>例子: 赋值 <code>qhnlkm       a &lt;- 1       a</code> <code>qhnlkm       is.function(`&lt;-`)       `&lt;-`(a, 2)       a</code></li>
+<li>例子: for 循环 <code>qhnlkm       for (i in 1:3) print(i)</code> <code>qhnlkm       is.function(`for`)       `for`(a, 1:3, print(a))</code></li>
 </ul></li>
 <li><p>存在未求值的 symbol/call (R 中统称为 language); 运行一切语句都等价于在某个 environment 中对某个 language 求值</p>
 <ul>
-<li><p>symbol <code>khxith       sum_symbol &lt;- as.symbol("sum")       str(sum_symbol)</code> ```khxith sum &lt;- function(a, b) a * b</p>
-<p>eval(sum_symbol, envir = globalenv()) # 找到刚刚在全局环境中定义的 sum eval(sum_symbol, envir = baseenv()) # 找到 base package 中定义的 sum <code></code>khxith # 前者等价于直接输入 sum 并运行 sum ```</p></li>
-<li><p>call <code>khxith       sum_call &lt;- call("sum", 1, 2)       str(sum_call)</code> ```khxith sum &lt;- function(a, b) a * b</p>
-<p>eval(sum_call, envir = globalenv()) # 调用刚刚在全局环境中定义的 sum eval(sum_call, envir = baseenv()) # 调用 base package 中定义的 sum <code></code>khxith # 前者等价于直接输入 sum(1, 2) 并运行 sum(1, 2) ```</p></li>
+<li><p>symbol <code>qhnlkm       sum_symbol &lt;- as.symbol("sum")       str(sum_symbol)</code> ```qhnlkm sum &lt;- function(a, b) a * b</p>
+<p>eval(sum_symbol, envir = globalenv()) # 找到刚刚在全局环境中定义的 sum eval(sum_symbol, envir = baseenv()) # 找到 base package 中定义的 sum <code></code>qhnlkm # 前者等价于直接输入 sum 并运行 sum ```</p></li>
+<li><p>call <code>qhnlkm       sum_call &lt;- call("sum", 1, 2)       str(sum_call)</code> ```qhnlkm sum &lt;- function(a, b) a * b</p>
+<p>eval(sum_call, envir = globalenv()) # 调用刚刚在全局环境中定义的 sum eval(sum_call, envir = baseenv()) # 调用 base package 中定义的 sum <code></code>qhnlkm # 前者等价于直接输入 sum(1, 2) 并运行 sum(1, 2) ```</p></li>
 </ul></li>
-<li><p>函数和函数调用都以可修改的列表结构存储 <code>khxith     g &lt;- function(a, b = 1) a + b</code> <code>khxith     str(formals(g)) # 一个 pairlist, 存储参数的 symbol 与默认值 (如果存在)</code> ``<code>khxith     str(body(g))    # 一个 call, 即对</code>+` 的调用</p>
-<p># call 在内部以列表形式存储 body(g)[[1]] body(g)[[2]] body(g)[[3]] <code></code>khxith formals(g)[[1]] &lt;- 100 # 修改 g 的第一个参数默认值为 100 body(g)[[1]] &lt;- as.symbol(“<em>“) # 修改 g 的函数体为 a </em> b g ```</p></li>
+<li><p>函数和函数调用都以可修改的列表结构存储 <code>qhnlkm     g &lt;- function(a, b = 1) a + b</code> <code>qhnlkm     str(formals(g)) # 一个 pairlist, 存储参数的 symbol 与默认值 (如果存在)</code> ``<code>qhnlkm     str(body(g))    # 一个 call, 即对</code>+` 的调用</p>
+<p># call 在内部以列表形式存储 body(g)[[1]] body(g)[[2]] body(g)[[3]] <code></code>qhnlkm formals(g)[[1]] &lt;- 100 # 修改 g 的第一个参数默认值为 100 body(g)[[1]] &lt;- as.symbol(“<em>“) # 修改 g 的函数体为 a </em> b g ```</p></li>
 </ul>
 <p><a href="https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/">Reddit</a> 上对 R 与 Lisp 的关系有更多讨论.</p>
 <p>与 Lisp 相近的特征使得 R 能原生实现许多宏/元编程的效果, 如:</p>
