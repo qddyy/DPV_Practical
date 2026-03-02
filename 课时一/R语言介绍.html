@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-007a8609411f977ffbfe52380a417f90.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2184ee79b4189700a07fecab5507ffb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -74,9 +74,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed fullcontent quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -131,7 +132,9 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -154,22 +157,33 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="起源" class="level2">
-<h2 class="anchored" data-anchor-id="起源">起源</h2>
 <p>摘自<a href="https://www.r-project.org/about.html">CRAN</a>:</p>
 <blockquote class="blockquote">
 <p>R is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&amp;T, now Lucent Technologies) by John Chambers and colleagues.</p>
 </blockquote>
 <p>此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与”一切皆对象”的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:</p>
 <ul>
-<li>函数是一等公民</li>
-<li>所有语言结构都是函数调用, 函数调用以可操作的列表结构存储</li>
-<li>基于 symbol, eval 和 environment 运行</li>
-</ul>
-<p><a href="https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/">Reddit</a> 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:</p>
+<li><p>函数是一等公民 <code>hmqvel     f &lt;- function() print("Hello, World!")     typeof(f)</code></p></li>
+<li><p>所有语言结构都是函数调用</p>
 <ul>
-<li>动态修改函数体内容</li>
-<li>基于 AST 将 R 语句翻译为其他语言语句 (如 <a href="https://CRAN.R-project.org/package=quickr">quickr</a> 包)</li>
+<li>例子: 赋值 <code>hmqvel       a &lt;- 1       a</code> <code>hmqvel       is.function(`&lt;-`)       `&lt;-`(a, 2)       a</code></li>
+<li>例子: for 循环 <code>hmqvel       for (i in 1:3) print(i)</code> <code>hmqvel       is.function(`for`)       `for`(a, 1:3, print(a))</code></li>
+</ul></li>
+<li><p>存在未求值的 symbol/call (R 中统称为 language); 运行一切语句都等价于在某个 environment 中对某个 language 求值</p>
+<ul>
+<li><p>symbol <code>hmqvel       sum_symbol &lt;- as.symbol("sum")       str(sum_symbol)</code> ```hmqvel sum &lt;- function(a, b) a * b</p>
+<p>eval(sum_symbol, envir = globalenv()) # 找到刚刚在全局环境中定义的 sum eval(sum_symbol, envir = baseenv()) # 找到 base package 中定义的 sum <code></code>hmqvel # 前者等价于直接输入 sum 并运行 sum ```</p></li>
+<li><p>call <code>hmqvel       sum_call &lt;- call("sum", 1, 2)       str(sum_call)</code> ```hmqvel sum &lt;- function(a, b) a * b</p>
+<p>eval(sum_call, envir = globalenv()) # 调用刚刚在全局环境中定义的 sum eval(sum_call, envir = baseenv()) # 调用 base package 中定义的 sum <code></code>hmqvel # 前者等价于直接输入 sum(1, 2) 并运行 sum(1, 2) ```</p></li>
+</ul></li>
+<li><p>函数和函数调用都以可修改的列表结构存储 <code>hmqvel     g &lt;- function(a, b = 1) a + b</code> <code>hmqvel     str(formals(g)) # 一个 pairlist, 存储参数的 symbol 与默认值 (如果存在)</code> ``<code>hmqvel     str(body(g))    # 一个 call, 即对</code>+` 的调用</p>
+<p># call 在内部以列表形式存储 body(g)[[1]] body(g)[[2]] body(g)[[3]] <code></code>hmqvel formals(g)[[1]] &lt;- 100 # 修改 g 的第一个参数默认值为 100 body(g)[[1]] &lt;- as.symbol(“<em>“) # 修改 g 的函数体为 a </em> b g ```</p></li>
+</ul>
+<p><a href="https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/">Reddit</a> 上对 R 与 Lisp 的关系有更多讨论.</p>
+<p>与 Lisp 相近的特征使得 R 能原生实现许多宏/元编程的效果, 如:</p>
+<ul>
+<li>非标准求值</li>
+<li>基于 AST 将 R 翻译为其他语言 (如 <a href="https://CRAN.R-project.org/package=quickr">quickr</a> 包将 R 翻译到 Fortran 以提高性能)</li>
 </ul>
 
 
@@ -187,7 +201,6 @@ eyJjb250ZW50cyI6W119
 <script type="vfs-file">
 W10=
 </script>
-</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script type="ojs-module-contents">

@@ -4,18 +4,7 @@
     "href": "课时一/R语言介绍.html",
     "title": "R语言介绍",
     "section": "",
-    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与”一切皆对象”的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n所有语言结构都是函数调用, 函数调用以可操作的列表结构存储\n基于 symbol, eval 和 environment 运行\n\nReddit 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:\n\n动态修改函数体内容\n基于 AST 将 R 语句翻译为其他语言语句 (如 quickr 包)",
-    "crumbs": [
-      "课时一",
-      "R语言介绍"
-    ]
-  },
-  {
-    "objectID": "课时一/R语言介绍.html#起源",
-    "href": "课时一/R语言介绍.html#起源",
-    "title": "R语言介绍",
-    "section": "",
-    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与”一切皆对象”的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n所有语言结构都是函数调用, 函数调用以可操作的列表结构存储\n基于 symbol, eval 和 environment 运行\n\nReddit 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:\n\n动态修改函数体内容\n基于 AST 将 R 语句翻译为其他语言语句 (如 quickr 包)",
+    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与”一切皆对象”的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民 hmqvel     f &lt;- function() print(\"Hello, World!\")     typeof(f)\n所有语言结构都是函数调用\n\n例子: 赋值 hmqvel       a &lt;- 1       a hmqvel       is.function(`&lt;-`)       `&lt;-`(a, 2)       a\n例子: for 循环 hmqvel       for (i in 1:3) print(i) hmqvel       is.function(`for`)       `for`(a, 1:3, print(a))\n\n存在未求值的 symbol/call (R 中统称为 language); 运行一切语句都等价于在某个 environment 中对某个 language 求值\n\nsymbol hmqvel       sum_symbol &lt;- as.symbol(\"sum\")       str(sum_symbol) ```hmqvel sum &lt;- function(a, b) a * b\neval(sum_symbol, envir = globalenv()) # 找到刚刚在全局环境中定义的 sum eval(sum_symbol, envir = baseenv()) # 找到 base package 中定义的 sum hmqvel # 前者等价于直接输入 sum 并运行 sum ```\ncall hmqvel       sum_call &lt;- call(\"sum\", 1, 2)       str(sum_call) ```hmqvel sum &lt;- function(a, b) a * b\neval(sum_call, envir = globalenv()) # 调用刚刚在全局环境中定义的 sum eval(sum_call, envir = baseenv()) # 调用 base package 中定义的 sum hmqvel # 前者等价于直接输入 sum(1, 2) 并运行 sum(1, 2) ```\n\n函数和函数调用都以可修改的列表结构存储 hmqvel     g &lt;- function(a, b = 1) a + b hmqvel     str(formals(g)) # 一个 pairlist, 存储参数的 symbol 与默认值 (如果存在) ``hmqvel     str(body(g))    # 一个 call, 即对+` 的调用\n# call 在内部以列表形式存储 body(g)[[1]] body(g)[[2]] body(g)[[3]] hmqvel formals(g)[[1]] &lt;- 100 # 修改 g 的第一个参数默认值为 100 body(g)[[1]] &lt;- as.symbol(““) # 修改 g 的函数体为 a  b g ```\n\nReddit 上对 R 与 Lisp 的关系有更多讨论.\n与 Lisp 相近的特征使得 R 能原生实现许多宏/元编程的效果, 如:\n\n非标准求值\n基于 AST 将 R 翻译为其他语言 (如 quickr 包将 R 翻译到 Fortran 以提高性能)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
       "课时一",
       "R语言介绍"
@@ -26,6 +15,6 @@
     "href": "index.html",
     "title": "Index",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n Back to top"
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
   }
 ]
