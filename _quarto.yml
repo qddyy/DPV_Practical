@@ -24,7 +24,7 @@ website:
     style: "docked"
 
 format:
-  html:
+  live-html:
     theme:
       - cosmo
       - brand

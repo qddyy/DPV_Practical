@@ -6,10 +6,7 @@ execute:
   cache: true
   error: false
   warning: false
-format: live-html
 ---
-
-## 起源
 
 摘自[CRAN](https://www.r-project.org/about.html):
 
@@ -18,10 +15,84 @@ format: live-html
 此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与"一切皆对象"的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:
 
 - 函数是一等公民
-- 所有语言结构都是函数调用, 函数调用以可操作的列表结构存储
-- 基于 symbol, eval 和 environment 运行
+    ```{webr}
+    f <- function() print("Hello, World!")
+    typeof(f)
+    ```
+- 所有语言结构都是函数调用
+    - 例子: 赋值
+        ```{webr}
+        a <- 1
+        a
+        ```
+        ```{webr}
+        is.function(`<-`)
+        `<-`(a, 2)
+        a
+        ```
+    - 例子: for 循环
+        ```{webr}
+        for (i in 1:3) print(i)
+        ```
+        ```{webr}
+        is.function(`for`)
+        `for`(a, 1:3, print(a))
+        ```
+- 存在未求值的 symbol/call (R 中统称为 language); 运行一切语句都等价于在某个 environment 中对某个 language 求值
+    - symbol
+        ```{webr}
+        sum_symbol <- as.symbol("sum")
+        str(sum_symbol)
+        ```
+        ```{webr}
+        sum <- function(a, b) a * b
 
-[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:
+        eval(sum_symbol, envir = globalenv()) # 找到刚刚在全局环境中定义的 sum
+        eval(sum_symbol, envir = baseenv())   # 找到 base package 中定义的 sum
+        ```
+        ```{webr}
+        # 前者等价于直接输入 sum 并运行
+        sum
+        ```
+    - call
+        ```{webr}
+        sum_call <- call("sum", 1, 2)
+        str(sum_call)
+        ```
+        ```{webr}
+        sum <- function(a, b) a * b
 
-- 动态修改函数体内容
-- 基于 AST 将 R 语句翻译为其他语言语句 (如 [quickr](https://CRAN.R-project.org/package=quickr) 包)
+        eval(sum_call, envir = globalenv()) # 调用刚刚在全局环境中定义的 sum
+        eval(sum_call, envir = baseenv())   # 调用 base package 中定义的 sum
+        ```
+        ```{webr}
+        # 前者等价于直接输入 sum(1, 2) 并运行
+        sum(1, 2)
+        ```
+- 函数和函数调用都以可修改的列表结构存储
+    ```{webr}
+    g <- function(a, b = 1) a + b
+    ```
+    ```{webr}
+    str(formals(g)) # 一个 pairlist, 存储参数的 symbol 与默认值 (如果存在)
+    ```
+    ```{webr}
+    str(body(g))    # 一个 call, 即对 `+` 的调用
+
+    # call 在内部以列表形式存储
+    body(g)[[1]]
+    body(g)[[2]]
+    body(g)[[3]]
+    ```
+    ```{webr}
+    formals(g)[[1]] <- 100         # 修改 g 的第一个参数默认值为 100
+    body(g)[[1]] <- as.symbol("*") # 修改 g 的函数体为 a * b
+    g
+    ```
+
+[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对 R 与 Lisp 的关系有更多讨论.
+
+与 Lisp 相近的特征使得 R 能原生实现许多宏/元编程的效果, 如:
+
+- 非标准求值
+- 基于 AST 将 R 翻译为其他语言 (如 [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能)
