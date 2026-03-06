@@ -1,0 +1,370 @@
+---
+title: "R基础"
+order: 2
+format: live-html
+toc: true
+engine: knitr
+---
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+本节课介绍 R 语言基础. 包括:
+
+
+R 中对任何函数使用 `?` 或 `help` 可以打开对应的介绍文档, 如
+
+```{webr}
+help(pi)
+```
+
+```{webr}
+?`for` # 使用反引号表示其是一个名称而不是关键字
+```
+
+对于任意 R object, 都可以使用 `typeof()` 和 `str()` 查看其类型与内部结构, 如
+
+```{webr}
+typeof(3.14)
+str(3.14)
+```
+
+请同学们在接下来的内容中必要时使用这些特性自行探索.
+
+## 基本数据结构
+
+R 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.
+
+| 维度 | 同质          | 异质       |
+|------|---------------|------------|
+| 1d   | Atomic vector | List       |
+| 2d   | Matrix        | Data frame |
+| nd   | Array         |            |
+
+
+### 原子向量
+
+原子向量根据其存储的数据类型不同, 分为
+
+- 逻辑向量 (logical)
+- 整数向量 (integer)
+- 数值向量 (numeric)
+- 字符向量 (character)
+
+以及两种不常见的类型
+
+- 原始向量 (raw)
+- 复数向量 (complex)
+
+#### 创建
+
+原子向量通常用 `c()` 创建 (combine 的缩写):
+
+```{webr}
+dbl_vec <- c(1, 2.5, 4.5)
+int_vec <- c(1L, 6L, 10L)
+log_vec <- c(TRUE, FALSE, T, F) # T 和 F 是 TRUE 和 FALSE 的别名
+chr_vec <- c("these are", "some strings")
+```
+
+实际上 `c()` 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).
+
+一些便捷函数可以快速创建具有特定规律的数值类向量:
+
+```{webr}
+# 从 1 开始, 长度为 12 的向量
+1:12
+seq_len(12)
+
+# 从 1 到 12, 间隔为 2 的向量
+seq(1, 10, by = 2)
+
+# 从 1 到 12, 长度为 4 的向量
+seq(1, 10, length.out = 4)
+
+# 根据已有的向量创建从 1 开始, 与之等长的向量
+seq_along(c(20, 1, 5))
+
+# 将向量重复 5 次
+rep(c(1, 2), times = 5)
+
+# 将向量的每个元素重复 5 次
+rep(c(1,2), each = 3)
+```
+
+#### 取子集
+
+可以使用另一个向量作为索引取得向量的子集. R 中使用 `[]` 对向量取子集, 支持三种索引:
+
+- 正数索引
+    ```{webr}
+    c(1, 4, 2, 5)[c(1, 3)]
+    ```
+- 负数索引
+    ```{webr}
+    c(1, 4, 2, 5)[-c(2, 4)]
+    ```
+- 逻辑索引
+    ```{webr}
+    c(1, 4, 2, 5)[c(T, F, T, F)]
+    ```
+
+*\*R 中取向量子集的 `[]` 也是一个函数:*
+```{webr}
+is.function(`[`)
+
+`[`(c(1, 4, 2, 5), c(1, 3))
+```
+
+#### 相互转换
+
+不同原子向量可以通过 `as.*()` 函数族转换, 如:
+
+```{webr}
+as.integer(c(T, F, T))
+
+as.logical(0)
+
+as.character(10)
+
+as.numeric("3.14")
+```
+
+对于直观上不可相互转换的类型, 强行转换会产生 NA 值:
+
+```{webr}
+as.numeric("abc")
+```
+
+### 列表
+
+与原子向量不同, 列表的元素可以是任意类型的 R object.
+
+#### 创建
+
+可以使用 `list()` 创建列表
+
+```{webr}
+list(1:3, "a", c(TRUE, FALSE, TRUE), c(2.3, 5.9), list(1:2))  # 注意列表可以嵌套
+```
+
+类似地, 可以用 `c()` 合并多个列表
+
+```{webr}
+c(list(1, 2), list(c(1, 2), c(3, 4)))
+```
+
+#### 取子集
+
+对列表取子集操作分为两种
+
+- `[]` 取出子列表
+    ```{webr}
+    list(c(1, 2), c(3, 4), 5)[1]
+    ```
+    这与原子向量的 `[]` 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.
+- `[[]]` 取出列表元素
+    与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引
+    ```{webr}
+    list(c(1, 2), c(3, 4), 5)[[1]]
+    ```
+
+### 特殊向量
+
+原子向量和列表统称为向量. 所有向量都具有三个基本属性:
+
+- type: 存储的数据类型
+    ```{webr}
+    typeof(1:10)
+    ```
+- length: 长度
+    ```{webr}
+    length(c(2, 4, 6))
+    ```
+- attributes: 属性/元数据
+    普通的原子向量/列表无额外 attributes
+    ```{webr}
+    attributes(1:10)
+    ```
+
+若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.
+
+##### 命名向量
+
+若在创建向量时使用命名参数, 其会拥有 `names` 属性
+
+```{webr}
+attributes(c(a = 1, b = 2, c = 3))
+
+attributes(list(a = 0, b = 0L, c = FALSE))
+
+# 也可使用 names() 访问
+names(c(a = 1, b = 2))
+```
+
+具有 `names` 属性的向量可以使用 name 取子集
+
+```{webr}
+c(a = 1, b = 2, c = 3)["a"]
+
+list(a = 0, b = 0L, c = FALSE)["a"]
+
+list(a = 0, b = 0L, c = FALSE)[["a"]]
+
+# 列表使用 [["name"]] 取元素时可以使用等价的 $name
+list(a = 0, b = 0L, c = FALSE)$a
+```
+
+##### 矩阵
+
+矩阵本质是具有 `dims` 属性的向量.
+
+可以用 `matrix` 创建矩阵:
+
+```{webr}
+matrix(1:9, nrow = 3, ncol = 3)
+
+attributes(matrix(1:9, 3, 3))
+
+# 也可使用 dims() 访问
+dims(matrix(1:9, 3, 3))
+```
+
+矩阵额外支持二维索引 (分别指定子集所在的行和列):
+
+```{webr}
+matrix(1:9, nrow = 3, ncol = 3)[1:2, 3]
+```
+
+##### 因子
+
+因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 `levels` 和 `class="factor"` 属性的整数向量.
+
+可以用 `factor` 创建因子:
+
+```{webr}
+# ordered 参数指定 levels 间是否有大小关系
+factor(c("h", "l", "m"), levels = c("l", "m", "h"), ordered = TRUE)
+
+attributes(factor(c("h", "l", "m")))
+
+# 也可使用 levels() 访问
+levels(factor(c("h", "l", "m")))
+```
+
+##### 数据框
+
+数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 `names`, `row.names` 和 `class="data.frame"` 属性, 所有元素都是等长向量的列表.
+
+可以用 `data.frame` 创建数据框:
+
+```{webr}
+data.frame(
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(20, 22, 21),
+    student = c(TRUE, TRUE, FALSE)
+)
+```
+
+作为和矩阵一样的二维结构, 数据框也额外支持二维索引:
+
+```{webr}
+data.frame(
+    name = c("Alice", "Bob", "Charlie"),
+    age = c(20, 22, 21),
+    student = c(TRUE, TRUE, FALSE)
+)[1:2, c("name", "age")]
+```
+
+<!-- ### NULL, NA 与 NaN
+
+- `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
+
+- `NA` (Not Available) 在向量中表示存在缺失值. 对于不同的原子向量存在不同的 NA 值类型
+    - `NA_integer_`
+    - `NA_real_`
+    - `NA_character_ `
+    - ...
+
+- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值 -->
+
+## 基本语法
+
+### 变量命名与赋值
+
+R 中使用 `<-` 给变量赋值. R 的基本变量命名规则如下:
+
+- 不能以数字开头
+- 不能包含空格或特殊符号 (如 @, #, $ 等)
+- 不能使用保留字 (如 `for`, `if`)
+
+使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则
+
+```{webr}
+`1@无视规则 if 使用反引号` <- 1
+`1@无视规则 if 使用反引号`
+```
+
+### 控制流
+
+- `if` 条件控制
+    基本语法为 `if (condition) expression else alternative_expression`
+    ```{webr}
+    x <- 5
+
+    # 大括号 `{` 是 expression 的一部分, 可以省略
+    if (x > 1) {
+        print("x > 1")
+    } else {
+        print("x <= 1")
+    }
+    ```
+    `if` 有返回值 (返回 expression 部分):
+    ```{webr}
+    x <- if (FALSE) 1 else 2
+    x
+
+    # 省略 else 部分相当于 alternative_expression 为 NULL
+    x <- if (FALSE) 1 else 2
+    x
+    ```
+
+- `for` 循环
+    基本语法为 `for (variable in sequence) expression`
+    ```{webr}
+    for (i in 1:5) {
+        print(i)
+    }
+    ```
+
+### 函数
+
+在 R 中创建函数的语法为 `function(arg_list) expression`, 其将返回一个 `closure` 类型的值:
+
+```{webr}
+f <- function(a, b = 1) a + b
+
+typeof(f)
+```
+
+参数可以有默认值, 且具有惰性求值机制:
+
+```{webr}
+# 在函数创建时 b 的默认值 a 并没有被求值
+f <- function(a = 1, b = a) a + b
+
+# 只有对函数体求值时用到了 b 才会求值
+f()
+
+# 如果函数体中没有用到 b, 即使发生函数调用 b 也不会被求值
+g <- function(a = 1, b = print("evaluated")) a
+g()
+```
+
+此外, 存在可变长参数 `...`, 通常用于转发不定数量的参数给其他函数
+
+```{webr}
+h <- function(...) sum(...)
+h(1)
+h(1, 2)
+```
+
