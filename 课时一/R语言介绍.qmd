@@ -1,27 +1,112 @@
 ---
-title: R语言介绍
+title: "R语言介绍"
 order: 1
-execute:
-  echo: true
-  cache: true
-  error: false
-  warning: false
 format: live-html
+toc: true
+engine: knitr
+webr:
+  packages:
+    - magrittr
 ---
 
-## 起源
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
 
 摘自[CRAN](https://www.r-project.org/about.html):
 
 > R is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.
 
-此外, R 还受到了 Lisp 语言的影响. 因此, R 偏向函数式编程, 这与"一切皆对象"的python不同. R 有时也被视为一种lisp方言, 因其具有 Lisp 的许多特征:
+此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:
 
 - 函数是一等公民
-- 所有语言结构都是函数调用, 函数调用以可操作的列表结构存储
-- 基于 symbol, eval 和 environment 运行
+    ```{webr}
+    f <- function() print("Hello, World!")
+    typeof(f)
+    ```
+- 几乎所有语句都是函数调用
+    - 例子: 赋值
+        ```{webr}
+        # 以语句形式给 a 赋值
+        a <- 1
 
-[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对此有一些讨论. 与 Lisp 相近的语法特征使得 R 能原生实现许多宏/元编程的效果, 如:
+        a
+        ```
+        ```{webr}
+        # is.function 是 R 的基础函数, 判断参数是否是一个函数
+        is.function(`<-`)
 
-- 动态修改函数体内容
-- 基于 AST 将 R 语句翻译为其他语言语句 (如 [quickr](https://CRAN.R-project.org/package=quickr) 包)
+        # 以函数形式给 a 赋值
+        `<-`(a, 2)
+
+        a
+        ```
+    - 例子: for 循环
+        ```{webr}
+        # 以语句形式创建 for 循环
+        for (i in 1:3) print(i)
+        ```
+        ```{webr}
+        is.function(`for`)
+
+        # 以函数形式创建 for 循环
+        `for`(a, 1:3, print(a))
+        ```
+- 存在未求值状态的 symbol/call (二者都被称为 language objects)
+    - symbol
+        ```{webr}
+        x_symbol <- as.symbol("x")
+
+        x_symbol
+        ```
+        ```{webr}
+        x <- 3
+
+        eval(x_symbol, envir = .GlobalEnv)
+        ```
+    - call
+        ```{webr}
+        sum_call <- call("sum", 1, 2)
+
+        sum_call
+        ```
+        ```{webr}
+        sum <- function(a, b) a + b
+
+        eval(sum_call, envir = .GlobalEnv)
+        ```
+    R 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.
+- 函数体和函数调用都以可修改的列表形式存储
+    ```{webr}
+    g <- function(a, b = 1) a + b
+    g
+    ```
+    ```{webr}
+    body(g) # 一个 call, 即对 `+` 的调用
+
+    body(g)[[1]]
+    body(g)[[2]]
+    body(g)[[3]]
+    ```
+    这与 Lisp 中"代码即数据"类似. R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.
+
+[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对 R 与 Lisp 的关系有更多讨论.
+
+这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:
+
+- Data-Masking
+    ```{webr}
+    # 直接使用 Data Frame 中的列名进行计算
+    with(mtcars, cor(mpg, hp / wt))
+
+    # 而不是反复从 Data Frame 中取列
+    cor(mtcars[["mpg"]], mtcars[["hp"]] / mtcars[["wt"]])
+    ```
+- 管道操作符: [magrittr](https://CRAN.R-project.org/package=magrittr) 包实现了一系列管道操作符, 避免嵌套多个函数
+    ```{webr}
+    library(magrittr)
+
+    1:10 %>% sum %>% print
+
+    # 等价于
+    print(sum(1:10))
+    ```
+- 基于函数体将 R 函数翻译为其他语言: [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能

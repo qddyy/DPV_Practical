@@ -6,7 +6,7 @@ website:
   page-navigation: true
   back-to-top-navigation: true
   repo-url: https://github.com/qddyy/DPV_Practical
-  repo-actions: [edit, source, issue]
+  repo-actions: [source, issue]
   navbar:
     search: true
     # left:
@@ -23,13 +23,9 @@ website:
     contents: auto
     style: "docked"
 
-format:
-  html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
-    toc: true
+theme:
+  light: cosmo
+  dark: darkly
 
 execute:
   freeze: auto
