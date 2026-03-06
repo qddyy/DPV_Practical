@@ -1,13 +1,35 @@
 [
   {
-    "objectID": "课时一/R语言介绍.html",
-    "href": "课时一/R语言介绍.html",
-    "title": "R语言介绍",
+    "objectID": "课时一/R基础.html",
+    "href": "课时一/R基础.html",
+    "title": "R基础",
     "section": "",
-    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n::: {.cell}\n\n\n\n\n\n\n:::\n几乎所有语句都是函数调用\n\n例子: 赋值\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n例子: 子集操作\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n例子: for 循环\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\ncall\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\nR 代码的执行可以概括为：symbol/call 在特定 environment 中求值\n函数形参列表, 函数体和函数调用都以可修改的列表形式存储\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n这与 Lisp 中”代码即数据”类似. 因此 R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.\n\nReddit 上对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n::: {.cell}\n\n\n\n\n\n\n:::\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n::: {.cell}\n\n\n\n\n\n\n:::\n基于 AST 将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "text": "本节课介绍 R 语言基础. 包括:\nR 中对任何函数使用 ? 或 help 可以打开对应的介绍文档, 如\n对于任意 R object, 都可以使用 typeof() 和 str() 查看其类型与内部结构, 如\n请同学们在接下来的内容中必要时使用这些特性自行探索.",
     "crumbs": [
       "课时一",
-      "R语言介绍"
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html#基本数据结构",
+    "href": "课时一/R基础.html#基本数据结构",
+    "title": "R基础",
+    "section": "基本数据结构",
+    "text": "基本数据结构\nR 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.\n\n\n\n维度\n同质\n异质\n\n\n\n\n1d\nAtomic vector\nList\n\n\n2d\nMatrix\nData frame\n\n\nnd\nArray\n\n\n\n\n\n原子向量\n原子向量根据其存储的数据类型不同, 分为\n\n逻辑向量 (logical)\n整数向量 (integer)\n数值向量 (numeric)\n字符向量 (character)\n\n以及两种不常见的类型\n\n原始向量 (raw)\n复数向量 (complex)\n\n\n创建\n原子向量通常用 c() 创建 (combine 的缩写):\n\n\n\n\n\n\n\n\n实际上 c() 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).\n一些便捷函数可以快速创建具有特定规律的数值类向量:\n\n\n\n\n\n\n\n\n\n\n取子集\n可以使用另一个向量作为索引取得向量的子集. R 中使用 [] 对向量取子集, 支持三种索引:\n\n正数索引\n::: {.cell}\n\n\n\n\n\n\n:::\n负数索引\n::: {.cell}\n\n\n\n\n\n\n:::\n逻辑索引\n::: {.cell}\n\n\n\n\n\n\n:::\n\n*R 中取向量子集的 [] 也是一个函数:\n\n\n\n\n\n\n\n\n\n\n相互转换\n不同原子向量可以通过 as.*() 函数族转换, 如:\n\n\n\n\n\n\n\n\n对于直观上不可相互转换的类型, 强行转换会产生 NA 值:\n\n\n\n\n\n\n\n\n\n\n\n列表\n与原子向量不同, 列表的元素可以是任意类型的 R object.\n\n创建\n可以使用 list() 创建列表\n\n\n\n\n\n\n\n\n类似地, 可以用 c() 合并多个列表\n\n\n\n\n\n\n\n\n\n\n取子集\n对列表取子集操作分为两种\n\n[] 取出子列表\n::: {.cell}\n\n\n\n\n\n\n:::\n这与原子向量的 [] 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.\n[[]] 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引\n::: {.cell}\n\n\n\n\n\n\n:::\n\n\n\n\n特殊向量\n原子向量和列表统称为向量. 所有向量都具有三个基本属性:\n\ntype: 存储的数据类型\n::: {.cell}\n\n\n\n\n\n\n:::\nlength: 长度\n::: {.cell}\n\n\n\n\n\n\n:::\nattributes: 属性/元数据 普通的原子向量/列表无额外 attributes\n::: {.cell}\n\n\n\n\n\n\n:::\n\n若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.\n\n命名向量\n若在创建向量时使用命名参数, 其会拥有 names 属性\n\n\n\n\n\n\n\n\n具有 names 属性的向量可以使用 name 取子集\n\n\n\n\n\n\n\n\n\n\n矩阵\n矩阵本质是具有 dims 属性的向量.\n可以用 matrix 创建矩阵:\n\n\n\n\n\n\n\n\n矩阵额外支持二维索引 (分别指定子集所在的行和列):\n\n\n\n\n\n\n\n\n\n\n因子\n因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 levels 和 class=\"factor\" 属性的整数向量.\n可以用 factor 创建因子:\n\n\n\n\n\n\n\n\n\n\n数据框\n数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 names, row.names 和 class=\"data.frame\" 属性, 所有元素都是等长向量的列表.\n可以用 data.frame 创建数据框:\n\n\n\n\n\n\n\n\n作为和矩阵一样的二维结构, 数据框也额外支持二维索引:",
+    "crumbs": [
+      "课时一",
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html#基本语法",
+    "href": "课时一/R基础.html#基本语法",
+    "title": "R基础",
+    "section": "基本语法",
+    "text": "基本语法\n\n变量命名与赋值\nR 中使用 &lt;- 给变量赋值. R 的基本变量命名规则如下:\n\n不能以数字开头\n不能包含空格或特殊符号 (如 @, #, $ 等)\n不能使用保留字 (如 for, if)\n\n使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则\n\n\n\n\n\n\n\n\n\n\n控制流\n\nif 条件控制 基本语法为 if (condition) expression else alternative_expression\n::: {.cell}\n\n\n\n\n\n\n:::\nif 有返回值 (返回 expression 部分):\n::: {.cell}\n\n\n\n\n\n\n:::\nfor 循环 基本语法为 for (variable in sequence) expression\n::: {.cell}\n\n\n\n\n\n\n:::\n\n\n\n函数\n在 R 中创建函数的语法为 function(arg_list) expression, 其将返回一个 closure 类型的值:\n\n\n\n\n\n\n\n\n参数可以有默认值, 且具有惰性求值机制:\n\n\n\n\n\n\n\n\n此外, 存在可变长参数 ..., 通常用于转发不定数量的参数给其他函数",
+    "crumbs": [
+      "课时一",
+      "R基础"
     ]
   },
   {
@@ -16,5 +38,16 @@
     "title": "Index",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "课时一/R语言介绍.html",
+    "href": "课时一/R语言介绍.html",
+    "title": "R语言介绍",
+    "section": "",
+    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n::: {.cell}\n\n\n\n\n\n\n:::\n几乎所有语句都是函数调用\n\n例子: 赋值\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n例子: for 循环\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\ncall\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\nR 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.\n函数体和函数调用都以可修改的列表形式存储\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n这与 Lisp 中”代码即数据”类似. R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.\n\nReddit 上对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n::: {.cell}\n\n\n\n\n\n\n:::\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n::: {.cell}\n\n\n\n\n\n\n:::\n基于函数体将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "课时一",
+      "R语言介绍"
+    ]
   }
 ]
