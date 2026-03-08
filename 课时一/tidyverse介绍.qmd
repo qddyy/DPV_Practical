@@ -1,0 +1,423 @@
+---
+title: "tidyverse介绍"
+order: 3
+format: live-html
+toc: true
+engine: knitr
+webr:
+  packages:
+    - tidyverse
+---
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+## tidyverse
+
+tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 ，这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.
+
+简而言之, tidyverse 提供了数据分析的一整套流程, 包括
+
+- 数据读取
+- 数据清洗
+- 数据变换
+- 可视化
+
+<!-- 此外, tidyverse 的风格也影响了一大批 R 包: -->
+
+<!-- 搜寻一下 cran 上以 tidy 开头的包 -->
+<!-- ```{webr}
+
+``` -->
+
+要使用 tidyverse 中的各个包, 只需 `library(tidyverse)`
+
+<!-- 自动运行 -->
+```{webr}
+#| autorun: true
+library(tidyverse)
+```
+
+## magrittr
+
+讲一下 . 和 {} 的运用, 以及后者由于等价于 `{`(., ...) 而造成的性质
+
+## tibble
+
+tibble 是对 R base data.frame 的重构, 仅保留了多年来被证明实用的特性, 由 tibble 包提供.
+
+有许多种方式创建一个 tibble:
+
+- 使用 `tibble` 直接创建
+    ```{webr}
+    # 支持惰性求值
+    tibble(x = 1:5, y = 1, z = x^2 + y)
+    ```
+- 使用 `as_tibble` 从现有的 data.frame 创建 (支持的更多数据结构见文档)
+    ```{webr}
+    data <- data.frame(a = 1:3, b = letters[1:3], c = Sys.Date() - 1:3)
+
+    as_tibble(data)
+    ```
+- 使用 `tribble` (transposed tibble) 逐行定义一个 tibble
+    ```{webr}
+    tribble(
+        ~x, ~y,  ~z,
+        "a", 2,  3.6,
+        "b", 1,  8.5
+    )
+    ```
+
+此外, 还有 `as_tibble_row`, `as_tibble_col`, `enframe` 等函数可创建 tibble.
+
+## readr: 数据读取
+
+readr 提供了一系列风格统一的函数以读取各种文件并转换为 tibble.
+
+cheetsheet
+
+- `read_csv()`: 读取逗号分隔文件
+- `read_tsv()`: 读取制表符分隔文件
+- `read_delim()`: 读取任意分隔符的文本文件
+- `read_table()`: 读取空白字符分隔的表格
+- ...
+
+其中，`read_csv()` 和 `read_tsv()` 可以看作 `read_delim()` 的特例.
+
+readr 会自动推断列的类型, 但也允许手动修正.
+
+```{webr}
+chickens <- read_csv(readr_example("chickens.csv"))
+chickens
+
+chickens2 <- read_csv(
+    readr_example("chickens.csv"),
+    col_types = cols(
+        chicken   = col_character(),
+        sex       = col_factor(levels = c("rooster", "hen")),
+        eggs_laid = col_integer(),
+        motto     = col_character()
+    )
+)
+chickens2
+```
+
+另外常用的参数还包括
+
+- `col_names`: 是否把第一行当作列名
+- `skip`: 跳过文件开头若干行
+- `n_max`: 限制最大读取行数
+
+另一个常见的需求是读取 excel 文件. `readxl` 包中的 `read_excel()` 实现了这个功能.
+
+<!-- 介绍一下 -->
+
+存在与 `read_*()` 对应的 `write_*()`, 用于将 tibble 保存至各种格式的文件.
+
+## tidyr: 整洁数据
+
+Hadley Wickham 将 tidy data 定义为满足如下条件的数据格式:
+
+- Each variable is a column; each column is a variable.
+- Each observation is a row; each row is an observation.
+- Each value is a cell; each cell is a single value.
+
+这种结构很接近我们熟悉的 n×p 矩阵. 典型的 tidy data 如
+
+
+tidyr 提供了一系列函数, 用于将不同形式的数据转换为 tidy data. tidyr 也包含了一些处理缺失值的函数.
+
+### pivot_longer
+
+最常见的非 tidy 数据是宽表, 即分类变量成为列名.
+
+```{webr}
+relig_income
+```
+
+注意其中每个 cell 中的 count 唯一对应一个 religion 和一个 income. 此时可以使用 `pivot_longer()` 将宽表转化为长表, 成为 tidy data:
+
+```{webr}
+relig_income %>% 
+    pivot_longer(
+        cols = !religion,    # 哪些列"本质是分类变量值"
+        names_to = "income", # 列名变成一个新列的值后, 新列的列名
+        values_to = "count"  # 这些列下的所有 cell 值变成一个新列后, 新列的列名
+    )
+```
+
+### pivot_wider
+
+有时长表中的列仅作为不同变量的 indicator 而没有实际意义, 此时应将其包含的每个变量作为一列.
+
+```{webr}
+us_rent_income
+```
+
+此时可以使用 `pivot_wider()` 将宽表转化为长表, 成为 tidy data:
+
+```{webr}
+us_rent_income %>% 
+    pivot_wider(
+        names_from = variable,          # 哪些列"本质是indicator"
+        values_from = c(estimate, moe), # 那些列存储了变量值
+        names_sep = "_"                 # 创建新列时自动生成列名, 所用的分隔符
+    )
+```
+
+### separate_longer_delim
+
+有时候同一个 cell 中以字符串形式存储了同一变量的多个值:
+
+```{webr}
+df <- tibble(id = 1:4, x = c("x", "x y", "x y z", NA))
+df
+```
+
+此时可以使用 `separate_longer_delim()` 将 cell 含多个值的一行拆分成 cell 含一个值的多行, 成为 tidy data:
+
+```{webr}
+df %>% separate_longer_delim(cols = x, delim = " ")
+```
+
+除了按分隔符分割, 也可以使用 `separate_longer_position` 按固定宽度分割:
+
+```{webr}
+df <- tibble(id = 1:3, x = c("ab", "def", ""))
+df
+
+df %>% separate_longer_position(cols = x, width = 1)
+```
+
+### separate_wider_delim
+
+有时候同一个 cell 中以字符串形式存储了多个变量的值:
+
+```{webr}
+df <- tibble(id = 1:3, x = c("m-123", "f-455", "f-123"))
+df
+```
+
+此时可以使用 `separate_wider_delim()` 将含多个变量的一列拆分成含一个变量的多列, 成为 tidy data:
+
+```{webr}
+df %>% separate_wider_delim(cols = x, delim = "-", names = c("gender", "unit"))
+```
+
+### 缺失值处理
+
+- `complete()`, `drop_na()`
+- `replace_na()`, `fill()`
+
+## dplyr: 数据变换
+
+dplyr 是 tidyverse 的核心包. 其提供了一组风格一致的动词, 以完成数据处理中所有常见操作.
+
+- 行操作
+    - `slice()`: 行切片
+    - `filter()`: 行筛选
+    - `distinct()`: 行去重
+    - `arrange()`: 行排序
+- 列操作
+    - `select()`: 选择列
+    - `mutate()`: 修改/新增列
+    - `rename()`: 修改列名
+    - `relocate()`: 列排序
+- 分组计算: `group_by()`, `summarise()`
+- 合并数据框: `bind_rows()`, `bind_cols()`, `*_join()`
+
+### 行操作
+
+`slice()` 根据数字索引对行进行切片.
+```{webr}
+starwars %>%
+    slice(1:5)
+
+# 便捷函数: slice_head/slice_tail 按数量或比例从 tibble 的头部/尾部切片
+starwars %>%
+    slice_head(n = 5)
+starwars %>%
+    slice_tail(prop = 0.1)
+```
+
+`filter()` 根据逻辑条件过滤出符合要求的行, 参数是作为条件的逻辑向量 (通常是由某些列向量运算得到的一个逻辑向量).
+```{webr}
+starwars %>%
+    filter(species == "Human" & height > 180)
+```
+
+`distinct()` 去除重复行, 参数是去重的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).
+```{webr}
+df <- tibble(
+    x = sample(10, 100, rep = TRUE),
+    y = sample(10, 100, rep = TRUE),
+    z = sample(10, 100, rep = TRUE)
+)
+nrow(df)
+
+df %>%
+    distinct(x) %>% 
+    nrow()
+df %>%
+    distinct(x + y) %>% 
+    nrow()
+# 多变量联合去重
+df %>% 
+    distinct(x, y) %>% 
+    nrow()
+```
+
+`arrange()` 对行排序, 参数是排序的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).
+```{webr}
+# 按 height 排序
+starwars %>% 
+    arrange(height)
+
+# 按 height 倒序
+starwars %>% 
+    arrange(-height)
+
+# 按 height + mass 排序
+starwars %>% 
+    arrange(height + mass)
+
+# 先按 height, 再按 mass 排序
+starwars %>% 
+    arrange(height, mass)
+```
+
+### 列操作
+
+### 分组操作
+
+### 合并数据框
+
+### 同时操作多列
+
+## 补充: `<tidy-select>`
+
+tidyverse 中常常出现列名集合作为参数的情况. tidyselect 包提供了一套 DSL (domain specific language) 以快速构建 tibble 中特定的列名子集.
+
+我们创建一个 tibble 用作演示:
+
+```{webr}
+student_data <- tibble(
+    student_id = 1:3,
+    student_name = c("Alice", "Bob", "Charlie"),
+    math_midterm = c(85, 78, 90),
+    math_final = c(92, 88, 95),
+    passed = c(TRUE, TRUE, TRUE)
+)
+student_data
+```
+
+### 按位置/列名构建
+
+* `c(col1, col2, col3)`: 选择特定列 (`col*` 可以是数字/列名)
+* `start:end`: 选择从 `start` 到 `end` 的所有列 (`start` 和 `end` 可以是数字/列名)
+* `everything()`: 选择所有列
+* `last_col()`: 选择最后一列
+
+```{webr}
+# 选择第 2, 5 列
+student_data %>% select(c(2, 5))
+
+# 等价
+student_data %>% select(c(student_name, passed))
+
+# 选择从 student_id 到 math_midterm 的所有列
+student_data %>% select(student_id:math_midterm)
+```
+
+### 按字符向量构建
+
+可以用已存在的字符向量选择列
+
+- `all_of(vars)`: 严格匹配, 选择 `vars` 中的所有列
+- `any_of(vars)`: 宽松匹配, 选择 `vars` 中存在的列
+
+```{webr}
+cols_to_select <- c("student_name", "passed", "age")
+
+student_data %>% select(any_of(cols_to_select))
+
+student_data %>% select(all_of(cols_to_select))
+```
+
+### 正则匹配构建
+
+- `starts_with("match")`: 匹配以 "match" 开头的列名
+- `ends_with("match")`: 匹配以 "match" 结尾的列名
+- `contains("match")`: 匹配包含 "match" 的字符串的列名
+- `matches("match")`: 匹配符合正则表达式的列名
+- `num_range("prefix", range)`: 匹配带有数字后缀的列名
+
+```{webr}
+# 选择所有以 "math" 开头的列 (即所有数学成绩)
+student_data %>% select(starts_with("math"))
+
+# 选择所有包含 "name" 的列
+student_data %>% select(contains("name"))
+```
+
+### 条件匹配构建
+
+使用 `where()` 结合返回 bool 的函数 (如 `is.numeric`, `is.character`, `is.logical` 等) 可以按条件选择列
+
+```{webr}
+# 选择所有数值型列 (ID和成绩)
+student_data %>% select(where(is.numeric))
+
+# 选择所有布尔型(逻辑)列 (是否及格)
+student_data %>% select(where(is.logical))
+```
+
+### 结合多个 selection
+
+可以像操作逻辑运算多个 selection
+
+- `-` / `!`: 取反
+- `&`: 交集
+- `|`: 并集
+- `c()`: combine 多个 selection 对应的列
+
+```{webr}
+# 排除 student_id 和 student_name 列
+student_data %>% select(-student_id, -student_name)
+
+# 排除所有的数值型变量
+student_data %>% select(!where(is.numeric))
+
+# 组合条件：选择包含 "math" 并且不以 "final" 结尾的列
+student_data %>% select(contains("math") & !ends_with("final"))
+
+# 组合多个选择：选择第一列，以及所有逻辑类型的列
+student_data %>% select(c(1, where(is.logical)))
+```
+
+## purrr
+
+实际使用中, for 循环往往可以被函数式编程等价替代. `purrr` 包提供的一系列函数提供了这样的功能.
+
+使用 for 循环的常见场景:
+
+- 遍历向量并应用函数
+```{webr}
+v <- 1:5
+for (i in seq_along(v)) {
+    v[i] <- v[i] * 2
+}
+
+# 等价于
+v <- map(v, \(x) x * 2)
+```
+
+- 读取多个同质的数据表
+
+可以单独使用 list_rbind, list_cbind
+
+## stringr
+
+## forcats
+
+## lubridate
+
