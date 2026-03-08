@@ -4,12 +4,15 @@ order: 2
 format: live-html
 toc: true
 engine: knitr
+webr:
+  packages:
+    - this.path
+    - qs2
 ---
 
 {{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
 
 本节课介绍 R 语言基础. 包括:
-
 
 R 中对任何函数使用 `?` 或 `help` 可以打开对应的介绍文档, 如
 
@@ -275,6 +278,8 @@ data.frame(
 )[1:2, c("name", "age")]
 ```
 
+在 2026 年, R 自带的 `data.frame` 类型已经有更加现代化的替代品 (如 `tibble`, `data.table`). 不过对 `data.frame` 的基础操作同样适用于这些新的数据框类型.
+
 <!-- ### NULL, NA 与 NaN
 
 - `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
@@ -338,10 +343,20 @@ R 中使用 `<-` 给变量赋值. R 的基本变量命名规则如下:
 
 ### 函数
 
-在 R 中创建函数的语法为 `function(arg_list) expression`, 其将返回一个 `closure` 类型的值:
+在 R 中创建函数的语法为 `function(arg_list) expression` 或 `\(arg_list) expression`, 其将返回一个 `closure` 类型的值:
 
 ```{webr}
 f <- function(a, b = 1) a + b
+
+# 等价
+f <- \(a, b = 1) a + b
+
+# 等价, 此时函数体为 {a + b}
+f <- \(a, b = 1) {
+    a + b
+}
+# 这里的 { 实际是一个函数调用, 返回 {} 中最后一行的表达式值, 即
+f <- \(a, b = 1) `{`(a + b)
 
 typeof(f)
 ```
@@ -368,3 +383,72 @@ h(1)
 h(1, 2)
 ```
 
+<!-- ### 基本常用计算函数, 分布与随机函数 (base, stats, 接下来下一节讲第三方包)
+
+对于不同向量类型都尽量介绍一些常用函数, ai 填充
+
+作业: 借助 ai 了解 http://adv-r.had.co.nz/Vocabulary.html 上的所有函数 -->
+
+## 源代码组织
+
+### source
+
+项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. `source` 用于运行其他 R 文件中的代码:
+
+```{webr}
+# 创建一个外部 R 文件
+writeLines(text = "square_number <- function(x) x^2", "square.R")
+
+# 使用 source 加载这个文件
+source("utils.R")
+
+square_number(5)
+```
+
+### R package
+
+另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.
+
+我们重点关注如何使用别人的 R 包. 可以使用 `library()` 来加载本地已安装的 R 包, 之后可以使用包里的全部函数
+
+```{webr}
+library(this.path)
+
+# this.dir() 返回当前文件所在的目录. 设置工作目录时有用
+this.dir()
+
+# here() 将参数与当前文件所在的目录拼接, 创造一个文件路径. 从代码保存到文件时有用
+here("plot.pdf")
+```
+
+由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 `::` 访问包中的特定函数:
+
+```{webr}
+data <- data.frame(a = 1:2, b = 3:4)
+
+# qs2 包中的 qs_save 可以保存任何 R 对象至文件. 常用于保存中间计算结果
+qs2::qs_save(data, this.path::here("data.qs2"))
+
+# qs_read 从保存的文件中读取对象
+qs2::qs_read(this.path::here("data.qs2"))
+```
+
+与 `::` 类似的是 `:::`, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.
+
+```{webr}
+stats::t.test.default
+
+stats:::t.test.default
+```
+
+<!-- ### R package 安装专题
+
+介绍cran, bioconductor, github
+
+结合xhs求助, 解释只要找到文件夹就可以安装
+
+## 泛型方法与面向对象
+
+多态分发与py魔术方法的对比, 以print为例
+
+S3, S4, reference class, R6, S7 -->
