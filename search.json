@@ -1,5 +1,155 @@
 [
   {
+    "objectID": "课时一/tidyverse介绍.html",
+    "href": "课时一/tidyverse介绍.html",
+    "title": "tidyverse介绍",
+    "section": "",
+    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 ，这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据清洗\n数据变换\n可视化\n\n\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#tidyverse",
+    "href": "课时一/tidyverse介绍.html#tidyverse",
+    "title": "tidyverse介绍",
+    "section": "",
+    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 ，这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据清洗\n数据变换\n可视化\n\n\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#magrittr",
+    "href": "课时一/tidyverse介绍.html#magrittr",
+    "title": "tidyverse介绍",
+    "section": "magrittr",
+    "text": "magrittr\n讲一下 . 和 {} 的运用, 以及后者由于等价于 {(., …) 而造成的性质",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#tibble",
+    "href": "课时一/tidyverse介绍.html#tibble",
+    "title": "tidyverse介绍",
+    "section": "tibble",
+    "text": "tibble\ntibble 是对 R base data.frame 的重构, 仅保留了多年来被证明实用的特性, 由 tibble 包提供.\n有许多种方式创建一个 tibble:\n\n使用 tibble 直接创建\n::: {.cell}\n\n\n\n\n\n\n:::\n使用 as_tibble 从现有的 data.frame 创建 (支持的更多数据结构见文档)\n::: {.cell}\n\n\n\n\n\n\n:::\n使用 tribble (transposed tibble) 逐行定义一个 tibble\n::: {.cell}\n\n\n\n\n\n\n:::\n\n此外, 还有 as_tibble_row, as_tibble_col, enframe 等函数可创建 tibble.",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#readr-数据读取",
+    "href": "课时一/tidyverse介绍.html#readr-数据读取",
+    "title": "tidyverse介绍",
+    "section": "readr: 数据读取",
+    "text": "readr: 数据读取\nreadr 提供了一系列风格统一的函数以读取各种文件并转换为 tibble.\ncheetsheet\n\nread_csv(): 读取逗号分隔文件\nread_tsv(): 读取制表符分隔文件\nread_delim(): 读取任意分隔符的文本文件\nread_table(): 读取空白字符分隔的表格\n…\n\n其中，read_csv() 和 read_tsv() 可以看作 read_delim() 的特例.\nreadr 会自动推断列的类型, 但也允许手动修正.\n\n\n\n\n\n\n\n\n另外常用的参数还包括\n\ncol_names: 是否把第一行当作列名\nskip: 跳过文件开头若干行\nn_max: 限制最大读取行数\n\n另一个常见的需求是读取 excel 文件. readxl 包中的 read_excel() 实现了这个功能.\n\n存在与 read_*() 对应的 write_*(), 用于将 tibble 保存至各种格式的文件.",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#tidyr-整洁数据",
+    "href": "课时一/tidyverse介绍.html#tidyr-整洁数据",
+    "title": "tidyverse介绍",
+    "section": "tidyr: 整洁数据",
+    "text": "tidyr: 整洁数据\nHadley Wickham 将 tidy data 定义为满足如下条件的数据格式:\n\nEach variable is a column; each column is a variable.\nEach observation is a row; each row is an observation.\nEach value is a cell; each cell is a single value.\n\n这种结构很接近我们熟悉的 n×p 矩阵. 典型的 tidy data 如\ntidyr 提供了一系列函数, 用于将不同形式的数据转换为 tidy data. tidyr 也包含了一些处理缺失值的函数.\n\npivot_longer\n最常见的非 tidy 数据是宽表, 即分类变量成为列名.\n\n\n\n\n\n\n\n\n注意其中每个 cell 中的 count 唯一对应一个 religion 和一个 income. 此时可以使用 pivot_longer() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\n\n\npivot_wider\n有时长表中的列仅作为不同变量的 indicator 而没有实际意义, 此时应将其包含的每个变量作为一列.\n\n\n\n\n\n\n\n\n此时可以使用 pivot_wider() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\n\n\nseparate_longer_delim\n有时候同一个 cell 中以字符串形式存储了同一变量的多个值:\n\n\n\n\n\n\n\n\n此时可以使用 separate_longer_delim() 将 cell 含多个值的一行拆分成 cell 含一个值的多行, 成为 tidy data:\n\n\n\n\n\n\n\n\n除了按分隔符分割, 也可以使用 separate_longer_position 按固定宽度分割:\n\n\n\n\n\n\n\n\n\n\nseparate_wider_delim\n有时候同一个 cell 中以字符串形式存储了多个变量的值:\n\n\n\n\n\n\n\n\n此时可以使用 separate_wider_delim() 将含多个变量的一列拆分成含一个变量的多列, 成为 tidy data:\n\n\n\n\n\n\n\n\n\n\n缺失值处理\n\ncomplete(), drop_na()\nreplace_na(), fill()",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#dplyr-数据变换",
+    "href": "课时一/tidyverse介绍.html#dplyr-数据变换",
+    "title": "tidyverse介绍",
+    "section": "dplyr: 数据变换",
+    "text": "dplyr: 数据变换\ndplyr 是 tidyverse 的核心包. 其提供了一组风格一致的动词, 以完成数据处理中所有常见操作.\n\n行操作\n\nslice(): 行切片\nfilter(): 行筛选\ndistinct(): 行去重\narrange(): 行排序\n\n列操作\n\nselect(): 选择列\nmutate(): 修改/新增列\nrename(): 修改列名\nrelocate(): 列排序\n\n分组计算: group_by(), summarise()\n合并数据框: bind_rows(), bind_cols(), *_join()\n\n\n行操作\nslice() 根据数字索引对行进行切片.\n\n\n\n\n\n\n\n\nfilter() 根据逻辑条件过滤出符合要求的行, 参数是作为条件的逻辑向量 (通常是由某些列向量运算得到的一个逻辑向量).\n\n\n\n\n\n\n\n\ndistinct() 去除重复行, 参数是去重的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).\n\n\n\n\n\n\n\n\narrange() 对行排序, 参数是排序的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).\n\n\n\n\n\n\n\n\n\n\n列操作\n\n\n分组操作\n\n\n合并数据框\n\n\n同时操作多列",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#补充-tidy-select",
+    "href": "课时一/tidyverse介绍.html#补充-tidy-select",
+    "title": "tidyverse介绍",
+    "section": "补充: <tidy-select>",
+    "text": "补充: &lt;tidy-select&gt;\ntidyverse 中常常出现列名集合作为参数的情况. tidyselect 包提供了一套 DSL (domain specific language) 以快速构建 tibble 中特定的列名子集.\n我们创建一个 tibble 用作演示:\n\n\n\n\n\n\n\n\n\n按位置/列名构建\n\nc(col1, col2, col3): 选择特定列 (col* 可以是数字/列名)\nstart:end: 选择从 start 到 end 的所有列 (start 和 end 可以是数字/列名)\neverything(): 选择所有列\nlast_col(): 选择最后一列\n\n\n\n\n\n\n\n\n\n\n\n按字符向量构建\n可以用已存在的字符向量选择列\n\nall_of(vars): 严格匹配, 选择 vars 中的所有列\nany_of(vars): 宽松匹配, 选择 vars 中存在的列\n\n\n\n\n\n\n\n\n\n\n\n正则匹配构建\n\nstarts_with(\"match\"): 匹配以 “match” 开头的列名\nends_with(\"match\"): 匹配以 “match” 结尾的列名\ncontains(\"match\"): 匹配包含 “match” 的字符串的列名\nmatches(\"match\"): 匹配符合正则表达式的列名\nnum_range(\"prefix\", range): 匹配带有数字后缀的列名\n\n\n\n\n\n\n\n\n\n\n\n条件匹配构建\n使用 where() 结合返回 bool 的函数 (如 is.numeric, is.character, is.logical 等) 可以按条件选择列\n\n\n\n\n\n\n\n\n\n\n结合多个 selection\n可以像操作逻辑运算多个 selection\n\n- / !: 取反\n&: 交集\n|: 并集\nc(): combine 多个 selection 对应的列",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#purrr",
+    "href": "课时一/tidyverse介绍.html#purrr",
+    "title": "tidyverse介绍",
+    "section": "purrr",
+    "text": "purrr\n实际使用中, for 循环往往可以被函数式编程等价替代. purrr 包提供的一系列函数提供了这样的功能.\n使用 for 循环的常见场景:\n\n遍历向量并应用函数\n\n\n\n\n\n\n\n\n\n\n读取多个同质的数据表\n\n可以单独使用 list_rbind, list_cbind",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#stringr",
+    "href": "课时一/tidyverse介绍.html#stringr",
+    "title": "tidyverse介绍",
+    "section": "stringr",
+    "text": "stringr",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#forcats",
+    "href": "课时一/tidyverse介绍.html#forcats",
+    "title": "tidyverse介绍",
+    "section": "forcats",
+    "text": "forcats",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/tidyverse介绍.html#lubridate",
+    "href": "课时一/tidyverse介绍.html#lubridate",
+    "title": "tidyverse介绍",
+    "section": "lubridate",
+    "text": "lubridate",
+    "crumbs": [
+      "课时一",
+      "tidyverse介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/R语言介绍.html",
+    "href": "课时一/R语言介绍.html",
+    "title": "R语言介绍",
+    "section": "",
+    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n::: {.cell}\n\n\n\n\n\n\n:::\n几乎所有语句都是函数调用\n\n例子: 赋值\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n例子: for 循环\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\ncall\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\nR 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.\n函数体和函数调用都以可修改的列表形式存储\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n这与 Lisp 中”代码即数据”类似. R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.\n\nReddit 上对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n::: {.cell}\n\n\n\n\n\n\n:::\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n::: {.cell}\n\n\n\n\n\n\n:::\n基于函数体将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "课时一",
+      "R语言介绍"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Index",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
     "objectID": "课时一/R基础.html",
     "href": "课时一/R基础.html",
     "title": "R基础",
@@ -30,24 +180,6 @@
     "crumbs": [
       "课时一",
       "R基础"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Index",
-    "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
-  },
-  {
-    "objectID": "课时一/R语言介绍.html",
-    "href": "课时一/R语言介绍.html",
-    "title": "R语言介绍",
-    "section": "",
-    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n::: {.cell}\n\n\n\n\n\n\n:::\n几乎所有语句都是函数调用\n\n例子: 赋值\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n例子: for 循环\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\ncall\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n\nR 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.\n函数体和函数调用都以可修改的列表形式存储\n::: {.cell}\n\n\n\n\n\n\n:::\n::: {.cell}\n\n\n\n\n\n\n:::\n这与 Lisp 中”代码即数据”类似. R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.\n\nReddit 上对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n::: {.cell}\n\n\n\n\n\n\n:::\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n::: {.cell}\n\n\n\n\n\n\n:::\n基于函数体将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
-    "crumbs": [
-      "课时一",
-      "R语言介绍"
     ]
   }
 ]
