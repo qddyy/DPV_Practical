@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R基础 – title</title>
+<title>R基础 – 数据处理与可视化-实践课程</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">title</span>
+    <span class="navbar-title">数据处理与可视化-实践课程</span>
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
@@ -156,6 +156,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#原子向量" id="toc-原子向量" class="nav-link" data-scroll-target="#原子向量">原子向量</a></li>
   <li><a href="#列表" id="toc-列表" class="nav-link" data-scroll-target="#列表">列表</a></li>
   <li><a href="#特殊向量" id="toc-特殊向量" class="nav-link" data-scroll-target="#特殊向量">特殊向量</a></li>
+  <li><a href="#null-na-与-nan" id="toc-null-na-与-nan" class="nav-link" data-scroll-target="#null-na-与-nan">NULL, NA 与 NaN</a></li>
   </ul></li>
   <li><a href="#基本语法" id="toc-基本语法" class="nav-link" data-scroll-target="#基本语法">基本语法</a>
   <ul class="collapse">
@@ -561,18 +562,21 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBu
 </div>
 </div>
 <p>在 2026 年, R 自带的 <code>data.frame</code> 类型已经有更加现代化的替代品 (如 <code>tibble</code>, <code>data.table</code>). 不过对 <code>data.frame</code> 的基础操作同样适用于这些新的数据框类型.</p>
-<!-- ### NULL, NA 与 NaN
-
-- `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
-
-- `NA` (Not Available) 在向量中表示存在缺失值. 对于不同的原子向量存在不同的 NA 值类型
-    - `NA_integer_`
-    - `NA_real_`
-    - `NA_character_ `
-    - ...
-
-- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值 -->
 </section>
+</section>
+<section id="null-na-与-nan" class="level3">
+<h3 class="anchored" data-anchor-id="null-na-与-nan">NULL, NA 与 NaN</h3>
+<ul>
+<li><p><code>NULL</code> 表示空对象, 是与原子数组, 列表并列的一种变量类型</p></li>
+<li><p><code>NA</code> (Not Available) 在向量中表示存在缺失值. 对于不同的原子向量存在不同的 NA 值类型</p>
+<ul>
+<li><code>NA_integer_</code></li>
+<li><code>NA_real_</code></li>
+<li><code>NA_character_</code></li>
+<li>…</li>
+</ul></li>
+<li><p><code>NaN</code> (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值</p></li>
+</ul>
 </section>
 </section>
 <section id="基本语法" class="level2">
@@ -644,7 +648,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZm9yIChpIGluIDE6NSkge1xu
 
 </div>
 <script type="webr-30-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZiA8LSBmdW5jdGlvbihhLCBiID0gMSkgYSArIGJcblxuIyDnrYnku7dcbmYgPC0gXFwoYSwgYiA9IDEpIGEgKyBiXG5cbiMg562J5Lu3LCDmraTml7blh73mlbDkvZPkuLoge2EgKyBifVxuZiA8LSBcXChhLCBiID0gMSkge1xuICAgIGEgKyBiXG59XG4jIOi/memHjOeahCB7IOWunumZheaYr+S4gOS4quWHveaVsOiwg+eUqCwg6L+U5ZueIHt9IOS4reacgOWQjuS4gOihjOeahOihqOi+vuW8j+WAvCwg5Y2zXG5mIDwtIFxcKGEsIGIgPSAxKSBge2AoYSArIGIpXG5cbnR5cGVvZihmKSJ9
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZiA8LSBmdW5jdGlvbihhLCBiID0gMSkgYSArIGJcblxuIyDnrYnku7dcbmYgPC0gXFwoYSwgYiA9IDEpIGEgKyBiXG5cbiMg562J5Lu3LCDmraTml7blh73mlbDkvZPkuLogeyBhICsgYiB9XG5mIDwtIFxcKGEsIGIgPSAxKSB7XG4gICAgYSArIGJcbn1cbiMg6L+Z6YeM55qEIHsg5a6e6ZmF5piv5LiA5Liq5Ye95pWw6LCD55SoLCDov5Tlm54ge30g5Lit5pyA5ZCO5LiA6KGM55qE6KGo6L6+5byP5YC8LCDljbNcbmYgPC0gXFwoYSwgYiA9IDEpIGB7YChhICsgYilcblxudHlwZW9mKGYpIn0=
 </script>
 </div>
 </div>
@@ -670,11 +674,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaCA8LSBmdW5jdGlvbiguLi4p
 </script>
 </div>
 </div>
-<!-- ### 基本常用计算函数, 分布与随机函数 (base, stats, 接下来下一节讲第三方包)
-
-对于不同向量类型都尽量介绍一些常用函数, ai 填充
-
-作业: 借助 ai 了解 http://adv-r.had.co.nz/Vocabulary.html 上的所有函数 -->
+<p>Hadley 的 Advanced R 中总结了 <a href="http://adv-r.had.co.nz/Vocabulary.html">base R 中常用的函数</a>.</p>
 </section>
 </section>
 <section id="源代码组织" class="level2">
