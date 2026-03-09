@@ -86,7 +86,7 @@ webr:
     body(g)[[2]]
     body(g)[[3]]
     ```
-    这与 Lisp 中"代码即数据"类似. R 一定程度上具备操纵自身抽象语法树 (AST) 的能力.
+    这与 Lisp 中"代码即数据"类似.
 
 [Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对 R 与 Lisp 的关系有更多讨论.
 
@@ -109,4 +109,4 @@ webr:
     # 等价于
     print(sum(1:10))
     ```
-- 基于函数体将 R 函数翻译为其他语言: [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能
+- 基于 AST 将 R 函数翻译为其他语言: [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能

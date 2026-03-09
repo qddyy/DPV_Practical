@@ -280,7 +280,7 @@ data.frame(
 
 在 2026 年, R 自带的 `data.frame` 类型已经有更加现代化的替代品 (如 `tibble`, `data.table`). 不过对 `data.frame` 的基础操作同样适用于这些新的数据框类型.
 
-<!-- ### NULL, NA 与 NaN
+### NULL, NA 与 NaN
 
 - `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
 
@@ -290,7 +290,7 @@ data.frame(
     - `NA_character_ `
     - ...
 
-- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值 -->
+- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值
 
 ## 基本语法
 
@@ -351,7 +351,7 @@ f <- function(a, b = 1) a + b
 # 等价
 f <- \(a, b = 1) a + b
 
-# 等价, 此时函数体为 {a + b}
+# 等价, 此时函数体为 { a + b }
 f <- \(a, b = 1) {
     a + b
 }
@@ -383,11 +383,7 @@ h(1)
 h(1, 2)
 ```
 
-<!-- ### 基本常用计算函数, 分布与随机函数 (base, stats, 接下来下一节讲第三方包)
-
-对于不同向量类型都尽量介绍一些常用函数, ai 填充
-
-作业: 借助 ai 了解 http://adv-r.had.co.nz/Vocabulary.html 上的所有函数 -->
+Hadley 的 Advanced R 中总结了 [base R 中常用的函数](http://adv-r.had.co.nz/Vocabulary.html).
 
 ## 源代码组织
 
