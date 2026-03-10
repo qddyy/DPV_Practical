@@ -4,7 +4,7 @@
     "href": "课时一/tidyverse介绍.html",
     "title": "tidyverse介绍",
     "section": "",
-    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 , 这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据整理\n数据变换\n可视化\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
+    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 , 这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据整理\n数据变换\n可视化\n\n此外, tidyverse 的风格也影响了一大批 R 包:\n\n\n\n\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -15,7 +15,7 @@
     "href": "课时一/tidyverse介绍.html#tidyverse",
     "title": "tidyverse介绍",
     "section": "",
-    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 , 这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据整理\n数据变换\n可视化\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
+    "text": "tidyverse 是由 Hadley Wickham 及其团队引入的 R 编程语言的一系列开源软件包 , 这些软件包共享整洁数据 (tidy data) 的底层设计理念. tidyverse 系列包的特征是广泛利用管道操作以及 R 的非标准求值.\n简而言之, tidyverse 提供了数据分析的一整套流程, 包括\n\n数据读取\n数据整理\n数据变换\n可视化\n\n此外, tidyverse 的风格也影响了一大批 R 包:\n\n\n\n\n\n\n要使用 tidyverse 中的各个包, 只需 library(tidyverse)",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -26,7 +26,7 @@
     "href": "课时一/tidyverse介绍.html#magrittr",
     "title": "tidyverse介绍",
     "section": "magrittr",
-    "text": "magrittr\nmagrittr 是 tidyverse 管道操作的基础包, 提供了多种管道符, 最常用的是 %&gt;%. 管道符允许将前一步的结果作为下一个函数的第一个参数, 极大提升了代码的可读性.\n常用管道符包括:\n\n%&gt;%：将左侧结果作为右侧函数的第一个参数\n\n\n\n\n\n\n%T&gt;%：将左侧结果传递给右侧表达式并返回左侧原始值, 常用于插入中间操作 (如 plot, print 这类依赖副作用的函数)\n\n\n\n\n\n\n%$%：暴露数据框的列名到右侧表达式的环境中, 直接用于计算\n\n\n\n\n\n\n%&lt;&gt;%：将结果赋值回左侧对象\n\n\n\n\n\n\n\nmagrittr 总是将左侧变量传递给右侧函数作为第一个参数, 但有时我们需要传给其他参数. 此时可以使用 . 代表左侧变量:",
+    "text": "magrittr\nmagrittr 是 tidyverse 管道操作的基础包, 提供了多种管道符, 最常用的是 %&gt;%. 管道符允许将前一步的结果作为下一个函数的第一个参数, 极大提升了代码的可读性.\n常用管道符包括:\n\n%&gt;%：将左侧作为右侧函数的第一个参数\n\n\n\n\n\n\n%T&gt;%：将左侧传递给右侧函数但返回左侧值, 常用于插入中间操作 (如 plot, print 这类依赖副作用的函数)\n\n\n\n\n\n\n%$%：将左侧包含的 names 暴露给右侧\n\n\n\n\n\n\n%&lt;&gt;%：在 %&gt;% 的基础上, 将结果赋值回左侧\n\n\n\n\n\n\n\nmagrittr 总是将左侧变量传递给右侧函数作为第一个参数, 但有时我们需要传给其他参数. 此时可以使用 . 代表左侧变量:",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -37,7 +37,7 @@
     "href": "课时一/tidyverse介绍.html#tibble",
     "title": "tidyverse介绍",
     "section": "tibble",
-    "text": "tibble\ntibble 是对 R base data.frame 的重构, 仅保留了多年来被证明实用的特性, 由 tibble 包提供.\n有许多种方式创建一个 tibble:\n\n使用 tibble 直接创建\n\n\n\n\n\n\n使用 as_tibble 从现有的 data.frame 创建 (支持的更多数据结构见文档)\n\n\n\n\n\n\n使用 tribble (transposed tibble) 逐行定义一个 tibble\n\n\n\n\n\n\n\n此外, 还有 as_tibble_row, as_tibble_col, enframe 等函数可创建 tibble.",
+    "text": "tibble\ntibble 是对 R 基础数据框的重构, 仅保留了多年来被证明实用的特性, 由 tibble 包提供.\n有许多种方式创建一个 tibble:\n\n使用 tibble 直接创建\n\n\n\n\n\n\n使用 as_tibble 从现有的 data.frame 创建 (支持的更多数据结构见文档)\n\n\n\n\n\n\n\n此外, 还有 tribble, as_tibble_row, as_tibble_col, enframe 等函数可创建 tibble.",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -48,7 +48,7 @@
     "href": "课时一/tidyverse介绍.html#readr-数据读取",
     "title": "tidyverse介绍",
     "section": "readr: 数据读取",
-    "text": "readr: 数据读取\nreadr 提供了一系列风格统一的函数以读取各种文件并转换为 tibble.\ncheetsheet\n\nread_csv(): 读取逗号分隔文件\nread_tsv(): 读取制表符分隔文件\nread_delim(): 读取任意分隔符的文本文件\nread_table(): 读取空白字符分隔的表格\n…\n\n其中, read_csv() 和 read_tsv() 可以看作 read_delim() 的特例.\nreadr 会自动推断列的类型, 但也允许手动修正.\n\n\n\n\n\n\n另外常用的参数还包括\n\ncol_names: 是否把第一行当作列名\nskip: 跳过文件开头若干行\nn_max: 限制最大读取行数\n\n另一个常见的需求是读取 excel 文件. readxl 包中的 read_excel() 实现了这个功能.\n\n\n\n\n\n\n此外, 还存在与 read_*() 对应的 write_*() 函数族, 用于将 tibble 保存至各种格式的文件.",
+    "text": "readr: 数据读取\nreadr 提供了一系列风格统一的函数以读取各种文件并转换为 tibble.\n\nread_csv(): 读取逗号分隔文件\nread_tsv(): 读取制表符分隔文件\nread_delim(): 读取任意分隔符的文本文件\nread_table(): 读取空白字符分隔的表格\n…\n\n其中, read_csv() 和 read_tsv() 可以看作 read_delim() 的特例.\n\n\n\n\n\n\nreadr 会自动推断列的类型, 但也允许手动修正.\n\n\n\n\n\n\n另外常用的参数还包括\n\ncol_names: 是否把第一行当作列名\nskip: 跳过文件开头若干行\nn_max: 限制最大读取行数\n\n另一个常见的需求是读取 excel 文件. readxl 包中的 read_excel() 实现了这个功能.\n\n\n\n\n\n\n此外, 还存在与 read_*() 对应的 write_*() 函数族, 用于将 tibble 保存至各种格式的文件.",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -59,7 +59,7 @@
     "href": "课时一/tidyverse介绍.html#tidyr-整洁数据",
     "title": "tidyverse介绍",
     "section": "tidyr: 整洁数据",
-    "text": "tidyr: 整洁数据\nHadley Wickham 将 tidy data 定义为满足如下条件的数据格式:\n\nEach variable is a column; each column is a variable.\nEach observation is a row; each row is an observation.\nEach value is a cell; each cell is a single value.\n\n这种结构很接近我们熟悉的 n×p 矩阵. 典型的 tidy data 如\n\n\n\nstudent_id\nsubject\nscore\n\n\n\n\n1\nmath\n85\n\n\n1\nenglish\n90\n\n\n2\nmath\n78\n\n\n2\nenglish\n88\n\n\n3\nmath\n90\n\n\n3\nenglish\n95\n\n\n\ntidyr 提供了一系列函数, 用于将不同形式的数据转换为 tidy data. tidyr 也包含了一些处理缺失值的函数.\n\npivot_longer\n最常见的非 tidy 数据是宽表, 即分类变量成为列名.\n\n\n\n\n\n\n注意其中每个 cell 中的 count 唯一对应一个 religion 和一个 income. 此时可以使用 pivot_longer() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\npivot_wider\n有时长表中的列仅作为不同变量的 indicator 而没有实际意义, 此时应将其包含的每个变量作为一列.\n\n\n\n\n\n\n此时可以使用 pivot_wider() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\nseparate_longer_delim\n有时候同一个 cell 中以字符串形式存储了同一变量的多个值:\n\n\n\n\n\n\n此时可以使用 separate_longer_delim() 将 cell 含多个值的一行拆分成 cell 含一个值的多行, 成为 tidy data:\n\n\n\n\n\n\n除了按分隔符分割, 也可以使用 separate_longer_position 按固定宽度分割:\n\n\n\n\n\n\n\n\nseparate_wider_delim\n有时候同一个 cell 中以字符串形式存储了多个变量的值:\n\n\n\n\n\n\n此时可以使用 separate_wider_delim() 将含多个变量的一列拆分成含一个变量的多列, 成为 tidy data:\n\n\n\n\n\n\n\n\n数据清洗\n此外, tidyr 还包含一些数据清洗的函数:\n\ncomplete(): 补全所有可能的组合\ndrop_na(): 删除含缺失值的行\nreplace_na(): 用指定值替换缺失值\nfill(): 用前/后非缺失值填充缺失值",
+    "text": "tidyr: 整洁数据\nHadley Wickham 将 tidy data 定义为满足如下条件的数据格式:\n\nEach variable is a column; each column is a variable.\nEach observation is a row; each row is an observation.\nEach value is a cell; each cell is a single value.\n\n这种结构很接近我们熟悉的 \\(n \\times p\\) 矩阵. 典型的 tidy data 如\n\n\n\nstudent_id\nsubject\nscore\n\n\n\n\n1\nmath\n85\n\n\n1\nenglish\n90\n\n\n2\nmath\n78\n\n\n2\nenglish\n88\n\n\n3\nmath\n90\n\n\n3\nenglish\n95\n\n\n\ntidyr 提供了一系列函数, 用于将不同形式的数据转换为 tidy data.\n\npivot_longer\n最常见的非 tidy 数据是宽表, 即分类变量成为列名.\n\n\n\n\n\n\n注意其中每个 cell 中的 count 唯一对应一个 religion 和一个 income. 此时可以使用 pivot_longer() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\npivot_wider\n有时长表中的列仅作为不同变量的 indicator 而没有实际意义, 此时应将其包含的每个变量作为一列.\n\n\n\n\n\n\n此时可以使用 pivot_wider() 将宽表转化为长表, 成为 tidy data:\n\n\n\n\n\n\n\n\nseparate_longer_delim\n有时候同一个 cell 中以字符串形式存储了同一变量的多个值:\n\n\n\n\n\n\n此时可以使用 separate_longer_delim() 将 cell 含多个值的一行拆分成 cell 含一个值的多行, 成为 tidy data:\n\n\n\n\n\n\n除了按分隔符分割, 也可以使用 separate_longer_position 按固定宽度分割:\n\n\n\n\n\n\n\n\nseparate_wider_delim\n有时候同一个 cell 中以字符串形式存储了多个变量的值:\n\n\n\n\n\n\n此时可以使用 separate_wider_delim() 将含多个变量的一列拆分成含一个变量的多列, 成为 tidy data:\n\n\n\n\n\n\n\n\n数据清洗\n此外, tidyr 还包含一些数据清洗的函数:\n\ncomplete(): 补全所有可能的组合\ndrop_na(): 删除含缺失值的行\nreplace_na(): 用指定值替换缺失值\nfill(): 用前/后非缺失值填充缺失值",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
@@ -158,7 +158,7 @@
     "href": "课时一/tidyverse介绍.html#tidyverse-的回顾与反思",
     "title": "tidyverse介绍",
     "section": "tidyverse 的回顾与反思",
-    "text": "tidyverse 的回顾与反思\nHadley 对 tidyverse 发展历史的回顾\n统计之都转载: 从另一个视角看 tidyverse",
+    "text": "tidyverse 的回顾与反思\nHadley 对 tidyverse 发展历史的回顾\ntidyverse 将数据处理拆成很多动词, 以符合自然语言习惯与其设计哲学. 但这也导致了学习成本的增加. 例如, filter() 其实就是基于逻辑向量对行索引, arrange() 就是基于 order 向量对行索引, 但 tidyverse 却将它们拆成了三个动词.\n统计之都转载: 从另一个视角看 tidyverse",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
