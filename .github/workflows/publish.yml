@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install Jupyter
-        run: python3 -m pip install jupyter
+        run: python3 -m pip install jupyter jupyter-cache
       - name: Force Quarto to use this Python
         run: |
           echo "QUARTO_PYTHON=$(which python)" >> $GITHUB_ENV

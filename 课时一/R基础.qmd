@@ -3,12 +3,8 @@ title: "R基础"
 order: 2
 format: live-html
 toc: true
-engine: knitr
 ---
 
-{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
-
-本节课介绍 R 语言基础. 包括:
 
 R 中对任何函数使用 `?` 或 `help` 可以打开对应的介绍文档, 如
 

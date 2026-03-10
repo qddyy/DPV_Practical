@@ -3,13 +3,11 @@ title: "R语言介绍"
 order: 1
 format: live-html
 toc: true
-engine: knitr
 webr:
   packages:
     - magrittr
 ---
 
-{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
 
 摘自[CRAN](https://www.r-project.org/about.html):
 
