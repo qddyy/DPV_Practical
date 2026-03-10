@@ -194,9 +194,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>本节课介绍 R 语言基础. 包括:</p>
 <p>R 中对任何函数使用 <code>?</code> 或 <code>help</code> 可以打开对应的介绍文档, 如</p>
-<div class="cell">
 <div>
 <div id="webr-1" class="exercise-cell">
 
@@ -205,8 +203,6 @@ ul.task-list li input[type="checkbox"] {
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaGVscChwaSkifQ==
 </script>
 </div>
-</div>
-<div class="cell">
 <div>
 <div id="webr-2" class="exercise-cell">
 
@@ -215,9 +211,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaGVscChwaSkifQ==
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiP2Bmb3JgICMg5L2/55So5Y+N5byV5Y+36KGo56S65YW25piv5LiA5Liq5ZCN56ew6ICM5LiN5piv5YWz6ZSu5a2XIn0=
 </script>
 </div>
-</div>
 <p>对于任意 R object, 都可以使用 <code>typeof()</code> 和 <code>str()</code> 查看其类型与内部结构, 如</p>
-<div class="cell">
 <div>
 <div id="webr-3" class="exercise-cell">
 
@@ -225,7 +219,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiP2Bmb3JgICMg5L2/55So5Y+N
 <script type="webr-3-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHlwZW9mKDMuMTQpXG5zdHIoMy4xNCkifQ==
 </script>
-</div>
 </div>
 <p>请同学们在接下来的内容中必要时使用这些特性自行探索.</p>
 <section id="基本数据结构" class="level2">
@@ -274,7 +267,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHlwZW9mKDMuMTQpXG5zdHIo
 <section id="创建" class="level4">
 <h4 class="anchored" data-anchor-id="创建">创建</h4>
 <p>原子向量通常用 <code>c()</code> 创建 (combine 的缩写):</p>
-<div class="cell">
 <div>
 <div id="webr-4" class="exercise-cell">
 
@@ -283,10 +275,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHlwZW9mKDMuMTQpXG5zdHIo
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGJsX3ZlYyA8LSBjKDEsIDIuNSwgNC41KVxuaW50X3ZlYyA8LSBjKDFMLCA2TCwgMTBMKVxubG9nX3ZlYyA8LSBjKFRSVUUsIEZBTFNFLCBULCBGKSAjIFQg5ZKMIEYg5pivIFRSVUUg5ZKMIEZBTFNFIOeahOWIq+WQjVxuY2hyX3ZlYyA8LSBjKFwidGhlc2UgYXJlXCIsIFwic29tZSBzdHJpbmdzXCIpIn0=
 </script>
 </div>
-</div>
 <p>实际上 <code>c()</code> 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).</p>
 <p>一些便捷函数可以快速创建具有特定规律的数值类向量:</p>
-<div class="cell">
 <div>
 <div id="webr-5" class="exercise-cell">
 
@@ -295,14 +285,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGJsX3ZlYyA8LSBjKDEsIDIu
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDku44gMSDlvIDlp4ssIOmVv+W6puS4uiAxMiDnmoTlkJHph49cbjE6MTJcbnNlcV9sZW4oMTIpXG5cbiMg5LuOIDEg5YiwIDEyLCDpl7TpmpTkuLogMiDnmoTlkJHph49cbnNlcSgxLCAxMCwgYnkgPSAyKVxuXG4jIOS7jiAxIOWIsCAxMiwg6ZW/5bqm5Li6IDQg55qE5ZCR6YePXG5zZXEoMSwgMTAsIGxlbmd0aC5vdXQgPSA0KVxuXG4jIOagueaNruW3suacieeahOWQkemHj+WIm+W7uuS7jiAxIOW8gOWniywg5LiO5LmL562J6ZW/55qE5ZCR6YePXG5zZXFfYWxvbmcoYygyMCwgMSwgNSkpXG5cbiMg5bCG5ZCR6YeP6YeN5aSNIDUg5qyhXG5yZXAoYygxLCAyKSwgdGltZXMgPSA1KVxuXG4jIOWwhuWQkemHj+eahOavj+S4quWFg+e0oOmHjeWkjSA1IOasoVxucmVwKGMoMSwyKSwgZWFjaCA9IDMpIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="取子集" class="level4">
 <h4 class="anchored" data-anchor-id="取子集">取子集</h4>
 <p>可以使用另一个向量作为索引取得向量的子集. R 中使用 <code>[]</code> 对向量取子集, 支持三种索引:</p>
 <ul>
 <li><p>正数索引</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-6" class="exercise-cell">
 
@@ -310,10 +298,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDku44gMSDlvIDlp4ssIOmV
 <script type="webr-6-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVtjKDEsIDMpXSJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>负数索引</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-7" class="exercise-cell">
 
@@ -321,10 +307,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVtjKDEs
 <script type="webr-7-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVstYygyLCA0KV0ifQ==
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>逻辑索引</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-8" class="exercise-cell">
 
@@ -332,11 +316,9 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVstYygy
 <script type="webr-8-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVtjKFQsIEYsIFQsIEYpXSJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 <p><em>*R 中取向量子集的 <code>[]</code> 也是一个函数:</em></p>
-<div class="cell">
 <div>
 <div id="webr-9" class="exercise-cell">
 
@@ -345,12 +327,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYygxLCA0LCAyLCA1KVtjKFQs
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaXMuZnVuY3Rpb24oYFtgKVxuXG5gW2AoYygxLCA0LCAyLCA1KSwgYygxLCAzKSkifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="相互转换" class="level4">
 <h4 class="anchored" data-anchor-id="相互转换">相互转换</h4>
 <p>不同原子向量可以通过 <code>as.*()</code> 函数族转换, 如:</p>
-<div class="cell">
 <div>
 <div id="webr-10" class="exercise-cell">
 
@@ -359,9 +339,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaXMuZnVuY3Rpb24oYFtgKVxu
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXMuaW50ZWdlcihjKFQsIEYsIFQpKVxuXG5hcy5sb2dpY2FsKDApXG5cbmFzLmNoYXJhY3RlcigxMClcblxuYXMubnVtZXJpYyhcIjMuMTRcIikifQ==
 </script>
 </div>
-</div>
 <p>对于直观上不可相互转换的类型, 强行转换会产生 NA 值:</p>
-<div class="cell">
 <div>
 <div id="webr-11" class="exercise-cell">
 
@@ -369,7 +347,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXMuaW50ZWdlcihjKFQsIEYs
 <script type="webr-11-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXMubnVtZXJpYyhcImFiY1wiKSJ9
 </script>
-</div>
 </div>
 </section>
 </section>
@@ -379,7 +356,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXMubnVtZXJpYyhcImFiY1wi
 <section id="创建-1" class="level4">
 <h4 class="anchored" data-anchor-id="创建-1">创建</h4>
 <p>可以使用 <code>list()</code> 创建列表</p>
-<div class="cell">
 <div>
 <div id="webr-12" class="exercise-cell">
 
@@ -388,9 +364,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXMubnVtZXJpYyhcImFiY1wi
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdCgxOjMsIFwiYVwiLCBjKFRSVUUsIEZBTFNFLCBUUlVFKSwgYygyLjMsIDUuOSksIGxpc3QoMToyKSkgICMg5rOo5oSP5YiX6KGo5Y+v5Lul5bWM5aWXIn0=
 </script>
 </div>
-</div>
 <p>类似地, 可以用 <code>c()</code> 合并多个列表</p>
-<div class="cell">
 <div>
 <div id="webr-13" class="exercise-cell">
 
@@ -399,14 +373,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdCgxOjMsIFwiYVwiLCBj
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYyhsaXN0KDEsIDIpLCBsaXN0KGMoMSwgMiksIGMoMywgNCkpKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="取子集-1" class="level4">
 <h4 class="anchored" data-anchor-id="取子集-1">取子集</h4>
 <p>对列表取子集操作分为两种</p>
 <ul>
 <li><p><code>[]</code> 取出子列表</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-14" class="exercise-cell">
 
@@ -415,10 +387,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYyhsaXN0KDEsIDIpLCBsaXN0
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdChjKDEsIDIpLCBjKDMsIDQpLCA1KVsxXSJ9
 </script>
 </div>
-<p>:::</p>
 <p>这与原子向量的 <code>[]</code> 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.</p></li>
 <li><p><code>[[]]</code> 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-15" class="exercise-cell">
 
@@ -426,8 +396,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdChjKDEsIDIpLCBjKDMs
 <script type="webr-15-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdChjKDEsIDIpLCBjKDMsIDQpLCA1KVtbMV1dIn0=
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 </section>
 </section>
@@ -436,7 +405,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdChjKDEsIDIpLCBjKDMs
 <p>原子向量和列表统称为向量. 所有向量都具有三个基本属性:</p>
 <ul>
 <li><p>type: 存储的数据类型</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-16" class="exercise-cell">
 
@@ -444,10 +412,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlzdChjKDEsIDIpLCBjKDMs
 <script type="webr-16-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHlwZW9mKDE6MTApIn0=
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>length: 长度</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-17" class="exercise-cell">
 
@@ -455,10 +421,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHlwZW9mKDE6MTApIn0=
 <script type="webr-17-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGVuZ3RoKGMoMiwgNCwgNikpIn0=
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>attributes: 属性/元数据 普通的原子向量/列表无额外 attributes</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-18" class="exercise-cell">
 
@@ -466,14 +430,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGVuZ3RoKGMoMiwgNCwgNikp
 <script type="webr-18-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXR0cmlidXRlcygxOjEwKSJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 <p>若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.</p>
 <section id="命名向量" class="level5">
 <h5 class="anchored" data-anchor-id="命名向量">命名向量</h5>
 <p>若在创建向量时使用命名参数, 其会拥有 <code>names</code> 属性</p>
-<div class="cell">
 <div>
 <div id="webr-19" class="exercise-cell">
 
@@ -482,9 +444,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXR0cmlidXRlcygxOjEwKSJ9
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXR0cmlidXRlcyhjKGEgPSAxLCBiID0gMiwgYyA9IDMpKVxuXG5hdHRyaWJ1dGVzKGxpc3QoYSA9IDAsIGIgPSAwTCwgYyA9IEZBTFNFKSlcblxuIyDkuZ/lj6/kvb/nlKggbmFtZXMoKSDorr/pl65cbm5hbWVzKGMoYSA9IDEsIGIgPSAyKSkifQ==
 </script>
 </div>
-</div>
 <p>具有 <code>names</code> 属性的向量可以使用 name 取子集</p>
-<div class="cell">
 <div>
 <div id="webr-20" class="exercise-cell">
 
@@ -493,13 +453,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYXR0cmlidXRlcyhjKGEgPSAx
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYyhhID0gMSwgYiA9IDIsIGMgPSAzKVtcImFcIl1cblxubGlzdChhID0gMCwgYiA9IDBMLCBjID0gRkFMU0UpW1wiYVwiXVxuXG5saXN0KGEgPSAwLCBiID0gMEwsIGMgPSBGQUxTRSlbW1wiYVwiXV1cblxuIyDliJfooajkvb/nlKggW1tcIm5hbWVcIl1dIOWPluWFg+e0oOaXtuWPr+S7peS9v+eUqOetieS7t+eahCAkbmFtZVxubGlzdChhID0gMCwgYiA9IDBMLCBjID0gRkFMU0UpJGEifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="矩阵" class="level5">
 <h5 class="anchored" data-anchor-id="矩阵">矩阵</h5>
 <p>矩阵本质是具有 <code>dims</code> 属性的向量.</p>
 <p>可以用 <code>matrix</code> 创建矩阵:</p>
-<div class="cell">
 <div>
 <div id="webr-21" class="exercise-cell">
 
@@ -508,9 +466,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYyhhID0gMSwgYiA9IDIsIGMg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWF0cml4KDE6OSwgbnJvdyA9IDMsIG5jb2wgPSAzKVxuXG5hdHRyaWJ1dGVzKG1hdHJpeCgxOjksIDMsIDMpKVxuXG4jIOS5n+WPr+S9v+eUqCBkaW1zKCkg6K6/6ZeuXG5kaW1zKG1hdHJpeCgxOjksIDMsIDMpKSJ9
 </script>
 </div>
-</div>
 <p>矩阵额外支持二维索引 (分别指定子集所在的行和列):</p>
-<div class="cell">
 <div>
 <div id="webr-22" class="exercise-cell">
 
@@ -519,13 +475,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWF0cml4KDE6OSwgbnJvdyA9
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWF0cml4KDE6OSwgbnJvdyA9IDMsIG5jb2wgPSAzKVsxOjIsIDNdIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="因子" class="level5">
 <h5 class="anchored" data-anchor-id="因子">因子</h5>
 <p>因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 <code>levels</code> 和 <code>class="factor"</code> 属性的整数向量.</p>
 <p>可以用 <code>factor</code> 创建因子:</p>
-<div class="cell">
 <div>
 <div id="webr-23" class="exercise-cell">
 
@@ -534,13 +488,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWF0cml4KDE6OSwgbnJvdyA9
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyBvcmRlcmVkIOWPguaVsOaMh+WumiBsZXZlbHMg6Ze05piv5ZCm5pyJ5aSn5bCP5YWz57O7XG5mYWN0b3IoYyhcImhcIiwgXCJsXCIsIFwibVwiKSwgbGV2ZWxzID0gYyhcImxcIiwgXCJtXCIsIFwiaFwiKSwgb3JkZXJlZCA9IFRSVUUpXG5cbmF0dHJpYnV0ZXMoZmFjdG9yKGMoXCJoXCIsIFwibFwiLCBcIm1cIikpKVxuXG4jIOS5n+WPr+S9v+eUqCBsZXZlbHMoKSDorr/pl65cbmxldmVscyhmYWN0b3IoYyhcImhcIiwgXCJsXCIsIFwibVwiKSkpIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="数据框" class="level5">
 <h5 class="anchored" data-anchor-id="数据框">数据框</h5>
 <p>数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 <code>names</code>, <code>row.names</code> 和 <code>class="data.frame"</code> 属性, 所有元素都是等长向量的列表.</p>
 <p>可以用 <code>data.frame</code> 创建数据框:</p>
-<div class="cell">
 <div>
 <div id="webr-24" class="exercise-cell">
 
@@ -549,9 +501,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyBvcmRlcmVkIOWPguaVsOaM
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBuYW1lID0gYyhcIkFsaWNlXCIsIFwiQm9iXCIsIFwiQ2hhcmxpZVwiKSxcbiAgICBhZ2UgPSBjKDIwLCAyMiwgMjEpLFxuICAgIHN0dWRlbnQgPSBjKFRSVUUsIFRSVUUsIEZBTFNFKVxuKSJ9
 </script>
 </div>
-</div>
 <p>作为和矩阵一样的二维结构, 数据框也额外支持二维索引:</p>
-<div class="cell">
 <div>
 <div id="webr-25" class="exercise-cell">
 
@@ -559,7 +509,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBu
 <script type="webr-25-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBuYW1lID0gYyhcIkFsaWNlXCIsIFwiQm9iXCIsIFwiQ2hhcmxpZVwiKSxcbiAgICBhZ2UgPSBjKDIwLCAyMiwgMjEpLFxuICAgIHN0dWRlbnQgPSBjKFRSVUUsIFRSVUUsIEZBTFNFKVxuKVsxOjIsIGMoXCJuYW1lXCIsIFwiYWdlXCIpXSJ9
 </script>
-</div>
 </div>
 <p>在 2026 年, R 自带的 <code>data.frame</code> 类型已经有更加现代化的替代品 (如 <code>tibble</code>, <code>data.table</code>). 不过对 <code>data.frame</code> 的基础操作同样适用于这些新的数据框类型.</p>
 </section>
@@ -590,7 +539,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBu
 <li>不能使用保留字 (如 <code>for</code>, <code>if</code>)</li>
 </ul>
 <p>使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则</p>
-<div class="cell">
 <div>
 <div id="webr-26" class="exercise-cell">
 
@@ -599,13 +547,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBu
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYDFA5peg6KeG6KeE5YiZIGlmIOS9v+eUqOWPjeW8leWPt2AgPC0gMVxuYDFA5peg6KeG6KeE5YiZIGlmIOS9v+eUqOWPjeW8leWPt2AifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="控制流" class="level3">
 <h3 class="anchored" data-anchor-id="控制流">控制流</h3>
 <ul>
 <li><p><code>if</code> 条件控制 基本语法为 <code>if (condition) expression else alternative_expression</code></p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-27" class="exercise-cell">
 
@@ -614,9 +560,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYDFA5peg6KeG6KeE5YiZIGlm
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSA1XG5cbiMg5aSn5ous5Y+3IGB7YCDmmK8gZXhwcmVzc2lvbiDnmoTkuIDpg6jliIYsIOWPr+S7peecgeeVpVxuaWYgKHggPiAxKSB7XG4gICAgcHJpbnQoXCJ4ID4gMVwiKVxufSBlbHNlIHtcbiAgICBwcmludChcInggPD0gMVwiKVxufSJ9
 </script>
 </div>
-<p>:::</p>
 <p><code>if</code> 有返回值 (返回 expression 部分):</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-28" class="exercise-cell">
 
@@ -624,10 +568,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSA1XG5cbiMg5aSn5ous
 <script type="webr-28-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSBpZiAoRkFMU0UpIDEgZWxzZSAyXG54XG5cbiMg55yB55WlIGVsc2Ug6YOo5YiG55u45b2T5LqOIGFsdGVybmF0aXZlX2V4cHJlc3Npb24g5Li6IE5VTExcbnggPC0gaWYgKEZBTFNFKSAxIGVsc2UgMlxueCJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p><code>for</code> 循环 基本语法为 <code>for (variable in sequence) expression</code></p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-29" class="exercise-cell">
 
@@ -635,14 +577,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSBpZiAoRkFMU0UpIDEg
 <script type="webr-29-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZm9yIChpIGluIDE6NSkge1xuICAgIHByaW50KGkpXG59In0=
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 </section>
 <section id="函数" class="level3">
 <h3 class="anchored" data-anchor-id="函数">函数</h3>
 <p>在 R 中创建函数的语法为 <code>function(arg_list) expression</code> 或 <code>\(arg_list) expression</code>, 其将返回一个 <code>closure</code> 类型的值:</p>
-<div class="cell">
 <div>
 <div id="webr-30" class="exercise-cell">
 
@@ -651,9 +591,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZm9yIChpIGluIDE6NSkge1xu
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZiA8LSBmdW5jdGlvbihhLCBiID0gMSkgYSArIGJcblxuIyDnrYnku7dcbmYgPC0gXFwoYSwgYiA9IDEpIGEgKyBiXG5cbiMg562J5Lu3LCDmraTml7blh73mlbDkvZPkuLogeyBhICsgYiB9XG5mIDwtIFxcKGEsIGIgPSAxKSB7XG4gICAgYSArIGJcbn1cbiMg6L+Z6YeM55qEIHsg5a6e6ZmF5piv5LiA5Liq5Ye95pWw6LCD55SoLCDov5Tlm54ge30g5Lit5pyA5ZCO5LiA6KGM55qE6KGo6L6+5byP5YC8LCDljbNcbmYgPC0gXFwoYSwgYiA9IDEpIGB7YChhICsgYilcblxudHlwZW9mKGYpIn0=
 </script>
 </div>
-</div>
 <p>参数可以有默认值, 且具有惰性求值机制:</p>
-<div class="cell">
 <div>
 <div id="webr-31" class="exercise-cell">
 
@@ -662,9 +600,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZiA8LSBmdW5jdGlvbihhLCBi
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlnKjlh73mlbDliJvlu7rml7YgYiDnmoTpu5jorqTlgLwgYSDlubbmsqHmnInooqvmsYLlgLxcbmYgPC0gZnVuY3Rpb24oYSA9IDEsIGIgPSBhKSBhICsgYlxuXG4jIOWPquacieWvueWHveaVsOS9k+axguWAvOaXtueUqOWIsOS6hiBiIOaJjeS8muaxguWAvFxuZigpXG5cbiMg5aaC5p6c5Ye95pWw5L2T5Lit5rKh5pyJ55So5YiwIGIsIOWNs+S9v+WPkeeUn+WHveaVsOiwg+eUqCBiIOS5n+S4jeS8muiiq+axguWAvFxuZyA8LSBmdW5jdGlvbihhID0gMSwgYiA9IHByaW50KFwiZXZhbHVhdGVkXCIpKSBhXG5nKCkifQ==
 </script>
 </div>
-</div>
 <p>此外, 存在可变长参数 <code>...</code>, 通常用于转发不定数量的参数给其他函数</p>
-<div class="cell">
 <div>
 <div id="webr-32" class="exercise-cell">
 
@@ -672,7 +608,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlnKjlh73mlbDliJvlu7rm
 <script type="webr-32-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaCA8LSBmdW5jdGlvbiguLi4pIHN1bSguLi4pXG5oKDEpXG5oKDEsIDIpIn0=
 </script>
-</div>
 </div>
 <p>Hadley 的 Advanced R 中总结了 <a href="http://adv-r.had.co.nz/Vocabulary.html">base R 中常用的函数</a>.</p>
 </section>
@@ -682,7 +617,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaCA8LSBmdW5jdGlvbiguLi4p
 <section id="source" class="level3">
 <h3 class="anchored" data-anchor-id="source">source</h3>
 <p>项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. <code>source</code> 用于运行其他 R 文件中的代码:</p>
-<div class="cell">
 <div>
 <div id="webr-33" class="exercise-cell">
 
@@ -691,13 +625,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaCA8LSBmdW5jdGlvbiguLi4p
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDliJvlu7rkuIDkuKrlpJbpg6ggUiDmlofku7ZcbndyaXRlTGluZXModGV4dCA9IFwic3F1YXJlX251bWJlciA8LSBmdW5jdGlvbih4KSB4XjJcIiwgXCJzcXVhcmUuUlwiKVxuXG4jIOS9v+eUqCBzb3VyY2Ug5Yqg6L296L+Z5Liq5paH5Lu2XG5zb3VyY2UoXCJ1dGlscy5SXCIpXG5cbnNxdWFyZV9udW1iZXIoNSkifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="r-package" class="level3">
 <h3 class="anchored" data-anchor-id="r-package">R package</h3>
 <p>另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.</p>
 <p>我们重点关注如何使用别人的 R 包. 可以使用 <code>library()</code> 来加载本地已安装的 R 包, 之后可以使用包里的全部函数</p>
-<div class="cell">
 <div>
 <div id="webr-34" class="exercise-cell">
 
@@ -706,9 +638,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDliJvlu7rkuIDkuKrlpJbp
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeSh0aGlzLnBhdGgpXG5cbiMgdGhpcy5kaXIoKSDov5Tlm57lvZPliY3mlofku7bmiYDlnKjnmoTnm67lvZUuIOiuvue9ruW3peS9nOebruW9leaXtuacieeUqFxudGhpcy5kaXIoKVxuXG4jIGhlcmUoKSDlsIblj4LmlbDkuI7lvZPliY3mlofku7bmiYDlnKjnmoTnm67lvZXmi7zmjqUsIOWIm+mAoOS4gOS4quaWh+S7tui3r+W+hC4g5LuO5Luj56CB5L+d5a2Y5Yiw5paH5Lu25pe25pyJ55SoXG5oZXJlKFwicGxvdC5wZGZcIikifQ==
 </script>
 </div>
-</div>
 <p>由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 <code>::</code> 访问包中的特定函数:</p>
-<div class="cell">
 <div>
 <div id="webr-35" class="exercise-cell">
 
@@ -717,9 +647,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeSh0aGlzLnBhdGgp
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YSA8LSBkYXRhLmZyYW1lKGEgPSAxOjIsIGIgPSAzOjQpXG5cbiMgcXMyIOWMheS4reeahCBxc19zYXZlIOWPr+S7peS/neWtmOS7u+S9lSBSIOWvueixoeiHs+aWh+S7ti4g5bi455So5LqO5L+d5a2Y5Lit6Ze06K6h566X57uT5p6cXG5xczI6OnFzX3NhdmUoZGF0YSwgdGhpcy5wYXRoOjpoZXJlKFwiZGF0YS5xczJcIikpXG5cbiMgcXNfcmVhZCDku47kv53lrZjnmoTmlofku7bkuK3or7vlj5blr7nosaFcbnFzMjo6cXNfcmVhZCh0aGlzLnBhdGg6OmhlcmUoXCJkYXRhLnFzMlwiKSkifQ==
 </script>
 </div>
-</div>
 <p>与 <code>::</code> 类似的是 <code>:::</code>, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.</p>
-<div class="cell">
 <div>
 <div id="webr-36" class="exercise-cell">
 
@@ -727,7 +655,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YSA8LSBkYXRhLmZyYW1l
 <script type="webr-36-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhdHM6OnQudGVzdC5kZWZhdWx0XG5cbnN0YXRzOjo6dC50ZXN0LmRlZmF1bHQifQ==
 </script>
-</div>
 </div>
 <!-- ### R package 安装专题
 

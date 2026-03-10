@@ -231,15 +231,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-::: {.cell}
 
-```bsfluq
+```wknkcr
 available.packages() %>%
     rownames() %>%
     .[str_starts(., "tidy")]
 ```
 
-:::
 
 
 
@@ -248,7 +246,6 @@ available.packages() %>%
 -->
 <p>要使用 tidyverse 中的各个包, 只需 <code>library(tidyverse)</code></p>
 <!-- TODO: 禁止修改 -->
-<div class="cell" data-autorun="true">
 <div>
 <div id="webr-1" class="exercise-cell">
 
@@ -257,7 +254,6 @@ available.packages() %>%
 eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeSh0aWR5dmVyc2UpIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="magrittr" class="level2">
 <h2 class="anchored" data-anchor-id="magrittr">magrittr</h2>
@@ -265,7 +261,6 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGli
 <p>常用管道符包括:</p>
 <ul>
 <li><p><code>%&gt;%</code>：将左侧结果作为右侧函数的第一个参数</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-2" class="exercise-cell">
 
@@ -273,10 +268,8 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGli
 <script type="webr-2-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICU+JSBzdW0oKSJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p><code>%T&gt;%</code>：将左侧结果传递给右侧表达式并返回左侧原始值, 常用于插入中间操作 (如 plot, print 这类依赖副作用的函数)</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-3" class="exercise-cell">
 
@@ -284,10 +277,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICU+JSBzdW0oKSJ9
 <script type="webr-3-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICVUPiUgcHJpbnQoKSAlPiUgc3VtKCkifQ==
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p><code>%$%</code>：暴露数据框的列名到右侧表达式的环境中, 直接用于计算</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-4" class="exercise-cell">
 
@@ -295,10 +286,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICVUPiUgcHJpbnQoKSAl
 <script type="webr-4-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZSh4ID0gMTozLCB5ID0gNDo2KSAlJCUgeCArIHkifQ==
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p><code>%&lt;&gt;%</code>：将结果赋值回左侧对象</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-5" class="exercise-cell">
 
@@ -306,11 +295,9 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZSh4ID0gMToz
 <script type="webr-5-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSAxOjNcbnggJTw+JSBzdW0oKVxueCJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 <p><code>magrittr</code> 总是将左侧变量传递给右侧函数作为第一个参数, 但有时我们需要传给其他参数. 此时可以使用 <code>.</code> 代表左侧变量:</p>
-<div class="cell">
 <div>
 <div id="webr-6" class="exercise-cell">
 
@@ -319,7 +306,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieCA8LSAxOjNcbnggJTw+JSBz
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICU+JVxuICAgIHBhc3RlKFwieFwiLCAuLCBzZXAgPSBcIl9cIilcblxuIyAuIOWPr+S9v+eUqOWkmuasoVxuMTo1ICU+JVxuICAgIHBhc3RlKFwieFwiLCAuLCAuLCBzZXAgPSBcIl9cIikifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="tibble" class="level2">
 <h2 class="anchored" data-anchor-id="tibble">tibble</h2>
@@ -327,7 +313,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICU+JVxuICAgIHBhc3Rl
 <p>有许多种方式创建一个 tibble:</p>
 <ul>
 <li><p>使用 <code>tibble</code> 直接创建</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-7" class="exercise-cell">
 
@@ -335,10 +320,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiMTo1ICU+JVxuICAgIHBhc3Rl
 <script type="webr-7-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmlK/mjIHmg7DmgKfmsYLlgLxcbnRpYmJsZSh4ID0gMTo1LCB5ID0gMSwgeiA9IHheMiArIHkpIn0=
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>使用 <code>as_tibble</code> 从现有的 data.frame 创建 (支持的更多数据结构见文档)</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-8" class="exercise-cell">
 
@@ -346,10 +329,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmlK/mjIHmg7DmgKfmsYLl
 <script type="webr-8-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YSA8LSBkYXRhLmZyYW1lKGEgPSAxOjMsIGIgPSBsZXR0ZXJzWzE6M10sIGMgPSBTeXMuRGF0ZSgpIC0gMTozKVxuXG5hc190aWJibGUoZGF0YSkifQ==
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 <li><p>使用 <code>tribble</code> (transposed tibble) 逐行定义一个 tibble</p>
-<p>::: {.cell}</p>
 <div>
 <div id="webr-9" class="exercise-cell">
 
@@ -357,8 +338,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YSA8LSBkYXRhLmZyYW1l
 <script type="webr-9-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHJpYmJsZShcbiAgICB+eCwgfnksICB+eixcbiAgICBcImFcIiwgMiwgIDMuNixcbiAgICBcImJcIiwgMSwgIDguNVxuKSJ9
 </script>
-</div>
-<p>:::</p></li>
+</div></li>
 </ul>
 <p>此外, 还有 <code>as_tibble_row</code>, <code>as_tibble_col</code>, <code>enframe</code> 等函数可创建 tibble.</p>
 </section>
@@ -375,7 +355,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHJpYmJsZShcbiAgICB+eCwg
 </ul>
 <p>其中, <code>read_csv()</code> 和 <code>read_tsv()</code> 可以看作 <code>read_delim()</code> 的特例.</p>
 <p>readr 会自动推断列的类型, 但也允许手动修正.</p>
-<div class="cell">
 <div>
 <div id="webr-10" class="exercise-cell">
 
@@ -384,7 +363,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHJpYmJsZShcbiAgICB+eCwg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY2hpY2tlbnMgPC0gcmVhZF9jc3YocmVhZHJfZXhhbXBsZShcImNoaWNrZW5zLmNzdlwiKSlcbmNoaWNrZW5zXG5cbmNoaWNrZW5zMiA8LSByZWFkX2NzdihcbiAgICByZWFkcl9leGFtcGxlKFwiY2hpY2tlbnMuY3N2XCIpLFxuICAgIGNvbF90eXBlcyA9IGNvbHMoXG4gICAgICAgIGNoaWNrZW4gICA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgICAgICAgc2V4ICAgICAgID0gY29sX2ZhY3RvcihsZXZlbHMgPSBjKFwicm9vc3RlclwiLCBcImhlblwiKSksXG4gICAgICAgIGVnZ3NfbGFpZCA9IGNvbF9pbnRlZ2VyKCksXG4gICAgICAgIG1vdHRvICAgICA9IGNvbF9jaGFyYWN0ZXIoKVxuICAgIClcbilcbmNoaWNrZW5zMiJ9
 </script>
 </div>
-</div>
 <p>另外常用的参数还包括</p>
 <ul>
 <li><code>col_names</code>: 是否把第一行当作列名</li>
@@ -392,7 +370,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY2hpY2tlbnMgPC0gcmVhZF9j
 <li><code>n_max</code>: 限制最大读取行数</li>
 </ul>
 <p>另一个常见的需求是读取 excel 文件. <code>readxl</code> 包中的 <code>read_excel()</code> 实现了这个功能.</p>
-<div class="cell">
 <div>
 <div id="webr-11" class="exercise-cell">
 
@@ -400,7 +377,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY2hpY2tlbnMgPC0gcmVhZF9j
 <script type="webr-11-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShyZWFkeGwpXG5cbnJlYWRfZXhjZWwocmVhZHhsX2V4YW1wbGUoXCJjbGlwcHkueGxzeFwiKSkifQ==
 </script>
-</div>
 </div>
 <p>此外, 还存在与 <code>read_*()</code> 对应的 <code>write_*()</code> 函数族, 用于将 tibble 保存至各种格式的文件.</p>
 </section>
@@ -458,7 +434,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShyZWFkeGwpXG5c
 <section id="pivot_longer" class="level3">
 <h3 class="anchored" data-anchor-id="pivot_longer">pivot_longer</h3>
 <p>最常见的非 tidy 数据是宽表, 即分类变量成为列名.</p>
-<div class="cell">
 <div>
 <div id="webr-12" class="exercise-cell">
 
@@ -467,9 +442,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShyZWFkeGwpXG5c
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmVsaWdfaW5jb21lIn0=
 </script>
 </div>
-</div>
 <p>注意其中每个 cell 中的 count 唯一对应一个 religion 和一个 income. 此时可以使用 <code>pivot_longer()</code> 将宽表转化为长表, 成为 tidy data:</p>
-<div class="cell">
 <div>
 <div id="webr-13" class="exercise-cell">
 
@@ -478,12 +451,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmVsaWdfaW5jb21lIn0=
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmVsaWdfaW5jb21lICU+JSBcbiAgICBwaXZvdF9sb25nZXIoXG4gICAgICAgIGNvbHMgPSAhcmVsaWdpb24sICAgICMg5ZOq5Lqb5YiXXCLmnKzotKjmmK/liIbnsbvlj5jph4/lgLxcIlxuICAgICAgICBuYW1lc190byA9IFwiaW5jb21lXCIsICMg5YiX5ZCN5Y+Y5oiQ5LiA5Liq5paw5YiX55qE5YC85ZCOLCDmlrDliJfnmoTliJflkI1cbiAgICAgICAgdmFsdWVzX3RvID0gXCJjb3VudFwiICAjIOi/meS6m+WIl+S4i+eahOaJgOaciSBjZWxsIOWAvOWPmOaIkOS4gOS4quaWsOWIl+WQjiwg5paw5YiX55qE5YiX5ZCNXG4gICAgKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="pivot_wider" class="level3">
 <h3 class="anchored" data-anchor-id="pivot_wider">pivot_wider</h3>
 <p>有时长表中的列仅作为不同变量的 indicator 而没有实际意义, 此时应将其包含的每个变量作为一列.</p>
-<div class="cell">
 <div>
 <div id="webr-14" class="exercise-cell">
 
@@ -492,9 +463,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmVsaWdfaW5jb21lICU+JSBc
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNfcmVudF9pbmNvbWUifQ==
 </script>
 </div>
-</div>
 <p>此时可以使用 <code>pivot_wider()</code> 将宽表转化为长表, 成为 tidy data:</p>
-<div class="cell">
 <div>
 <div id="webr-15" class="exercise-cell">
 
@@ -503,12 +472,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNfcmVudF9pbmNvbWUifQ==
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNfcmVudF9pbmNvbWUgJT4lIFxuICAgIHBpdm90X3dpZGVyKFxuICAgICAgICBuYW1lc19mcm9tID0gdmFyaWFibGUsICAgICAgICAgICMg5ZOq5Lqb5YiXXCLmnKzotKjmmK9pbmRpY2F0b3JcIlxuICAgICAgICB2YWx1ZXNfZnJvbSA9IGMoZXN0aW1hdGUsIG1vZSksICMg6YKj5Lqb5YiX5a2Y5YKo5LqG5Y+Y6YeP5YC8XG4gICAgICAgIG5hbWVzX3NlcCA9IFwiX1wiICAgICAgICAgICAgICAgICAjIOWIm+W7uuaWsOWIl+aXtuiHquWKqOeUn+aIkOWIl+WQjSwg5omA55So55qE5YiG6ZqU56ymXG4gICAgKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="separate_longer_delim" class="level3">
 <h3 class="anchored" data-anchor-id="separate_longer_delim">separate_longer_delim</h3>
 <p>有时候同一个 cell 中以字符串形式存储了同一变量的多个值:</p>
-<div class="cell">
 <div>
 <div id="webr-16" class="exercise-cell">
 
@@ -517,9 +484,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNfcmVudF9pbmNvbWUgJT4l
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0gMTo0LCB4ID0gYyhcInhcIiwgXCJ4IHlcIiwgXCJ4IHkgelwiLCBOQSkpXG5kZiJ9
 </script>
 </div>
-</div>
 <p>此时可以使用 <code>separate_longer_delim()</code> 将 cell 含多个值的一行拆分成 cell 含一个值的多行, 成为 tidy data:</p>
-<div class="cell">
 <div>
 <div id="webr-17" class="exercise-cell">
 
@@ -528,9 +493,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0g
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgJT4lIHNlcGFyYXRlX2xvbmdlcl9kZWxpbShjb2xzID0geCwgZGVsaW0gPSBcIiBcIikifQ==
 </script>
 </div>
-</div>
 <p>除了按分隔符分割, 也可以使用 <code>separate_longer_position</code> 按固定宽度分割:</p>
-<div class="cell">
 <div>
 <div id="webr-18" class="exercise-cell">
 
@@ -539,12 +502,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgJT4lIHNlcGFyYXRlX2xv
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0gMTozLCB4ID0gYyhcImFiXCIsIFwiZGVmXCIsIFwiXCIpKVxuZGZcblxuZGYgJT4lIHNlcGFyYXRlX2xvbmdlcl9wb3NpdGlvbihjb2xzID0geCwgd2lkdGggPSAxKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="separate_wider_delim" class="level3">
 <h3 class="anchored" data-anchor-id="separate_wider_delim">separate_wider_delim</h3>
 <p>有时候同一个 cell 中以字符串形式存储了多个变量的值:</p>
-<div class="cell">
 <div>
 <div id="webr-19" class="exercise-cell">
 
@@ -553,9 +514,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0g
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0gMTozLCB4ID0gYyhcIm0tMTIzXCIsIFwiZi00NTVcIiwgXCJmLTEyM1wiKSlcbmRmIn0=
 </script>
 </div>
-</div>
 <p>此时可以使用 <code>separate_wider_delim()</code> 将含多个变量的一列拆分成含一个变量的多列, 成为 tidy data:</p>
-<div class="cell">
 <div>
 <div id="webr-20" class="exercise-cell">
 
@@ -563,7 +522,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKGlkID0g
 <script type="webr-20-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgJT4lIHNlcGFyYXRlX3dpZGVyX2RlbGltKGNvbHMgPSB4LCBkZWxpbSA9IFwiLVwiLCBuYW1lcyA9IGMoXCJnZW5kZXJcIiwgXCJ1bml0XCIpKSJ9
 </script>
-</div>
 </div>
 </section>
 <section id="数据清洗" class="level3">
@@ -603,7 +561,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgJT4lIHNlcGFyYXRlX3dp
 <section id="slice" class="level4">
 <h4 class="anchored" data-anchor-id="slice">slice</h4>
 <p><code>slice()</code> 根据数字索引对行进行切片.</p>
-<div class="cell">
 <div>
 <div id="webr-21" class="exercise-cell">
 
@@ -612,12 +569,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgJT4lIHNlcGFyYXRlX3dp
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAgc2xpY2UoMTo1KVxuXG4jIOS+v+aNt+WHveaVsDogc2xpY2VfaGVhZC9zbGljZV90YWlsIOaMieaVsOmHj+aIluavlOS+i+S7jiB0aWJibGUg55qE5aS06YOoL+WwvumDqOWIh+eJh1xuc3RhcndhcnMgJT4lXG4gICAgc2xpY2VfaGVhZChuID0gNSlcbnN0YXJ3YXJzICU+JVxuICAgIHNsaWNlX3RhaWwocHJvcCA9IDAuMSkifQ==
 </script>
 </div>
-</div>
 </section>
 <section id="filter" class="level4">
 <h4 class="anchored" data-anchor-id="filter">filter</h4>
 <p><code>filter()</code> 根据逻辑条件过滤出符合要求的行, 参数是作为条件的逻辑向量 (通常是由某些列向量运算得到的一个逻辑向量).</p>
-<div class="cell">
 <div>
 <div id="webr-22" class="exercise-cell">
 
@@ -626,12 +581,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAgZmlsdGVyKHNwZWNpZXMgPT0gXCJIdW1hblwiICYgaGVpZ2h0ID4gMTgwKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="distinct" class="level4">
 <h4 class="anchored" data-anchor-id="distinct">distinct</h4>
 <p><code>distinct()</code> 去除重复行, 参数是去重的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).</p>
-<div class="cell">
 <div>
 <div id="webr-23" class="exercise-cell">
 
@@ -640,12 +593,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKFxuICAgIHggPSBzYW1wbGUoMTAsIDEwMCwgcmVwID0gVFJVRSksXG4gICAgeSA9IHNhbXBsZSgxMCwgMTAwLCByZXAgPSBUUlVFKSxcbiAgICB6ID0gc2FtcGxlKDEwLCAxMDAsIHJlcCA9IFRSVUUpXG4pXG5ucm93KGRmKVxuXG5kZiAlPiVcbiAgICBkaXN0aW5jdCh4KSAlPiUgXG4gICAgbnJvdygpXG5kZiAlPiVcbiAgICBkaXN0aW5jdCh4ICsgeSkgJT4lIFxuICAgIG5yb3coKVxuIyDlpJrlj5jph4/ogZTlkIjljrvph41cbmRmICU+JSBcbiAgICBkaXN0aW5jdCh4LCB5KSAlPiUgXG4gICAgbnJvdygpIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="arrange" class="level4">
 <h4 class="anchored" data-anchor-id="arrange">arrange</h4>
 <p><code>arrange()</code> 对行排序, 参数是排序的依据 (已经存在的一列向量/由某些列运算得到的一个向量/多个向量).</p>
-<div class="cell">
 <div>
 <div id="webr-24" class="exercise-cell">
 
@@ -654,7 +605,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGYgPC0gdGliYmxlKFxuICAg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjIkgaGVpZ2h0IOaOkuW6j1xuc3RhcndhcnMgJT4lIFxuICAgIGFycmFuZ2UoaGVpZ2h0KVxuXG4jIOaMiSBoZWlnaHQg5YCS5bqPXG5zdGFyd2FycyAlPiUgXG4gICAgYXJyYW5nZSgtaGVpZ2h0KVxuXG4jIOaMiSBoZWlnaHQgKyBtYXNzIOaOkuW6j1xuc3RhcndhcnMgJT4lIFxuICAgIGFycmFuZ2UoaGVpZ2h0ICsgbWFzcylcblxuIyDlhYjmjIkgaGVpZ2h0LCDlho3mjIkgbWFzcyDmjpLluo9cbnN0YXJ3YXJzICU+JSBcbiAgICBhcnJhbmdlKGhlaWdodCwgbWFzcykifQ==
 </script>
 </div>
-</div>
 </section>
 </section>
 <section id="列操作" class="level3">
@@ -662,7 +612,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjIkgaGVpZ2h0IOaOkuW6
 <section id="select" class="level4">
 <h4 class="anchored" data-anchor-id="select">select</h4>
 <p><code>select()</code> 用于提取 tibble 的列子集. 其和前述很多函数的 <code>col</code> 参数共用一套 <code>&lt;tidy-select&gt;</code> 语法.</p>
-<div class="cell">
 <div>
 <div id="webr-25" class="exercise-cell">
 
@@ -671,12 +620,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjIkgaGVpZ2h0IOaOkuW6
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgfD4gc2VsZWN0KGhlaWdodClcblxuIyBzZWxlY3Qg5Lmf5Y+v55So5LqO6LCD5pW05YiX6aG65bqPIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="mutate" class="level4">
 <h4 class="anchored" data-anchor-id="mutate">mutate</h4>
 <p><code>mutate()</code> 用于修改列/新增列/删除列. 注意 <code>mutate()</code> 会返回一个新的 tibble 而不是原地修改.</p>
-<div class="cell">
 <div>
 <div id="webr-26" class="exercise-cell">
 
@@ -685,9 +632,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgfD4gc2VsZWN0
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmt7vliqDmlrDliJdcbnN0YXJ3YXJzICU+JSBcbiAgICBtdXRhdGUoYm1pID0gbWFzcyAvIChoZWlnaHQgLyAxMDApXjIpXG5cbiMg5L+u5pS55bey5pyJ5YiXXG5zdGFyd2FycyAlPiUgXG4gICAgbXV0YXRlKGhlaWdodCA9IGhlaWdodCAvIDEwMClcblxuIyDliKDpmaTliJdcbnN0YXJ3YXJzICU+JSBcbiAgICBtdXRhdGUoaGVpZ2h0ID0gTlVMTCkifQ==
 </script>
 </div>
-</div>
 <p>将 <code>across()</code> 作为参数传给 <code>mutate()</code> 可以实现对多列应用同一个函数:</p>
-<div class="cell">
 <div>
 <div id="webr-27" class="exercise-cell">
 
@@ -696,13 +641,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmt7vliqDmlrDliJdcbnN0
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAgIG11dGF0ZShcbiAgICAgICAgIyBhY3Jvc3Mg5o6l5Y+X5LiA5LiqIDx0aWR5LXNlbGVjdD4g5ZKM5LiA5LiqIGZ1bmN0aW9uLFxuICAgICAgICAjIOi/lOWbnuS4gOS4queUsei/meS4qiBmdW5jdGlvbiDkvZznlKjkuo7pgInkuK3nmoTliJfnmoTnu5Pmnpznu4TmiJDnmoQgdGliYmxlXG4gICAgICAgIGFjcm9zcyhjKGhlaWdodCwgbWFzcyksIGZ1bmN0aW9uKHgpIHggKiAxMDApXG4gICAgKSJ9
 </script>
 </div>
-</div>
 <p>注意: <code>mutate()</code> 无法改变 tibble 的行数, 即只能新建/修改列为等长向量.</p>
 </section>
 <section id="rename" class="level4">
 <h4 class="anchored" data-anchor-id="rename">rename</h4>
 <p><code>rename()</code> 用于重命名 tibble 的列. 其语法为 <code>rename(new_name = old_name)</code>.</p>
-<div class="cell">
 <div>
 <div id="webr-28" class="exercise-cell">
 
@@ -711,9 +654,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDph43lkb3lkI3liJdcbnN0YXJ3YXJzICU+JVxuICAgIHJlbmFtZShoZWlnaHRfY20gPSBoZWlnaHQsIG1hc3Nfa2cgPSBtYXNzKSJ9
 </script>
 </div>
-</div>
 <p><code>rename_with()</code> 用于批量修改 tibble 的列名. 它对选定的列名应用同一个函数以生成新的列名.</p>
-<div class="cell">
 <div>
 <div id="webr-29" class="exercise-cell">
 
@@ -722,12 +663,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDph43lkb3lkI3liJdcbnN0
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlsIbliJflkI3ovazmjaLkuLrlpKflhplcbnN0YXJ3YXJzICU+JVxuICAgIHJlbmFtZV93aXRoKHRvdXBwZXIsIC5jb2xzID0gYyhoZWlnaHQsIG1hc3MpKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="relocate" class="level4">
 <h4 class="anchored" data-anchor-id="relocate">relocate</h4>
 <p><code>relocate()</code> 用于调整 tibble 中列的位置. 可以将指定的列移动到表头/表尾/某一列的前后.</p>
-<div class="cell">
 <div>
 <div id="webr-30" class="exercise-cell">
 
@@ -735,7 +674,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlsIbliJflkI3ovazmjaLk
 <script type="webr-30-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlsIYgbWFzcyDliJfnp7vliqjliLDmnIDliY3pnaJcbnN0YXJ3YXJzICU+JVxuICAgIHJlbG9jYXRlKG1hc3MpXG5cbiMg5bCGIG1hc3Mg5YiX56e75Yqo5YiwIGhlaWdodCDliJfkuYvlkI5cbnN0YXJ3YXJzICU+JVxuICAgIHJlbG9jYXRlKG1hc3MsIC5hZnRlciA9IGhlaWdodClcblxuIyDlsIYgc3BlY2llcyDliJfnp7vliqjliLAgaGVpZ2h0IOWIl+S5i+WJjVxuc3RhcndhcnMgJT4lXG4gICAgcmVsb2NhdGUoc3BlY2llcywgLmJlZm9yZSA9IGhlaWdodCkifQ==
 </script>
-</div>
 </div>
 </section>
 </section>
@@ -746,7 +684,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlsIYgbWFzcyDliJfnp7vl
 <h4 class="anchored" data-anchor-id="group_by">group_by</h4>
 <p><code>group_by()</code> 用于按指定变量对 tibble 分组, 返回被分组的 tibble.</p>
 <p>被分组的 tibble 不会立即改变, 但 <code>mutate</code>, <code>filter</code>, <code>arrange</code> 等函数作用于其上时会自动对每个组分别执行操作.</p>
-<div class="cell">
 <div>
 <div id="webr-31" class="exercise-cell">
 
@@ -755,14 +692,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDlsIYgbWFzcyDliJfnp7vl
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjIkgc3BlY2llcyDliIbnu4RcbnN0YXJ3YXJzICU+JSBcbiAgICBncm91cF9ieShzcGVjaWVzKSJ9
 </script>
 </div>
-</div>
 <p>分组进行某个操作可以理解为:</p>
 <ol type="1">
 <li>将原 tibble 按照分组变量的值分割成多个行数较小的 tibble</li>
 <li>对每个小 tibble 执行某个操作</li>
 <li>将各个小 tibble 在行方向合并, 得到的结果形状与原 tibble 一致</li>
 </ol>
-<div class="cell">
 <div>
 <div id="webr-32" class="exercise-cell">
 
@@ -771,9 +706,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjIkgc3BlY2llcyDliIbn
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDorqHnrpfouqvpq5jkuI7mnKznu4TlhoXlubPlnYfouqvpq5jnmoTlt67lgLxcbnN0YXJ3YXJzICU+JVxuICAgIGdyb3VwX2J5KGhvbWV3b3JsZCwgc3BlY2llcykgJT4lXG4gICAgbXV0YXRlKFxuICAgICAgICBkaWZmID0gaGVpZ2h0IC0gbWVhbihoZWlnaHQsIG5hLnJtID0gVFJVRSksXG4gICAgICAgIC5hZnRlciA9IGhlaWdodCAjIOS9v+eUqCBtdXRhdGUg5Yib5bu65paw5YiX5pe25Lmf5pSv5oyBIHJlbG9jYXRlIOS4reeahCAuYmVmb3JlLy5hZnRlciDlj4LmlbBcbiAgICApIn0=
 </script>
 </div>
-</div>
 <p>使用 <code>ungroup()</code> 可以取消分组:</p>
-<div class="cell">
 <div>
 <div id="webr-33" class="exercise-cell">
 
@@ -782,12 +715,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDorqHnrpfouqvpq5jkuI7m
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDml6Dkuovlj5HnlJ9cbnN0YXJ3YXJzICU+JSBcbiAgICBncm91cF9ieShzcGVjaWVzKSAlPiUgXG4gICAgdW5ncm91cCgpIn0=
 </script>
 </div>
-</div>
 </section>
 <section id="summarise" class="level4">
 <h4 class="anchored" data-anchor-id="summarise">summarise</h4>
 <p>对于已使用 <code>group_by</code> 分组的 tibble, 使用 <code>summarise()</code> 可进行分组聚合. 使用 <code>summarise()</code> 后 tibble 默认将退出分组状态 (可由参数 <code>.groups</code> 控制).</p>
-<div class="cell">
 <div>
 <div id="webr-34" class="exercise-cell">
 
@@ -796,14 +727,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDml6Dkuovlj5HnlJ9cbnN0
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAgZ3JvdXBfYnkoaG9tZXdvcmxkKSAlPiVcbiAgICBzdW1tYXJpc2UoXG4gICAgICAgIG1lYW4gPSBtZWFuKGhlaWdodCwgbmEucm0gPSBUUlVFKVxuICAgICkifQ==
 </script>
 </div>
-</div>
 <p>与之前的分组计算不同, 使用 <code>summarise()</code> 的分组聚合会改变结果的行数. <code>summarise()</code> 要求每组的计算结果必须是长度为 1 的向量或行数为 1 的数据框.</p>
 <section id="reframe" class="level5">
 <h5 class="anchored" data-anchor-id="reframe">reframe</h5>
 <p>使用 <code>group_by</code> + <code>mutate</code>/<code>summarise</code> 要求每组的计算结果为等长向量/标量, 这对分组计算造成了很大的限制.</p>
 <p>比如, 如果我们希望计算每组的多个分位数, 此时每组计算结果的行数取决于分位数的数量.</p>
 <p>此时我们可以使用 <code>reframe()</code>, 其允许每组的计算结果</p>
-<div class="cell">
 <div>
 <div id="webr-35" class="exercise-cell">
 
@@ -811,7 +740,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lXG4gICAg
 <script type="webr-35-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicXVhbnRpbGVfZGYgPC0gZnVuY3Rpb24oeCwgcHJvYnMgPSBjKDAuMjUsIDAuNSwgMC43NSkpIHtcbiAgICB0aWJibGUoXG4gICAgICAgIHZhbCA9IHF1YW50aWxlKHgsIHByb2JzLCBuYS5ybSA9IFRSVUUpLFxuICAgICAgICBxdWFudCA9IHByb2JzXG4gICAgKVxufVxuXG5zdGFyd2FycyAlPiVcbiAgICByZWZyYW1lKHF1YW50aWxlX2RmKGhlaWdodCksIC5ieSA9IGhvbWV3b3JsZCkifQ==
 </script>
-</div>
 </div>
 <p>注意: 这里我们在单个 verb 中使用了 <code>.by</code> 参数. 这与 <code>group_by</code> 的效果一致. 事实上, 可以与 <code>group_by</code> 联动的许多操作都支持直接传入 <code>.by</code> 参数, 无需显式 <code>group_by</code> (如 <code>mutate</code>, <code>filter</code>, <code>summarise</code>).</p>
 </section>
@@ -826,7 +754,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicXVhbnRpbGVfZGYgPC0gZnVu
 <li><code>bind_rows()</code>: 按行拼接多个数据框 (要求列名一致或自动补齐缺失列)</li>
 <li><code>bind_cols()</code>: 按列拼接多个数据框 (要求行数一致)</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-36" class="exercise-cell">
 
@@ -834,7 +761,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicXVhbnRpbGVfZGYgPC0gZnVu
 <script type="webr-36-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGZfMSA8LSB0aWJibGUoaWQgPSAxOjIsIG5hbWUgPSBjKFwiQWxpY2VcIiwgXCJCb2JcIikpXG5kZl8yIDwtIHRpYmJsZShpZCA9IDM6NCwgbmFtZSA9IGMoXCJDYXJvbFwiLCBcIkRhdmlkXCIpKVxuZGZfMyA8LSB0aWJibGUoc2NvcmUgPSBjKDkwLCA4NSkpXG5cbmJpbmRfcm93cyhkZl8xLCBkZl8yKVxuYmluZF9yb3dzKGRmXzEsIGRmXzMpXG5cbmJpbmRfY29scyhkZl8xLCBkZl8zKSJ9
 </script>
-</div>
 </div>
 </section>
 <section id="left_join-right_join" class="level3">
@@ -844,7 +770,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGZfMSA8LSB0aWJibGUoaWQg
 <li><code>left_join(x, y, by = ...)</code>: 将 <code>x</code> 与 <code>y</code> 按 <code>.by</code> 列匹配, 保留 <code>y</code> 的行但可能丢弃 <code>x</code> 的行</li>
 <li><code>full_join(x, y, by = ...)</code>: 将 <code>x</code> 与 <code>y</code> 按 <code>.by</code> 列匹配, 保留 <code>x</code> 和 <code>y</code> 中所有的行, 必要时用缺失值填充结果</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-37" class="exercise-cell">
 
@@ -853,14 +778,12 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGZfMSA8LSB0aWJibGUoaWQg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGZfbCA8LSB0aWJibGUoaWQgPSAxOjMsIG5hbWUgPSBjKFwiQWxpY2VcIiwgXCJCb2JcIiwgXCJDYXJvbFwiKSlcbmRmX3IgPC0gdGliYmxlKGlkID0gMjo0LCBzY29yZSA9IGMoOTAsIDg1LCA4OCkpXG5cbmxlZnRfam9pbihkZl9sLCBkZl9yLCBieSA9IFwiaWRcIilcblxucmlnaHRfam9pbihkZl9sLCBkZl9yLCBieSA9IFwiaWRcIilcblxuZnVsbF9qb2luKGRmX2wsIGRmX3IsIGJ5ID0gXCJpZFwiKSJ9
 </script>
 </div>
-</div>
 </section>
 </section>
 <section id="tidy-select-语法" class="level2">
 <h2 class="anchored" data-anchor-id="tidy-select-语法"><code>&lt;tidy-select&gt;</code> 语法</h2>
 <p>tidyverse 中常常出现参数需要提供列名子集 (通常是 <code>cols</code> 参数) 的情况. tidyselect 包提供了一套 DSL (domain specific language) 以快速构建 tibble 中特定的列名子集.</p>
 <p>我们创建一个 tibble 用作演示:</p>
-<div class="cell">
 <div>
 <div id="webr-38" class="exercise-cell">
 
@@ -868,7 +791,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGZfbCA8LSB0aWJibGUoaWQg
 <script type="webr-38-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3R1ZGVudF9kYXRhIDwtIHRpYmJsZShcbiAgICBzdHVkZW50X2lkID0gMTozLFxuICAgIHN0dWRlbnRfbmFtZSA9IGMoXCJBbGljZVwiLCBcIkJvYlwiLCBcIkNoYXJsaWVcIiksXG4gICAgbWF0aF9taWR0ZXJtID0gYyg4NSwgNzgsIDkwKSxcbiAgICBtYXRoX2ZpbmFsID0gYyg5MiwgODgsIDk1KSxcbiAgICBwYXNzZWQgPSBjKFRSVUUsIFRSVUUsIFRSVUUpXG4pXG5zdHVkZW50X2RhdGEifQ==
 </script>
-</div>
 </div>
 <section id="按位置列名构建" class="level3">
 <h3 class="anchored" data-anchor-id="按位置列名构建">按位置/列名构建</h3>
@@ -878,7 +800,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3R1ZGVudF9kYXRhIDwtIHRp
 <li><code>everything()</code>: 选择所有列</li>
 <li><code>last_col()</code>: 选择最后一列</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-39" class="exercise-cell">
 
@@ -886,7 +807,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3R1ZGVudF9kYXRhIDwtIHRp
 <script type="webr-39-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nnrKwgMiwgNSDliJdcbnN0dWRlbnRfZGF0YSAlPiUgc2VsZWN0KGMoMiwgNSkpXG5cbiMg562J5Lu3XG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdChjKHN0dWRlbnRfbmFtZSwgcGFzc2VkKSlcblxuIyDpgInmi6nku44gc3R1ZGVudF9pZCDliLAgbWF0aF9taWR0ZXJtIOeahOaJgOacieWIl1xuc3R1ZGVudF9kYXRhICU+JSBzZWxlY3Qoc3R1ZGVudF9pZDptYXRoX21pZHRlcm0pIn0=
 </script>
-</div>
 </div>
 </section>
 <section id="按字符向量构建" class="level3">
@@ -896,7 +816,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nnrKwgMiwgNSDl
 <li><code>all_of(vars)</code>: 严格匹配, 选择 <code>vars</code> 中的所有列</li>
 <li><code>any_of(vars)</code>: 宽松匹配, 选择 <code>vars</code> 中存在的列</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-40" class="exercise-cell">
 
@@ -904,7 +823,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nnrKwgMiwgNSDl
 <script type="webr-40-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29sc190b19zZWxlY3QgPC0gYyhcInN0dWRlbnRfbmFtZVwiLCBcInBhc3NlZFwiLCBcImFnZVwiKVxuXG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdChhbnlfb2YoY29sc190b19zZWxlY3QpKVxuXG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdChhbGxfb2YoY29sc190b19zZWxlY3QpKSJ9
 </script>
-</div>
 </div>
 </section>
 <section id="正则匹配构建" class="level3">
@@ -916,7 +834,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29sc190b19zZWxlY3QgPC0g
 <li><code>matches("match")</code>: 匹配符合正则表达式的列名</li>
 <li><code>num_range("prefix", range)</code>: 匹配带有数字后缀的列名</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-41" class="exercise-cell">
 
@@ -925,12 +842,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29sc190b19zZWxlY3QgPC0g
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nmiYDmnInku6UgXCJtYXRoXCIg5byA5aS055qE5YiXICjljbPmiYDmnInmlbDlrabmiJDnu6kpXG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdChzdGFydHNfd2l0aChcIm1hdGhcIikpXG5cbiMg6YCJ5oup5omA5pyJ5YyF5ZCrIFwibmFtZVwiIOeahOWIl1xuc3R1ZGVudF9kYXRhICU+JSBzZWxlY3QoY29udGFpbnMoXCJuYW1lXCIpKSJ9
 </script>
 </div>
-</div>
 </section>
 <section id="条件匹配构建" class="level3">
 <h3 class="anchored" data-anchor-id="条件匹配构建">条件匹配构建</h3>
 <p>使用 <code>where()</code> 结合返回 bool 的函数 (如 <code>is.numeric</code>, <code>is.character</code>, <code>is.logical</code> 等) 可以按条件选择列</p>
-<div class="cell">
 <div>
 <div id="webr-42" class="exercise-cell">
 
@@ -938,7 +853,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nmiYDmnInku6Ug
 <script type="webr-42-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nmiYDmnInmlbDlgLzlnovliJcgKElE5ZKM5oiQ57upKVxuc3R1ZGVudF9kYXRhICU+JSBzZWxlY3Qod2hlcmUoaXMubnVtZXJpYykpXG5cbiMg6YCJ5oup5omA5pyJ5biD5bCU5Z6LKOmAu+i+kSnliJcgKOaYr+WQpuWPiuagvClcbnN0dWRlbnRfZGF0YSAlPiUgc2VsZWN0KHdoZXJlKGlzLmxvZ2ljYWwpKSJ9
 </script>
-</div>
 </div>
 </section>
 <section id="结合多个-selection" class="level3">
@@ -950,7 +864,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nmiYDmnInmlbDl
 <li><code>|</code>: 并集</li>
 <li><code>c()</code>: combine 多个 selection 对应的列</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-43" class="exercise-cell">
 
@@ -959,13 +872,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDpgInmi6nmiYDmnInmlbDl
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjpLpmaQgc3R1ZGVudF9pZCDlkowgc3R1ZGVudF9uYW1lIOWIl1xuc3R1ZGVudF9kYXRhICU+JSBzZWxlY3QoLXN0dWRlbnRfaWQsIC1zdHVkZW50X25hbWUpXG5cbiMg5o6S6Zmk5omA5pyJ55qE5pWw5YC85Z6L5Y+Y6YePXG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdCghd2hlcmUoaXMubnVtZXJpYykpXG5cbiMg57uE5ZCI5p2h5Lu2OiDpgInmi6nljIXlkKsgXCJtYXRoXCIg5bm25LiU5LiN5LulIFwiZmluYWxcIiDnu5PlsL7nmoTliJdcbnN0dWRlbnRfZGF0YSAlPiUgc2VsZWN0KGNvbnRhaW5zKFwibWF0aFwiKSAmICFlbmRzX3dpdGgoXCJmaW5hbFwiKSlcblxuIyDnu4TlkIjlpJrkuKrpgInmi6k6IOmAieaLqeesrOS4gOWIlywg5Lul5Y+K5omA5pyJ6YC76L6R57G75Z6L55qE5YiXXG5zdHVkZW50X2RhdGEgJT4lIHNlbGVjdChjKDEsIHdoZXJlKGlzLmxvZ2ljYWwpKSkifQ==
 </script>
 </div>
-</div>
 </section>
 </section>
 <section id="data-masking-参数" class="level2">
 <h2 class="anchored" data-anchor-id="data-masking-参数"><code>&lt;data-masking&gt;</code> 参数</h2>
 <p>tidyverse 中的许多参数被标记为 <code>&lt;data-masking&gt;</code>, 这代表该参数位置我们输入的表达式中的所有 symbol 会在 tibble 环境中求值, 而不是在全局环境中求值, 即 tibble 中的变量 “mask” 了全局环境中的变量.</p>
-<div class="cell">
 <div>
 <div id="webr-44" class="exercise-cell">
 
@@ -974,9 +885,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDmjpLpmaQgc3R1ZGVudF9p
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAgIG11dGF0ZSh4ID0gaGVpZ2h0ICsgbWFzcykifQ==
 </script>
 </div>
-</div>
 <p>通常, <code>&lt;data-masking&gt;</code> 参数收到的值是一个向量, 如刚刚的例子. 但有时这个参数上需要传入多个列的组合, 如 <code>distinct()</code> 中可能需要根据多列的值去重. 为此, 存在两个函数以在 <code>&lt;data-masking&gt;</code> 参数中以 <code>&lt;tidy-select&gt;</code> 语法选择多个列, 返回一个 tibble.</p>
-<div class="cell">
 <div>
 <div id="webr-45" class="exercise-cell">
 
@@ -984,7 +893,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAg
 <script type="webr-45-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAgIG11dGF0ZShcbiAgICAgICAgIyBhY3Jvc3Mg5a+56YCJ5Lit55qE5YiX5omn6KGM5p+Q5Liq5Ye95pWwLCDov5Tlm54gdGliYmxlXG4gICAgICAgIGFjcm9zcyh3aGVyZShpcy5udW1lcmljKSwgXFwoeCkgeCAqIDEwMCkgIyAo5L2/55So5ZG95ZCN5Y+C5pWw5a+55Lya5aaC5L2VPylcbiAgICApXG5cbnN0YXJ3YXJzICU+JSBcbiAgICBkaXN0aW5jdChcbiAgICAgICAgIyBwaWNrIOS7hemAieS4reS4gOS6m+WIlywg5LiN5L2c5Lu75L2V5Y+Y5o2iLCDov5Tlm54gdGliYmxlXG4gICAgICAgIHBpY2sod2hlcmUoaXMubnVtZXJpYykpLFxuICAgICAgICAua2VlcF9hbGwgPSBUUlVFICMgKC5rZWVwX2FsbCA9IEZBTFNFIOS8muWmguS9lT8pXG4gICAgKSJ9
 </script>
-</div>
 </div>
 </section>
 <section id="purrr" class="level2">
@@ -1001,7 +909,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAg
 <li><code>map_dfr(.x, .f, ...)</code>: 返回按行拼接的数据框</li>
 <li><code>map_dfc(.x, .f, ...)</code>: 返回按列拼接的数据框</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-46" class="exercise-cell">
 
@@ -1010,12 +917,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RhcndhcnMgJT4lIFxuICAg
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWFwKDE6MywgXFwoeCkgeF4yKVxuXG5tYXBfZGJsKDE6MywgXFwoeCkgeF4yKVxuXG5tYXBfZGZyKDE6MywgXFwoeCkgdGliYmxlKG51bSA9IHgsIHNxdWFyZSA9IHheMikpXG5cbiMg5oyH5a6aIC5wcm9ncmVzcyA9IFRSVUUg5Y+v5pi+56S66L+b5bqm5p2hXG4uIDwtIG1hcCgxOjUsIFxcKHgpIFN5cy5zbGVlcCgxKSwgLnByb2dyZXNzID0gVFJVRSkifQ==
 </script>
 </div>
-</div>
 <section id="furrr-并行计算" class="level3">
 <h3 class="anchored" data-anchor-id="furrr-并行计算">furrr: 并行计算</h3>
 <p>使用 <code>purrr</code> 的好处除了提高代码可读性以外, 还在于其可以无缝切换到并行计算.</p>
 <p><code>furrr</code> 基于 <code>future</code> 提供的并行计算后端, 实现了一系列 <code>future_map_*</code> 函数, 与 <code>purrr</code> 中 <code>map_*</code> 函数的用法几乎一致.</p>
-<div class="cell">
 <div>
 <div id="webr-47" class="exercise-cell">
 
@@ -1023,7 +928,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibWFwKDE6MywgXFwoeCkgeF4y
 <script type="webr-47-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShmdXJycilcbnBsYW4obXVsdGlzZXNzaW9uKSAjIOiuvue9ruW5tuihjOWQjuerr1xuXG5mdXR1cmVfbWFwX2RibCgxOjMsIFxcKHgpIHheMikifQ==
 </script>
-</div>
 </div>
 </section>
 </section>
@@ -1038,7 +942,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShmdXJycilcbnBs
 <li><code>str_split()</code>: 按分隔符拆分字符串</li>
 <li>…</li>
 </ul>
-<div class="cell">
 <div>
 <div id="webr-48" class="exercise-cell">
 
@@ -1046,7 +949,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShmdXJycilcbnBs
 <script type="webr-48-contents">
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RyX3N1YihcImFiY2RlZlwiLCAyLCA0KVxuXG54IDwtIFwiaGVsbG9cIlxuc3RyX3N1Yih4LCAyLCA0KSA8LSBcIlhZWlwiXG54XG5cbm5hbWUgPC0gXCJBbGljZVwiXG5zY29yZSA8LSA5NVxuc3RyX2dsdWUoXCLlrabnlJ97bmFtZX3nmoTmiJDnu6nmmK97c2NvcmV95YiGXCIpIn0=
 </script>
-</div>
 </div>
 </section>
 <section id="forcats" class="level2">
