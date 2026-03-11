@@ -158,7 +158,7 @@
     "href": "课时一/tidyverse介绍.html#tidyverse-的回顾与反思",
     "title": "tidyverse介绍",
     "section": "tidyverse 的回顾与反思",
-    "text": "tidyverse 的回顾与反思\nHadley 对 tidyverse 发展历史的回顾\ntidyverse 将数据操作拆分成很多动词, 以符合自然语言习惯与其设计哲学. 但这也导致了学习成本的增加. 例如, filter() 其实就是基于逻辑向量对行索引, arrange() 就是基于 order 向量对行索引, 但 tidyverse 却将它们拆成了三个动词.\n统计之都转载: 从另一个视角看 tidyverse",
+    "text": "tidyverse 的回顾与反思\nHadley 对 tidyverse 发展历史的回顾\ntidyverse 将数据操作拆分成很多动词, 以符合自然语言习惯与其设计哲学. 但这也导致了学习成本的增加. 例如, 行筛选其实就是基于逻辑向量对行索引, 行排序就是基于 order 向量对行索引, 但 tidyverse 却拆分成了 slice()/filter()/arrange() 三个动词.\n统计之都转载: 从另一个视角看 tidyverse",
     "crumbs": [
       "课时一",
       "tidyverse介绍"

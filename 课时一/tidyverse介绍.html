@@ -990,7 +990,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RyX3N1YihcImFiY2RlZlwi
 <section id="tidyverse-的回顾与反思" class="level2">
 <h2 class="anchored" data-anchor-id="tidyverse-的回顾与反思">tidyverse 的回顾与反思</h2>
 <p><a href="https://hadley.github.io/25-tidyverse-history/index-preview.html">Hadley 对 <code>tidyverse</code> 发展历史的回顾</a></p>
-<p>tidyverse 将数据操作拆分成很多动词, 以符合自然语言习惯与其设计哲学. 但这也导致了学习成本的增加. 例如, <code>filter()</code> 其实就是基于逻辑向量对行索引, <code>arrange()</code> 就是基于 order 向量对行索引, 但 tidyverse 却将它们拆成了三个动词.</p>
+<p>tidyverse 将数据操作拆分成很多动词, 以符合自然语言习惯与其设计哲学. 但这也导致了学习成本的增加. 例如, 行筛选其实就是基于逻辑向量对行索引, 行排序就是基于 order 向量对行索引, 但 tidyverse 却拆分成了 <code>slice()</code>/<code>filter()</code>/<code>arrange()</code> 三个动词.</p>
 <p><a href="https://cosx.org/2020/10/alternative-view-tidyverse-r/">统计之都转载: 从另一个视角看 <code>tidyverse</code></a></p>
 
 
