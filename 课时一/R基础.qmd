@@ -272,7 +272,7 @@ data.frame(
 
 在 2026 年, R 自带的 `data.frame` 类型已经有更加现代化的替代品 (如 `tibble`, `data.table`). 不过对 `data.frame` 的基础操作同样适用于这些新的数据框类型.
 
-### NULL, NA 与 NaN
+<!-- ### NULL, NA 与 NaN
 
 - `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
 
@@ -282,7 +282,7 @@ data.frame(
     - `NA_character_ `
     - ...
 
-- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值
+- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值 -->
 
 ## 基本语法
 
@@ -388,7 +388,7 @@ Hadley 的 Advanced R 中总结了 [base R 中常用的函数](http://adv-r.had.
 writeLines(text = "square_number <- function(x) x^2", "square.R")
 
 # 使用 source 加载这个文件
-source("utils.R")
+source("square.R")
 
 square_number(5)
 ```
