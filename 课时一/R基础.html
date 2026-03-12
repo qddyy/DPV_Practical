@@ -156,7 +156,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#原子向量" id="toc-原子向量" class="nav-link" data-scroll-target="#原子向量">原子向量</a></li>
   <li><a href="#列表" id="toc-列表" class="nav-link" data-scroll-target="#列表">列表</a></li>
   <li><a href="#特殊向量" id="toc-特殊向量" class="nav-link" data-scroll-target="#特殊向量">特殊向量</a></li>
-  <li><a href="#null-na-与-nan" id="toc-null-na-与-nan" class="nav-link" data-scroll-target="#null-na-与-nan">NULL, NA 与 NaN</a></li>
   </ul></li>
   <li><a href="#基本语法" id="toc-基本语法" class="nav-link" data-scroll-target="#基本语法">基本语法</a>
   <ul class="collapse">
@@ -511,21 +510,18 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YS5mcmFtZShcbiAgICBu
 </script>
 </div>
 <p>在 2026 年, R 自带的 <code>data.frame</code> 类型已经有更加现代化的替代品 (如 <code>tibble</code>, <code>data.table</code>). 不过对 <code>data.frame</code> 的基础操作同样适用于这些新的数据框类型.</p>
+<!-- ### NULL, NA 与 NaN
+
+- `NULL` 表示空对象, 是与原子数组, 列表并列的一种变量类型
+
+- `NA` (Not Available) 在向量中表示存在缺失值. 对于不同的原子向量存在不同的 NA 值类型
+    - `NA_integer_`
+    - `NA_real_`
+    - `NA_character_ `
+    - ...
+
+- `NaN` (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值 -->
 </section>
-</section>
-<section id="null-na-与-nan" class="level3">
-<h3 class="anchored" data-anchor-id="null-na-与-nan">NULL, NA 与 NaN</h3>
-<ul>
-<li><p><code>NULL</code> 表示空对象, 是与原子数组, 列表并列的一种变量类型</p></li>
-<li><p><code>NA</code> (Not Available) 在向量中表示存在缺失值. 对于不同的原子向量存在不同的 NA 值类型</p>
-<ul>
-<li><code>NA_integer_</code></li>
-<li><code>NA_real_</code></li>
-<li><code>NA_character_</code></li>
-<li>…</li>
-</ul></li>
-<li><p><code>NaN</code> (Not a Number) 仅存在于数值向量的元素中, 表示未缺失但由非法运算 (如 0/0) 产生的值</p></li>
-</ul>
 </section>
 </section>
 <section id="基本语法" class="level2">
@@ -622,7 +618,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaCA8LSBmdW5jdGlvbiguLi4p
 
 </div>
 <script type="webr-33-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDliJvlu7rkuIDkuKrlpJbpg6ggUiDmlofku7ZcbndyaXRlTGluZXModGV4dCA9IFwic3F1YXJlX251bWJlciA8LSBmdW5jdGlvbih4KSB4XjJcIiwgXCJzcXVhcmUuUlwiKVxuXG4jIOS9v+eUqCBzb3VyY2Ug5Yqg6L296L+Z5Liq5paH5Lu2XG5zb3VyY2UoXCJ1dGlscy5SXCIpXG5cbnNxdWFyZV9udW1iZXIoNSkifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyDliJvlu7rkuIDkuKrlpJbpg6ggUiDmlofku7ZcbndyaXRlTGluZXModGV4dCA9IFwic3F1YXJlX251bWJlciA8LSBmdW5jdGlvbih4KSB4XjJcIiwgXCJzcXVhcmUuUlwiKVxuXG4jIOS9v+eUqCBzb3VyY2Ug5Yqg6L296L+Z5Liq5paH5Lu2XG5zb3VyY2UoXCJzcXVhcmUuUlwiKVxuXG5zcXVhcmVfbnVtYmVyKDUpIn0=
 </script>
 </div>
 </section>
