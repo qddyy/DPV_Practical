@@ -56,9 +56,21 @@ webr:
         x_symbol
         ```
         ```{webr}
+        # 在全局环境中将 x 赋值为 3
         x <- 3
 
-        eval(x_symbol, envir = .GlobalEnv)
+        eval(x_symbol)
+        ```
+        ```{webr}
+        f <- function() {
+            # 在 f 的执行环境中将 x 赋值为 4
+            x <- 4
+
+            print(
+                eval(x_symbol)
+            )
+        }
+        f()
         ```
     - call
         ```{webr}
@@ -69,24 +81,21 @@ webr:
         ```{webr}
         sum <- function(a, b) a + b
 
-        eval(sum_call, envir = .GlobalEnv)
+        eval(sum_call)
         ```
     R 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.
-- 函数体和函数调用都以可修改的列表形式存储
+- 函数调用以可修改的列表形式存储
     ```{webr}
-    g <- function(a, b = 1) a + b
-    g
-    ```
-    ```{webr}
-    body(g) # 一个 call, 即对 `+` 的调用
+    sum_call[[1]]
+    sum_call[[2]]
+    sum_call[[3]]
 
-    body(g)[[1]]
-    body(g)[[2]]
-    body(g)[[3]]
+    sum_call[[1]] <- as.symbol("prod")
+    sum_call
     ```
     这与 Lisp 中"代码即数据"类似.
 
-[Reddit](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 上对 R 与 Lisp 的关系有更多讨论.
+[此处](https://www.reddit.com/r/lisp/comments/mcp48g/is_r_a_dialect_of_lisp/) 对 R 与 Lisp 的关系有更多讨论.
 
 这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:
 
@@ -102,9 +111,24 @@ webr:
     ```{webr}
     library(magrittr)
 
-    1:10 %>% sum %>% print
+    # 带不带 () 均可
+    1:10 %>% sum %>% print()
 
     # 等价于
     print(sum(1:10))
+    ```
+    管道操作符的一个简略实现如下:
+    ```{webr}
+    `%my_pipe%` <- function(lhs, rhs) {
+        call <- substitute(
+            expr = rhs(lhs)
+        )
+
+        print(call)
+
+        eval(call, envir = parent.frame())
+    }
+
+    1:10 %my_pipe% sum
     ```
 - 基于 AST 将 R 函数翻译为其他语言: [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能
