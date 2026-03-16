@@ -112,10 +112,10 @@ webr:
     library(magrittr)
 
     # 带不带 () 均可
-    1:10 %>% sum %>% print()
+    1:10 %>% mean %>% print()
 
     # 等价于
-    print(sum(1:10))
+    print(mean(1:10))
     ```
     管道操作符的一个简略实现如下:
     ```{webr}
@@ -129,6 +129,6 @@ webr:
         eval(call, envir = parent.frame())
     }
 
-    1:10 %my_pipe% sum
+    1:10 %my_pipe% mean
     ```
 - 基于 AST 将 R 函数翻译为其他语言: [quickr](https://CRAN.R-project.org/package=quickr) 包将 R 翻译到 Fortran 以提高性能
