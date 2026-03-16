@@ -147,7 +147,7 @@
     "href": "课时一/tidyverse介绍.html#cheatsheets",
     "title": "tidyverse介绍",
     "section": "Cheatsheets",
-    "text": "Cheatsheets\n\nData Import Cheatsheet\nData Import Cheatsheet\nData Transformation Cheatsheet\npurrr Cheatsheet\nstringr Cheatsheet\nforcats Cheatsheet\nlubridate Cheatsheet",
+    "text": "Cheatsheets\n\nData Import Cheatsheet\nData Tidying Cheatsheet\nData Transformation Cheatsheet\npurrr Cheatsheet\nstringr Cheatsheet\nforcats Cheatsheet\nlubridate Cheatsheet",
     "crumbs": [
       "课时一",
       "tidyverse介绍"
