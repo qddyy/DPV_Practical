@@ -182,6 +182,12 @@ div.csl-indent {
  <span class="menu-text">数据重塑</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../课时二/数据重塑 copy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">数据重塑</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -770,75 +776,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShnZ3Bsb3QyKVxu
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShnZ3Bsb3QyKVxuXG5kYXRhKFwiZGlhbW9uZHNcIilcblxuIyDor7flnKjmraTooaXlhYXku6PnoIEifQ==
 </script>
 </div>
-<!-- ## 答案
-
-### 练习 1
-
-
-
-
-
-
-
-```jtfcnu
-ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
-    geom_point(alpha = 0.7) +
-    geom_smooth(method = "lm", se = FALSE, color = "black") +
-    scale_x_continuous(breaks = 2:7) +
-    labs(
-        title = "Engine size and highway mileage",
-        subtitle = "Colored by drive type",
-        x = "Engine displacement",
-        y = "Highway mileage"
-    ) +
-    theme_minimal()
-```
-
-
-
-
-
-
-
-### 练习 2
-
-
-
-
-
-
-
-```jtfcnu
-ggplot(mpg, aes(x = class, fill = drv)) +
-    geom_bar(position = "fill") +
-    scale_y_continuous(labels = \(x) paste0(round(100 * x), "%")) +
-    coord_flip() +
-    labs(fill = "Drive type", x = "Vehicle class", y = "Proportion") +
-    theme_bw() +
-    theme(legend.position = "bottom")
-```
-
-
-
-
-
-
-
-### 练习 3
-
-
-ggplot(diamonds, aes(x = carat)) +
-    geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "grey80", color = "white") +
-    geom_density(color = "firebrick", linewidth = 0.8) +
-    facet_wrap(~ cut, ncol = 3, scales = "free_y") +
-    coord_cartesian(xlim = c(0, 3)) +
-    labs(
-        title = "Distribution of diamond carat",
-        x = "Carat",
-        y = "Density"
-    ) +
-    theme_classic()
-``` -->
 
 
 <script type="webr-data">
