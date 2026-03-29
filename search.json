@@ -286,6 +286,50 @@
     ]
   },
   {
+    "objectID": "课时二/数据集成.html",
+    "href": "课时二/数据集成.html",
+    "title": "数据集成",
+    "section": "",
+    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n与 tidyverse 一样, 要使用 tidymodels 中的各个包, 只需 library(tidymodels)\n\n\n\n\n\n\n下面简要介绍使用 tidymodels 建模的基本流程. 完整用法可以参考其官网中的教程.\n\n使用 rsample 进行样本划分\n\n\n\n\n\n\n\n\n使用 recipes 指定数据预处理\n\n\n\n\n\n\n\n\n使用 parsnip 指定模型\n\n\n\n\n\n\n\n\n使用 workflows 将预处理和模型打包\n\n\n\n\n\n\n\n\n使用 tune 进行超参数调优",
+    "crumbs": [
+      "课时二",
+      "数据集成"
+    ]
+  },
+  {
+    "objectID": "课时二/数据集成.html#tidymodels",
+    "href": "课时二/数据集成.html#tidymodels",
+    "title": "数据集成",
+    "section": "",
+    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n与 tidyverse 一样, 要使用 tidymodels 中的各个包, 只需 library(tidymodels)\n\n\n\n\n\n\n下面简要介绍使用 tidymodels 建模的基本流程. 完整用法可以参考其官网中的教程.\n\n使用 rsample 进行样本划分\n\n\n\n\n\n\n\n\n使用 recipes 指定数据预处理\n\n\n\n\n\n\n\n\n使用 parsnip 指定模型\n\n\n\n\n\n\n\n\n使用 workflows 将预处理和模型打包\n\n\n\n\n\n\n\n\n使用 tune 进行超参数调优",
+    "crumbs": [
+      "课时二",
+      "数据集成"
+    ]
+  },
+  {
+    "objectID": "课时二/数据集成.html#特征衍生",
+    "href": "课时二/数据集成.html#特征衍生",
+    "title": "数据集成",
+    "section": "特征衍生",
+    "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 生成多项式特征\nstep_ns(): 生成自然样条特征\nstep_interact(): 生成特征交互项\nstep_pca(): 进行主成分分析\n\n这里以 step_poly() 为例, 生成 mpg 的二次项:\n\n\n\n\n\n\n上述过程中 prep() 只是计算并储存了数据预处理所需要的一些信息 (如标准化过程中需要计算均值和标准差), bake() 才真正对数据进行了变换. 这是 recipes 的一个重要设计, 使得预处理步骤可以被重复使用在不同的数据集上 (如训练集和测试集), 而不需要担心数据泄漏 (data leakage).",
+    "crumbs": [
+      "课时二",
+      "数据集成"
+    ]
+  },
+  {
+    "objectID": "课时二/数据集成.html#类别不平衡问题",
+    "href": "课时二/数据集成.html#类别不平衡问题",
+    "title": "数据集成",
+    "section": "类别不平衡问题",
+    "text": "类别不平衡问题\nthemis 包对 recipe 包作补充, 提供了一系列处理不平衡数据的 step.\n\n过采样\n\nstep_upsample(): 简单过采样\nstep_smote(): SMOTE 算法\nstep_smotenc(): SMOTENC 算法\nstep_bsmote(): borderline-SMOTE 算法\nstep_adasyn(): ADASYN 算法\nstep_rose(): ROSE 算法\n\n欠采样\n\nstep_downsample(): 简单欠采样\nstep_nearmiss(): NearMiss 算法\nstep_tomek(): Tomek Links 算法\n\n\n其和 recipes 中的用法完全一致:",
+    "crumbs": [
+      "课时二",
+      "数据集成"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Index",
