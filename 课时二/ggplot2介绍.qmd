@@ -41,7 +41,7 @@ ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
 ggplot() %>% class()
 ```
 
-此外, ggplot() 也提供了一个全局设置的机会, 如设置默认的数据集和美学映射. 之后的每个图层都将继承这些设置.
+此外, `ggplot()` 也提供了一个全局设置的机会, 如设置默认的数据集和美学映射. 之后的每个图层都将继承这些设置.
 
 ## Aesthetic Mapping
 
@@ -98,12 +98,12 @@ ggplot(data = mtcars, mapping = aes(y = mpg)) +
     geom_boxplot()
 ```
 
-ggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 `geom_point()` 的几何对象名为 point (画一些点), 而统计变换名为 identity (不进行任何计算). 另一方面, `geom_boxplot()` 的几何对象名为 boxplot (画一些箱子), 而统计变换名为 boxplot (计算分位数).
+ggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 `geom_point()` 的几何对象名为 `"point"` (画一些点), 而统计变换名为 `"identity"` (不进行任何计算). 另一方面, `geom_boxplot()` 的几何对象名为 `"boxplot"` (画一些箱子), 而统计变换名为 `"boxplot"` (计算分位数).
 
 图层中二者的地位是平等的, 因此创建一个图层有两种方式:
 
-- 使用 geom_*() 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 `geom_point()`, `geom_line()`, `geom_boxplot()`.
-- 使用 stat_*() 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 `stat_identity()`, `stat_boxplot()`.
+- 使用 `geom_*()` 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 `geom_point()`, `geom_line()`, `geom_boxplot()`.
+- 使用 `stat_*()` 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 `stat_identity()`, `stat_boxplot()`.
 
 ```{webr}
 ggplot(data = mtcars, mapping = aes(y = mpg)) +
@@ -129,28 +129,25 @@ ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
 
 ### after_stat()
 
-有时候, 我们希望利用统计变换计算出的值来绘图, 例如我们希望将概率密度图中值较大的位置赋予较高的不透明度.
+有时候, 我们希望利用统计变换计算出的值来绘图. 例如, 我们希望将概率密度图中的密度放缩到 [0, 1] 之间.
 
 ```{webr}
-ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) +
-    geom_density(alpha = 0.5)
+ggplot(mtcars, aes(x = mpg)) +
+    geom_density(fill = "red", alpha = 0.5)
 ```
 
-由于密度是 geom_density 图层在自己的统计变换中计算的, 因此无法直接将其传给 alpha 参数. 对于这种需求, ggplot 提供了 after_stat() 函数, 允许我们在图层中访问统计变换计算出的值. geom_density 计算出的密度在内部被命名为 density, 因此我们可以通过 `after_stat(density)` 来访问它.
+由于密度是 `geom_density()` 图层在自己的统计变换中计算的, 因此无法直接对其进行操作. 对于这种需求, ggplot 提供了 `after_stat()` 函数, 允许我们在图层中访问统计变换计算出的值. `geom_density()` 计算出的密度在内部被命名为 `density`, 因此我们可以通过 `after_stat(density)` 来访问它.
 
 ```{webr}
-ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) +
-    geom_density(aes(alpha = after_stat(density)))
-
-# 使用 %T>% print() 查看 density 的值?
-# 应该放在 after_stat 里!
+ggplot(mtcars, aes(x = mpg)) +
+    geom_density(fill = "red", aes(y = after_stat(density / max(density))))
 ```
 
 ## Scale
 
 Aesthetic mapping 只是指定了 dataset 中各个变量对应图中哪个部分, 而 scale 决定其值如何展示到图上.
 
-对于 `aes()` 中指定的每个美学映射, 都需要有一个对应的 scale. 未指定时, ggplot 都会自动为其创建一个默认的 scale. 例如, 对于 `aes(x = wt)` (数值型变量), ggplot 会创建一个 scale_x_continuous() 来将 wt 的值映射到 x 轴上. 对于 `aes(color = as.factor(cyl))` (因子型变量), ggplot 会创建一个 scale_color_discrete() 来将 cyl 的值映射到颜色上.
+对于 `aes()` 中指定的每个美学映射, 都需要有一个对应的 scale. 未指定时, ggplot 都会自动为其创建一个默认的 scale. 例如, 对于 `aes(x = wt)` (数值型变量), ggplot 会创建一个 `scale_x_continuous()` 来将 wt 的值映射到 x 轴上. 对于 `aes(color = as.factor(cyl))` (因子型变量), ggplot 会创建一个 `scale_color_discrete()` 来将 cyl 的值映射到颜色上.
 
 具体而言, scales 分为两大类:
 
@@ -179,8 +176,8 @@ position scales 包括
 
 #### 数据范围
 
-- `limits`: 控制坐标轴显示的数据范围，通常接受一个长度为 2 的向量
-- `expand`: 控制坐标轴两端与数据边际之间的留白
+- limits: 控制坐标轴显示的数据范围，通常接受一个长度为 2 的向量
+- expand: 控制坐标轴两端与数据边际之间的留白
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -198,8 +195,8 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 #### 刻度标签
 
-- `breaks`/`minor_breaks`: 控制主/次刻度, 接受一个数值向量或一个函数
-- `labels`: 控制刻度标签, 接受一个字符向量或一个函数
+- breaks/minor_breaks: 控制主/次刻度, 接受一个数值向量或一个函数
+- labels: 控制刻度标签, 接受一个字符向量或一个函数
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -215,7 +212,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 #### 轴变换
 
-- `trans`: 对坐标轴进行数学变换，接受一个字符串 (如 "log10") 或一个 transformation object (如 `scales::log_trans()`)
+- trans: 对坐标轴进行数学变换，接受一个字符串 (如 "log10") 或一个 transformation object (如 `scales::log_trans()`)
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -228,7 +225,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 #### 双轴图
 
-scale_x_continuous()/scale_y_continuous() 的一个特殊参数是 sec.axis, 用于创建双轴图.
+`scale_x_continuous()`/`scale_y_continuous()` 的一个特殊参数是 sec.axis, 用于创建双轴图.
 
 Hadley Wickham 本人并不提倡使用双轴图 (如双 y 轴图), 详见 [stackoverflow 上的回答](https://stackoverflow.com/a/3101876/23137996). 因此在很长一段时间内 ggplot2 中完全无法创建双轴图. 直到 ggplot2 2.2.0 中引入了 sec.axis 参数才打破这一限制.
 
@@ -249,7 +246,7 @@ ggplot(economics, aes(date)) +
 
 常见的 mapping 中除了位置 (x/y) 以外, 还有颜色 (color), 填充 (fill), 形状 (shape), 大小 (size), 透明度 (alpha) 等. 这里我们以 color scale 为例介绍.
 
-color scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 scale_color_continuous() 和 scale_color_discrete(). 与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质相同, 因此其参数也大同小异.
+color scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 `scale_color_continuous()` 和 `scale_color_discrete()`. 与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质相同, 因此其参数也大同小异.
 
 例如, 其也有 limits, breaks, labels 等参数, 用法与 position scales 中的相同.
 
@@ -304,7 +301,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = as.factor(cyl))) +
     )
 ```
 
-除了 guide_axis() 和 guide_legend() 以外, ggplot 还提供了 guide_colorbar() 对应 continuous color scales, guide_none() 对应不显示 guides, 等等.
+除了 `guide_axis()` 和 `guide_legend()` 以外, ggplot 还提供了 `guide_colorbar()` 对应 continuous color scales, `guide_none()` 对应不显示 guides, 等等.
 
 ### after_scale()
 
@@ -317,7 +314,7 @@ ggplot(mtcars, aes(x = mpg, color = as.factor(cyl))) +
     geom_density()
 ```
 
-与 after_stat() 类似, ggplot 提供了 after_scale() 函数来访问这些值.
+与 `after_stat()` 类似, ggplot 提供了 `after_scale()` 函数来访问这些值.
 
 ```{webr}
 ggplot(mtcars, aes(x = mpg, color = as.factor(cyl))) +
@@ -331,15 +328,15 @@ position scales 只负责将变量值映射到坐标. 因此, 还需要指定坐
 ggplot 中的坐标系分为两大类
 
 - linear coordinate systems
-    - coord_cartesian()
-    - coord_flip()
-    - coord_fixed()
+    - `coord_cartesian()`
+    - `coord_flip()`
+    - `coord_fixed()`
 - non-linear coordinate systems
-    - coord_polar()
-    - coord_trans()
-    - coord_map()/coord_quickmap()/coord_sf()
+    - `coord_polar()`
+    - `coord_trans()`
+    - `coord_map()`/`coord_quickmap()`/`coord_sf()`
 
-这里我们仅介绍两种最常用的坐标系: coord_cartesian() 和 coord_polar()
+这里我们仅介绍两种最常用的坐标系: `coord_cartesian()` 和 `coord_polar()`
 
 ### coord_cartesian()
 
@@ -357,24 +354,32 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     )
 ```
 
-注意这里的 xlim/ylim 与 scale_x_continuous()/scale_y_continuous() 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.
+注意这里的 xlim/ylim 与 `scale_x_continuous()`/`scale_y_continuous()` 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.
 
 ### coord_polar()
 
 `coord_polar()` (极坐标系) 将笛卡尔坐标系转换为极坐标系.
 
 ```{webr}
-ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
+ggplot(mtcars, aes(x = as.factor(cyl), fill = as.factor(cyl))) +
     geom_bar()
 ```
 
 ```{webr}
-ggplot(mtcars, aes(x = factor(cyl), fill = factor(cyl))) +
+ggplot(mtcars, aes(x = as.factor(cyl), fill = as.factor(cyl))) +
     geom_bar() +
     coord_polar(
         theta = "x",   # 指定 x 轴为角度轴
         direction = -1 # 指定逆时针方向
     )
+```
+
+`coord_polar()` 最常见的还是创建饼图. 其由堆叠条形图变化而来.
+
+```{webr}
+ggplot(mtcars, aes(x = "", fill = as.factor(cyl))) +
+    geom_bar(position = "stack") +
+    coord_polar(theta = "y")
 ```
 
 ## Facet
@@ -399,7 +404,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 没有指定分面时, ggplot 自动添加 `facet_null()` (不分面). facet 也是 ggplot 图的一个必要组成部分.
 
-facet_*() 中最重要的参数是 `scales`, 用于控制所有面板中位置刻度是否统一
+`facet_*()` 中最重要的参数是 scales, 用于控制所有面板中位置刻度是否统一
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -420,9 +425,9 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     )
 ```
 
-theme 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.
+`theme()` 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.
 
-除了使用 theme() 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 theme_bw(), theme_minimal(), theme_classic() 等.
+除了使用 `theme()` 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 `theme_bw()`, `theme_minimal()`, `theme_classic()` 等.
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
