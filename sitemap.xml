@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时一/tidyverse介绍.html</loc>
-    <lastmod>2026-03-16T06:52:11.685Z</lastmod>
+    <loc>https://qddyy.github.io/DPV_Practical/课时一/R语言介绍.html</loc>
+    <lastmod>2026-03-29T05:13:19.694Z</lastmod>
   </url>
   <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时一/R语言介绍.html</loc>
-    <lastmod>2026-03-16T06:52:11.685Z</lastmod>
+    <loc>https://qddyy.github.io/DPV_Practical/课时一/tidyverse介绍.html</loc>
+    <lastmod>2026-03-29T05:13:19.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时二/ggplot2介绍.html</loc>
+    <lastmod>2026-03-29T05:13:19.694Z</lastmod>
   </url>
   <url>
     <loc>https://qddyy.github.io/DPV_Practical/index.html</loc>
-    <lastmod>2026-03-16T06:52:11.685Z</lastmod>
+    <lastmod>2026-03-29T05:13:19.694Z</lastmod>
   </url>
   <url>
     <loc>https://qddyy.github.io/DPV_Practical/课时一/R基础.html</loc>
-    <lastmod>2026-03-16T06:52:11.685Z</lastmod>
+    <lastmod>2026-03-29T05:13:19.694Z</lastmod>
   </url>
 </urlset>
