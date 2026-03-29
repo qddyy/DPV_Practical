@@ -286,6 +286,17 @@
     ]
   },
   {
+    "objectID": "课时二/ggplot2介绍.html#练习",
+    "href": "课时二/ggplot2介绍.html#练习",
+    "title": "ggplot2介绍",
+    "section": "练习",
+    "text": "练习\n\n题目\n\n练习 1: 基本使用\n使用 ggplot2::mpg 完成以下任务:\n\n绘制 displ 与 hwy 的散点图;\n将 drv 映射到颜色;\n设置点的透明度为 0.7;\n添加一条线性拟合曲线，不显示置信区间;\n设置 x 轴刻度为 2 到 7;\n设置标题、副标题和坐标轴标签;\n使用 theme_minimal().\n\n\n\n\n\n\n\n\n\n练习 2: 分类比较\n继续使用 ggplot2::mpg 完成以下任务:\n\n绘制 class 的柱状图;\n将 drv 映射到填充颜色;\n使用 position = \"fill\" 展示各 class 中不同 drv 的比例;\n将 y 轴标签显示为百分比;\n翻转坐标轴;\n将图例放到底部，并设置图例标题为“驱动方式”;\n使用 theme_bw().\n\n\n\n\n\n\n\n\n\n练习 3: 统计变换\n使用 ggplot2::diamonds 完成以下任务:\n\n绘制 carat 的直方图;\n使用 after_stat(density) 将 y 轴改为密度;\n叠加一条密度曲线;\n按 cut 分面;\n仅显示 carat 在 0 到 3 之间的部分;\n使用 theme_classic();\n设置标题和 x / y 轴标签.\n\n\n\n\n\n\n\n\n\n\n答案\n\n练习 1\n\n\n\n\n\n\n\n\n练习 2\n\n\n\n\n\n\n\n\n练习 3",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
     "objectID": "课时二/数据重塑.html",
     "href": "课时二/数据重塑.html",
     "title": "数据重塑",
