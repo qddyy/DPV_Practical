@@ -330,6 +330,17 @@
     ]
   },
   {
+    "objectID": "课时二/数据重塑.html#练习",
+    "href": "课时二/数据重塑.html#练习",
+    "title": "数据重塑",
+    "section": "练习",
+    "text": "练习\n\n题目\n\n练习 1: recipes 的基本使用\n使用 airquality 完成以下任务:\n\n去除 Ozone 缺失记录\n划分训练集与测试集\n建立 recipe(Ozone ~ ., data = aq_train)\n对数值型预测变量做中位数填补\n对数值型预测变量做标准化\nprep() 后处理训练集与测试集.\n\n\n\n\n\n\n\n\n\n练习 2: 特征工程\n使用 modeldata::ames 完成以下任务:\n\n划分训练集与测试集\n建立 recipe(Sale_Price ~ ., data = ames_train)\n对响应变量做对数变换\n添加 Overall_Cond:Gr_Liv_Area 交互项\n对数值型预测变量做 Yeo-Johnson 变换\nprep() 后处理训练集与测试集.\n\n\n\n\n\n\n\n\n\n练习 3: 不平衡数据\n使用 modeldata::cells 完成以下任务:\n\n将 class 作为响应变量;\n按 class 分层切分训练集与测试集;\n建立一个基础 recipe(class ~ ., data = cells_train);\n分别基于同一个基础 recipe 构造以下 4 种训练集:\n\nstep_upsample(class)\nstep_downsample(class)\nstep_smote(class)\nstep_rose(class)\n\nprep() 后得到各自处理后的训练集;\n比较原始训练集与 4 种重采样结果中 class 的类别分布.\n\n\n\n\n\n\n\n\n\n\n答案\n\n练习 1\n\n\n\n\n\n\n\n\n练习 2\n\n\n\n\n\n\n\n\n练习 3\nsp &lt;- initial_split(cells, prop = 0.8, strata = class) cells_train &lt;- training(sp) cells_test &lt;- testing(sp)\ncells_base &lt;- recipe(class ~ ., data = cells_train)\ncells_up &lt;- cells_base %&gt;% step_upsample(class) %&gt;% prep() %&gt;% bake(new_data = NULL)\ncells_down &lt;- cells_base %&gt;% step_downsample(class) %&gt;% prep() %&gt;% bake(new_data = NULL)\ncells_smote &lt;- cells_base %&gt;% step_smote(class) %&gt;% prep() %&gt;% bake(new_data = NULL)\ncells_rose &lt;- cells_base %&gt;% step_rose(class) %&gt;% prep() %&gt;% bake(new_data = NULL)\nbind_rows( count(cells_train, class) %&gt;% mutate(method = “original”), count(cells_up, class) %&gt;% mutate(method = “upsample”), count(cells_down, class) %&gt;% mutate(method = “downsample”), count(cells_smote, class) %&gt;% mutate(method = “smote”), count(cells_rose, class) %&gt;% mutate(method = “rose”) )",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Index",
