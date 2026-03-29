@@ -410,7 +410,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 
 
 
-```txtrep
+```acbmut
 aq <- filter(airquality, !is.na(Ozone))
 
 sp <- initial_split(aq, prop = 0.75)
@@ -441,7 +441,7 @@ aq_test_baked  <- bake(aq_rec, new_data = aq_test)
 
 
 
-```txtrep
+```acbmut
 sp <- initial_split(ames, prop = 0.8)
 ames_train <- training(sp)
 ames_test  <- testing(sp)
