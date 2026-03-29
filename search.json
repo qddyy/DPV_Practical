@@ -286,47 +286,47 @@
     ]
   },
   {
-    "objectID": "课时二/数据集成.html",
-    "href": "课时二/数据集成.html",
-    "title": "数据集成",
+    "objectID": "课时二/数据重塑.html",
+    "href": "课时二/数据重塑.html",
+    "title": "数据重塑",
     "section": "",
     "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
     "crumbs": [
       "课时二",
-      "数据集成"
+      "数据重塑"
     ]
   },
   {
-    "objectID": "课时二/数据集成.html#tidymodels",
-    "href": "课时二/数据集成.html#tidymodels",
-    "title": "数据集成",
+    "objectID": "课时二/数据重塑.html#tidymodels",
+    "href": "课时二/数据重塑.html#tidymodels",
+    "title": "数据重塑",
     "section": "",
     "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
     "crumbs": [
       "课时二",
-      "数据集成"
+      "数据重塑"
     ]
   },
   {
-    "objectID": "课时二/数据集成.html#特征衍生",
-    "href": "课时二/数据集成.html#特征衍生",
-    "title": "数据集成",
+    "objectID": "课时二/数据重塑.html#特征衍生",
+    "href": "课时二/数据重塑.html#特征衍生",
+    "title": "数据重塑",
     "section": "特征衍生",
     "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 生成多项式特征\nstep_ns(): 生成自然样条特征\nstep_interact(): 生成特征交互项\nstep_pca(): 进行主成分分析\n…\n\n这里以 step_poly() 为例, 生成 mpg 的二次项:",
     "crumbs": [
       "课时二",
-      "数据集成"
+      "数据重塑"
     ]
   },
   {
-    "objectID": "课时二/数据集成.html#类别不平衡问题",
-    "href": "课时二/数据集成.html#类别不平衡问题",
-    "title": "数据集成",
+    "objectID": "课时二/数据重塑.html#类别不平衡问题",
+    "href": "课时二/数据重塑.html#类别不平衡问题",
+    "title": "数据重塑",
     "section": "类别不平衡问题",
     "text": "类别不平衡问题\nthemis 包对 recipe 包作补充, 提供了一系列处理不平衡数据的 step.\n\n过采样\n\nstep_upsample(): 简单过采样\nstep_smote(): SMOTE 算法\nstep_smotenc(): SMOTENC 算法\nstep_bsmote(): borderline-SMOTE 算法\nstep_adasyn(): ADASYN 算法\nstep_rose(): ROSE 算法\n\n欠采样\n\nstep_downsample(): 简单欠采样\nstep_nearmiss(): NearMiss 算法\nstep_tomek(): Tomek Links 算法\n\n\n其和 recipes 中的用法完全一致:",
     "crumbs": [
       "课时二",
-      "数据集成"
+      "数据重塑"
     ]
   },
   {
