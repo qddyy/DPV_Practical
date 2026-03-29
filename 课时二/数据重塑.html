@@ -30,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../课时二/数据重塑 copy.html" rel="next">
 <link href="../课时二/ggplot2介绍.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -159,12 +158,6 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../课时二/数据重塑.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">数据重塑</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../课时二/数据重塑 copy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">数据重塑</span></a>
   </div>
 </li>
@@ -407,115 +400,6 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEpXG5saWJyYXJ5KHJzYW1wbGUpXG5saWJyYXJ5KHJlY2lwZXMpXG5saWJyYXJ5KHRoZW1pcylcblxuZGF0YShcImNlbGxzXCIpXG5zZXQuc2VlZCgyMDI2KVxuXG4jIOivt+WcqOatpOihpeWFheS7o+eggSJ9
 </script>
 </div>
-<!-- ## 答案
-
-### 练习 1
-
-
-
-
-
-
-
-```hqfdfu
-aq <- filter(airquality, !is.na(Ozone))
-
-sp <- initial_split(aq, prop = 0.75)
-aq_train <- training(sp)
-aq_test  <- testing(sp)
-
-aq_rec <- 
-    recipe(Ozone ~ ., data = aq_train) %>%
-    step_impute_median(all_numeric_predictors()) %>%
-    step_normalize(all_numeric_predictors()) %>%
-    prep()
-
-aq_train_baked <- bake(aq_rec, new_data = aq_train)
-aq_test_baked  <- bake(aq_rec, new_data = aq_test)
-```
-
-
-
-
-
-
-
-### 练习 2
-
-
-
-
-
-
-
-```hqfdfu
-sp <- initial_split(ames, prop = 0.8)
-ames_train <- training(sp)
-ames_test  <- testing(sp)
-
-ames_rec <- 
-    recipe(Sale_Price ~ ., data = ames_train) %>%
-    step_log(Sale_Price, offset = 1) %>%
-    step_YeoJohnson(all_numeric_predictors()) %>%
-    step_dummy(Neighborhood) %>%
-    step_interact(terms = ~ starts_with("Neighborhood_"):Gr_Liv_Area) %>%
-    prep()
-
-ames_train_baked <- bake(ames_rec, new_data = ames_train)
-ames_test_baked  <- bake(ames_rec, new_data = ames_test)
-```
-
-
-
-
-
-
-
-### 练习 3
-
-
-sp <- initial_split(cells, prop = 0.8, strata = class)
-cells_train <- training(sp)
-cells_test  <- testing(sp)
-
-cells_base <- 
-    recipe(class ~ ., data = cells_train) %>%
-    update_role(case, new_role = "id")
-
-cells_up <- 
-    cells_base %>%
-    step_upsample(class) %>%
-    prep() %>%
-    bake(new_data = NULL)
-
-cells_down <- 
-    cells_base %>%
-    step_downsample(class) %>%
-    prep() %>%
-    bake(new_data = NULL)
-
-cells_smote <- 
-    cells_base %>%
-    step_smote(class) %>%
-    prep() %>%
-    bake(new_data = NULL)
-
-cells_rose <- 
-    cells_base %>%
-    step_rose(class) %>%
-    prep() %>%
-    bake(new_data = NULL)
-
-library(dplyr)
-
-bind_rows(
-    count(cells_train, class) %>% mutate(method = "original"),
-    count(cells_up, class) %>% mutate(method = "upsample"),
-    count(cells_down, class) %>% mutate(method = "downsample"),
-    count(cells_smote, class) %>% mutate(method = "smote"),
-    count(cells_rose, class) %>% mutate(method = "rose")
-)
-``` -->
 
 
 <script type="webr-data">
@@ -1118,9 +1002,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../课时二/数据重塑 copy.html" class="pagination-link" aria-label="数据重塑">
-        <span class="nav-page-text">数据重塑</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
