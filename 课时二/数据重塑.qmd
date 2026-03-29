@@ -82,19 +82,20 @@ test_data <-
 
 recipes 提供了一系列特征工程工具:
 
-- step_poly(): 生成多项式特征
-- step_ns(): 生成自然样条特征
+- step_poly(): 多项式特征
+- step_ns(): 自然样条特征
+- step_pca(): 主成分特征
 - step_interact(): 生成特征交互项
-- step_pca(): 进行主成分分析
 - ...
 
-这里以 step_poly() 为例, 生成 mpg 的二次项:
+这里以 step_poly() 为例, 在 mtcars 数据集中生成 mpg 的二次项:
 
 ```{webr}
-recipe(mpg ~ ., data = mtcars_train) %>%
-    step_poly(mpg, degree = 2) %>% # 创建食谱
-    prep() %>%                     # 准备食材
-    bake(new_data = NULL)          # 真正下厨
+recipe(mpg ~ ., data = mtcars) %>%
+    step_poly(mpg, degree = 2) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %>% 
+    str()
 ```
 
 

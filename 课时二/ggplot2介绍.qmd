@@ -353,8 +353,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     coord_cartesian(
         xlim = c(1.5, 5.5), # 设置 x 轴范围
         ylim = c(10, 30),   # 设置 y 轴范围
-        reverse = TRUE,     # 反转坐标轴方向
-        ratio = 1           # 设置两轴的单位长度相等
+        reverse = "x"       # 反转 x 轴方向
     )
 ```
 
