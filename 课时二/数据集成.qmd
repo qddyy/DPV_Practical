@@ -1,0 +1,169 @@
+---
+title: "数据集成"
+order: 2
+format: live-html
+toc: true
+webr:
+  packages:
+    - tidymodels
+    - themis
+    - modeldata
+---
+
+## tidymodels
+
+> The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.
+
+tidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:
+
+- recipes: 数据预处理与特征工程
+- parsnip: 接口/后端分离的模型指定
+- yardstick: 提供各种模型性能指标
+- rsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)
+- tune: 模型超参数调优
+- workflows: 将预处理/建模打包为工作流
+
+与 tidyverse 一样, 要使用 tidymodels 中的各个包, 只需 `library(tidymodels)`
+
+```{webr}
+#| autorun: true
+
+library(tidymodels)
+```
+
+下面简要介绍使用 tidymodels 建模的基本流程. 完整用法可以参考其[官网](https://www.tidymodels.org/)中的教程.
+
+- 使用 rsample 进行样本划分
+
+```{webr}
+set.seed(2026)
+
+# 划分训练集和测试集
+mtcars_split <- initial_split(mtcars, prop = 0.8)
+mtcars_train <- training(mtcars_split)
+mtcars_test <- testing(mtcars_split)
+
+# 创建 3 折交叉验证用于后续调参
+mtcars_folds <- vfold_cv(mtcars_train, v = 3)
+```
+
+- 使用 recipes 指定数据预处理
+
+```{webr}
+mtcars_rec <- 
+    recipe(mpg ~ ., data = mtcars_train) %>% # 创建 recipe
+    step_normalize(all_numeric_predictors()) # 对所有数值自变量进行标准化
+```
+
+- 使用 parsnip 指定模型
+
+```{webr}
+rf_mod <- 
+    rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% # 指定模型 (随机森林), 以及待调优参数 (mtry, min_n)
+    set_engine("ranger") %>%                                     # 指定模型后端为 ranger 包
+    set_mode("regression")                                       # 指定模型 mode 为连续型
+```
+
+- 使用 workflows 将预处理和模型打包
+
+```{webr}
+# 创建工作流将预处理配方和模型绑定
+mtcars_wf <- 
+    workflow() %>% 
+    add_recipe(mtcars_rec) %>% 
+    add_model(rf_mod)
+```
+
+- 使用 tune 进行超参数调优
+
+```{webr}
+rf_res <- 
+    tune_grid(
+        mtcars_wf,
+        resamples = mtcars_folds,                 # 使用前面创建的 3 折交叉验证集
+        grid = 25,                                # 自动生成 25 组不同的超参数组合进行测试
+        control = control_grid(save_pred = TRUE), # 保存全过程的预测结果
+        metrics = metric_set(rmse)                # 指定性能指标为 RMSE (连续型变量)
+    )
+
+# 查看所有超参数组合下的模型性能表现
+rf_res %>% 
+    collect_metrics()
+
+# 提取性能最好 (RMSE 最小) 的那组超参数
+best_rf <- 
+    rf_res %>% 
+    select_best(metric = "rmse")
+
+# 将最优参数注入, 固化为最终的完整工作流
+final_wf <- 
+    mtcars_wf %>% 
+    finalize_workflow(best_rf)
+
+# 使用完整的训练集拟合最终模型, 并计算其在测试集上的性能
+last_fit(final_wf, split = mtcars_split) %>% 
+    collect_metrics()
+```
+
+## 特征衍生
+
+recipes 提供了一系列特征工程工具:
+
+- step_poly(): 生成多项式特征
+- step_ns(): 生成自然样条特征
+- step_interact(): 生成特征交互项
+- step_pca(): 进行主成分分析
+
+这里以 step_poly() 为例, 生成 mpg 的二次项:
+
+```{webr}
+recipe(mpg ~ ., data = mtcars_train) %>%
+    step_poly(mpg, degree = 2) %>% # 创建食谱
+    prep() %>%                     # 准备食材
+    bake(new_data = NULL)          # 真正下厨
+```
+
+上述过程中 prep() 只是计算并储存了数据预处理所需要的一些信息 (如标准化过程中需要计算均值和标准差), bake() 才真正对数据进行了变换. 这是 recipes 的一个重要设计, 使得预处理步骤可以被重复使用在不同的数据集上 (如训练集和测试集), 而不需要担心数据泄漏 (data leakage).
+
+## 类别不平衡问题
+
+themis 包对 recipe 包作补充, 提供了一系列处理不平衡数据的 step.
+
+- 过采样
+    - step_upsample(): 简单过采样
+    - step_smote(): SMOTE 算法
+    - step_smotenc(): SMOTENC 算法
+    - step_bsmote(): borderline-SMOTE 算法
+    - step_adasyn(): ADASYN 算法
+    - step_rose(): ROSE 算法
+
+- 欠采样
+    - step_downsample(): 简单欠采样
+    - step_nearmiss(): NearMiss 算法
+    - step_tomek(): Tomek Links 算法
+
+其和 recipes 中的用法完全一致:
+
+
+```{webr}
+library(themis)
+library(modeldata)
+
+data(hpc_data)
+
+hpc_data0 <- 
+    hpc_data %>%
+    select(-protocol, -day) %T>% print()
+```
+
+```{webr}
+count(hpc_data0, class, name = "orig")
+```
+
+```{webr}
+recipe(class ~ ., data = hpc_data0) %>%
+    step_smote(class, over_ratio = 1000/2211) %>%
+    prep() %>%
+    bake(new_data = NULL) %>%
+    count(class, name = "training")
+```
