@@ -9,6 +9,7 @@ webr:
     - rsample
     - modeldata
     - themis
+    - dplyr
     - magrittr
 ---
 
@@ -139,4 +140,77 @@ recipe(class ~ ., data = hpc_data0) %>%
     prep() %>%
     bake(new_data = NULL) %>%
     count(class, name = "training")
+```
+
+## 练习
+
+### 练习 1: `recipes` 的基本使用
+
+使用 `airquality` 完成以下任务: 
+
+- 去除 `Ozone` 缺失记录
+- 划分训练集与测试集
+- 建立 `recipe(Ozone ~ ., data = aq_train)`
+- 对数值型预测变量做中位数填补
+- 对数值型预测变量做标准化
+- `prep()` 后处理训练集与测试集. 
+
+```{webr}
+library(rsample)
+library(recipes)
+
+data("airquality")
+set.seed(2026)
+
+# 请在此补充代码
+```
+
+### 练习 2: 特征工程
+
+使用 `modeldata::ames` 完成以下任务: 
+
+- 划分训练集与测试集
+- 建立 `recipe(Sale_Price ~ ., data = ames_train)`
+- 对响应变量做对数变换
+- 添加 `Neighborhood:Gr_Liv_Area` 交互项
+- 对数值型预测变量做 Yeo-Johnson 变换
+- `prep()` 后处理训练集与测试集. 
+
+```{webr}
+library(modeldata)
+library(rsample)
+library(recipes)
+
+data("ames")
+set.seed(2026)
+
+# 请在此补充代码
+```
+
+### 练习 3: 不平衡数据
+
+使用 `modeldata::cells` 完成以下任务: 
+
+- 将 `class` 作为响应变量;
+- 按 `class` 分层切分训练集与测试集;
+- 建立一个基础 `recipe(class ~ ., data = cells_train)`;
+- 将 `case` 变量的 role 设为 `id`; 
+- 分别基于同一个基础 `recipe` 构造以下 4 种训练集: 
+    - `step_upsample(class)`
+    - `step_downsample(class)`
+    - `step_smote(class)`
+    - `step_rose(class)`
+- `prep()` 后得到各自处理后的训练集;
+- 比较原始训练集与 4 种重采样结果中 `class` 的类别分布. 
+
+```{webr}
+library(modeldata)
+library(rsample)
+library(recipes)
+library(themis)
+
+data("cells")
+set.seed(2026)
+
+# 请在此补充代码
 ```

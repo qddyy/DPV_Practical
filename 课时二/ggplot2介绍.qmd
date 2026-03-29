@@ -445,3 +445,65 @@ latex2exp, ggtext
 ggsci
 
 rayshader -->
+
+## 练习
+
+### 练习 1: 基本使用
+
+使用 `ggplot2::mpg` 完成以下任务: 
+
+- 绘制 `displ` 与 `hwy` 的散点图; 
+- 将 `drv` 映射到颜色; 
+- 设置点的透明度为 0.7; 
+- 添加一条线性拟合曲线，不显示置信区间; 
+- 设置 x 轴刻度为 2 到 7; 
+- 设置标题、副标题和坐标轴标签; 
+- 使用 `theme_minimal()`. 
+
+```{webr}
+library(ggplot2)
+
+data("mpg")
+
+# 请在此补充代码
+```
+
+### 练习 2: 分类比较
+
+继续使用 `ggplot2::mpg` 完成以下任务: 
+
+- 绘制 `class` 的柱状图; 
+- 将 `drv` 映射到填充颜色; 
+- 使用 `position = "fill"` 展示各 `class` 中不同 `drv` 的比例; 
+- 将 y 轴标签显示为百分比; 
+- 翻转坐标轴; 
+- 将图例放到底部，并设置图例标题; 
+- 使用 `theme_bw()`. 
+
+```{webr}
+library(ggplot2)
+
+data("mpg")
+
+# 请在此补充代码
+```
+
+### 练习 3: 统计变换
+
+使用 `ggplot2::diamonds` 完成以下任务: 
+
+- 绘制 `carat` 的直方图; 
+- 使用 `after_stat(density)` 将 y 轴改为密度; 
+- 叠加一条密度曲线; 
+- 按 `cut` 分面; 
+- 仅显示 `carat` 在 0 到 3 之间的部分; 
+- 使用 `theme_classic()`; 
+- 设置标题和 x / y 轴标签. 
+
+```{webr}
+library(ggplot2)
+
+data("diamonds")
+
+# 请在此补充代码
+```
