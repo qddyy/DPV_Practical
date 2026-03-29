@@ -224,7 +224,7 @@
     "href": "课时二/ggplot2介绍.html#layer",
     "title": "ggplot2介绍",
     "section": "Layer",
-    "text": "Layer\n有时候, 我们需要在同一张图上绘制多个元素, 例如同时绘制点和线. ggplot 从中抽离出图层的概念.\n\n\n\n\n\n\nggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 可以在图层中指定数据集和美学映射:\n\n\n\n\n\n\n这就相当于 base R 中的 plot(x = mtcars$wt, y = mtcars$mpg). 因此, 可以说图层是 ggplot 绘图的基本单位.\n\nGeometric Object & Statistical Transformation\n有些图需要从数据中计算出一些统计量, 例如箱线图需要计算出四分位数. 由于这种可能存在的计算是图层级别的 (只有箱线图需要计算分位数), ggplot 将这样的计算作为每个图层自己的特征.\n\n\n\n\n\n\nggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 geom_point() 的几何对象名为 point (画一些点), 而统计变换名为 identity (不进行任何计算). 另一方面, geom_boxplot() 的几何对象名为 boxplot (画一些箱子), 而统计变换名为 boxplot (计算分位数).\n图层中二者的地位是平等的, 因此创建一个图层有两种方式:\n\n使用 geom_*() 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 geom_point(), geom_line(), geom_boxplot().\n使用 stat_*() 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 stat_identity(), stat_boxplot().\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot 以默认参数的形式自动为 geom/stat 推断其缺失的另一半.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nafter_stat()\n有时候, 我们希望利用统计变换计算出的值来绘图, 例如我们希望将概率密度图中值较大的位置赋予较高的不透明度.\n\n\n\n\n\n\n由于密度是 geom_density 图层在自己的统计变换中计算的, 因此无法直接将其传给 alpha 参数. 对于这种需求, ggplot 提供了 after_stat() 函数, 允许我们在图层中访问统计变换计算出的值. geom_density 计算出的密度在内部被命名为 density, 因此我们可以通过 after_stat(density) 来访问它.",
+    "text": "Layer\n有时候, 我们需要在同一张图上绘制多个元素, 例如同时绘制点和线. ggplot 从中抽离出图层的概念.\n\n\n\n\n\n\nggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 可以在图层中指定数据集和美学映射:\n\n\n\n\n\n\n这就相当于 base R 中的 plot(x = mtcars$wt, y = mtcars$mpg). 因此, 可以说图层是 ggplot 绘图的基本单位.\n\nGeometric Object & Statistical Transformation\n有些图需要从数据中计算出一些统计量, 例如箱线图需要计算出四分位数. 由于这种可能存在的计算是图层级别的 (只有箱线图需要计算分位数), ggplot 将这样的计算作为每个图层自己的特征.\n\n\n\n\n\n\nggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 geom_point() 的几何对象名为 \"point\" (画一些点), 而统计变换名为 \"identity\" (不进行任何计算). 另一方面, geom_boxplot() 的几何对象名为 \"boxplot\" (画一些箱子), 而统计变换名为 \"boxplot\" (计算分位数).\n图层中二者的地位是平等的, 因此创建一个图层有两种方式:\n\n使用 geom_*() 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 geom_point(), geom_line(), geom_boxplot().\n使用 stat_*() 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 stat_identity(), stat_boxplot().\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot 以默认参数的形式自动为 geom/stat 推断其缺失的另一半.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nafter_stat()\n有时候, 我们希望利用统计变换计算出的值来绘图, 例如我们希望将概率密度图中值较大的位置赋予较高的不透明度.\n\n\n\n\n\n\n由于密度是 geom_density() 图层在自己的统计变换中计算的, 因此无法直接将其传给 alpha 参数. 对于这种需求, ggplot 提供了 after_stat() 函数, 允许我们在图层中访问统计变换计算出的值. geom_density() 计算出的密度在内部被命名为 density, 因此我们可以通过 after_stat(density) 来访问它.",
     "crumbs": [
       "课时二",
       "ggplot2介绍"
@@ -246,7 +246,7 @@
     "href": "课时二/ggplot2介绍.html#coordinate-system",
     "title": "ggplot2介绍",
     "section": "Coordinate System",
-    "text": "Coordinate System\nposition scales 只负责将变量值映射到坐标. 因此, 还需要指定坐标系在图上的摆放方式.\nggplot 中的坐标系分为两大类\n\nlinear coordinate systems\n\ncoord_cartesian()\ncoord_flip()\ncoord_fixed()\n\nnon-linear coordinate systems\n\ncoord_polar()\ncoord_trans()\ncoord_map()/coord_quickmap()/coord_sf()\n\n\n这里我们仅介绍两种最常用的坐标系: coord_cartesian() 和 coord_polar()\n\ncoord_cartesian()\ncoord_cartesian() (笛卡尔坐标系) 是 ggplot 的默认坐标系. 对于没有显式指定坐标系的图, ggplot 会自动添加一个 coord_cartesian().\nggplot 提供了一系列参数以对 coord_cartesian() 进行微调\n\n\n\n\n\n\n注意这里的 xlim/ylim 与 scale_x_continuous()/scale_y_continuous() 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.\n\n\ncoord_polar()\ncoord_polar() (极坐标系) 将笛卡尔坐标系转换为极坐标系.",
+    "text": "Coordinate System\nposition scales 只负责将变量值映射到坐标. 因此, 还需要指定坐标系在图上的摆放方式.\nggplot 中的坐标系分为两大类\n\nlinear coordinate systems\n\ncoord_cartesian()\ncoord_flip()\ncoord_fixed()\n\nnon-linear coordinate systems\n\ncoord_polar()\ncoord_trans()\ncoord_map()/coord_quickmap()/coord_sf()\n\n\n这里我们仅介绍两种最常用的坐标系: coord_cartesian() 和 coord_polar()\n\ncoord_cartesian()\ncoord_cartesian() (笛卡尔坐标系) 是 ggplot 的默认坐标系. 对于没有显式指定坐标系的图, ggplot 会自动添加一个 coord_cartesian().\nggplot 提供了一系列参数以对 coord_cartesian() 进行微调\n\n\n\n\n\n\n注意这里的 xlim/ylim 与 scale_x_continuous()/scale_y_continuous() 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.\n\n\ncoord_polar()\ncoord_polar() (极坐标系) 将笛卡尔坐标系转换为极坐标系.\n\n\n\n\n\n\n\n\n\n\n\n\ncoord_polar() 最常见的还是创建饼图. 其由堆叠条形图变化而来.",
     "crumbs": [
       "课时二",
       "ggplot2介绍"
@@ -268,7 +268,7 @@
     "href": "课时二/ggplot2介绍.html#theme",
     "title": "ggplot2介绍",
     "section": "Theme",
-    "text": "Theme\ntheme 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.\n\n\n\n\n\n\ntheme 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.\n除了使用 theme() 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 theme_bw(), theme_minimal(), theme_classic() 等.",
+    "text": "Theme\ntheme 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.\n\n\n\n\n\n\ntheme() 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.\n除了使用 theme() 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 theme_bw(), theme_minimal(), theme_classic() 等.",
     "crumbs": [
       "课时二",
       "ggplot2介绍"
