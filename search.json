@@ -312,7 +312,7 @@
     "href": "课时二/数据重塑.html#特征衍生",
     "title": "数据重塑",
     "section": "特征衍生",
-    "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 生成多项式特征\nstep_ns(): 生成自然样条特征\nstep_interact(): 生成特征交互项\nstep_pca(): 进行主成分分析\n…\n\n这里以 step_poly() 为例, 生成 mpg 的二次项:",
+    "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 多项式特征\nstep_ns(): 自然样条特征\nstep_pca(): 主成分特征\nstep_interact(): 生成特征交互项\n…\n\n这里以 step_poly() 为例, 在 mtcars 数据集中生成 mpg 的二次项:",
     "crumbs": [
       "课时二",
       "数据重塑"
