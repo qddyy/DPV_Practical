@@ -393,22 +393,22 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KGRhdGEgPSBtdGNh
 </section>
 <section id="after_stat" class="level3">
 <h3 class="anchored" data-anchor-id="after_stat">after_stat()</h3>
-<p>有时候, 我们希望利用统计变换计算出的值来绘图, 例如我们希望将概率密度图中值较大的位置赋予较高的不透明度.</p>
+<p>有时候, 我们希望利用统计变换计算出的值来绘图. 例如, 我们希望将概率密度图中的密度放缩到 [0, 1] 之间.</p>
 <div>
 <div id="webr-13" class="exercise-cell">
 
 </div>
 <script type="webr-13-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KG10Y2FycywgYWVzKHggPSBtcGcsIGZpbGwgPSBhcy5mYWN0b3IoY3lsKSkpICtcbiAgICBnZW9tX2RlbnNpdHkoYWxwaGEgPSAwLjUpIn0=
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KG10Y2FycywgYWVzKHggPSBtcGcpKSArXG4gICAgZ2VvbV9kZW5zaXR5KGFscGhhID0gMC41KSJ9
 </script>
 </div>
-<p>由于密度是 <code>geom_density()</code> 图层在自己的统计变换中计算的, 因此无法直接将其传给 alpha 参数. 对于这种需求, ggplot 提供了 <code>after_stat()</code> 函数, 允许我们在图层中访问统计变换计算出的值. <code>geom_density()</code> 计算出的密度在内部被命名为 <code>density</code>, 因此我们可以通过 <code>after_stat(density)</code> 来访问它.</p>
+<p>由于密度是 <code>geom_density()</code> 图层在自己的统计变换中计算的, 因此无法直接对其进行操作. 对于这种需求, ggplot 提供了 <code>after_stat()</code> 函数, 允许我们在图层中访问统计变换计算出的值. <code>geom_density()</code> 计算出的密度在内部被命名为 <code>density</code>, 因此我们可以通过 <code>after_stat(density)</code> 来访问它.</p>
 <div>
 <div id="webr-14" class="exercise-cell">
 
 </div>
 <script type="webr-14-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KG10Y2FycywgYWVzKHggPSBtcGcsIGZpbGwgPSBhcy5mYWN0b3IoY3lsKSkpICtcbiAgICBnZW9tX2RlbnNpdHkoYWVzKGFscGhhID0gYWZ0ZXJfc3RhdChkZW5zaXR5KSkpXG5cbiMg5L2/55SoICVUPiUgcHJpbnQoKSDmn6XnnIsgZGVuc2l0eSDnmoTlgLw/XG4jIOW6lOivpeaUvuWcqCBhZnRlcl9zdGF0IOmHjCEifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KG10Y2FycywgYWVzKHggPSBtcGcpKSArXG4gICAgZ2VvbV9kZW5zaXR5KGFlcyh5ID0gYWZ0ZXJfc3RhdChkZW5zaXR5IC8gbWF4KGRlbnNpdHkpKSkpIn0=
 </script>
 </div>
 </section>
