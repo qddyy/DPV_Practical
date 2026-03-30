@@ -140,7 +140,10 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ```{webr}
 ggplot(mtcars, aes(x = mpg)) +
-    geom_density(fill = "red", aes(y = after_stat(density / max(density))))
+    geom_density(
+        fill = "red", alpha = 0.5,
+        aes(y = after_stat(density / max(density)))
+    )
 ```
 
 ## Scale
@@ -409,7 +412,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
     geom_point() +
-    facet_wrap(~ cyl, scales = "fixed") # 所有面板使用相同的坐标轴范围
+    facet_wrap(~ cyl, scales = "free") # 所有面板使用各自的坐标轴范围
 ```
 
 ## Theme
