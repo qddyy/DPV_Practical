@@ -179,11 +179,11 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#特征衍生" id="toc-特征衍生" class="nav-link" data-scroll-target="#特征衍生">特征衍生</a></li>
   <li><a href="#类别不平衡问题" id="toc-类别不平衡问题" class="nav-link" data-scroll-target="#类别不平衡问题">类别不平衡问题</a></li>
-  <li><a href="#练习" id="toc-练习" class="nav-link" data-scroll-target="#练习">练习</a>
+  <li><a href="#练习" id="toc-练习" class="nav-link" data-scroll-target="#练习">练习</a></li>
+  <li><a href="#练习-1" id="toc-练习-1" class="nav-link" data-scroll-target="#练习-1">练习 1</a>
   <ul class="collapse">
-  <li><a href="#练习-1-recipes-的基本使用" id="toc-练习-1-recipes-的基本使用" class="nav-link" data-scroll-target="#练习-1-recipes-的基本使用">练习 1: <code>recipes</code> 的基本使用</a></li>
-  <li><a href="#练习-2-特征工程" id="toc-练习-2-特征工程" class="nav-link" data-scroll-target="#练习-2-特征工程">练习 2: 特征工程</a></li>
-  <li><a href="#练习-3-不平衡数据" id="toc-练习-3-不平衡数据" class="nav-link" data-scroll-target="#练习-3-不平衡数据">练习 3: 不平衡数据</a></li>
+  <li><a href="#练习-2" id="toc-练习-2" class="nav-link" data-scroll-target="#练习-2">练习 2</a></li>
+  <li><a href="#练习-3" id="toc-练习-3" class="nav-link" data-scroll-target="#练习-3">练习 3</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/qddyy/DPV_Practical/blob/main/课时二/数据重塑.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/qddyy/DPV_Practical/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -334,36 +334,52 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmVjaXBlKGNsYXNzIH4gLiwg
 </section>
 <section id="练习" class="level2">
 <h2 class="anchored" data-anchor-id="练习">练习</h2>
-<section id="练习-1-recipes-的基本使用" class="level3">
-<h3 class="anchored" data-anchor-id="练习-1-recipes-的基本使用">练习 1: <code>recipes</code> 的基本使用</h3>
-<p>使用 <code>airquality</code> 完成以下任务:</p>
+</section>
+<section id="练习-1" class="level2">
+<h2 class="anchored" data-anchor-id="练习-1">练习 1</h2>
+<p>使用 <code>ggplot2::mpg</code> 完成以下任务:</p>
 <ul>
-<li>去除 <code>Ozone</code> 缺失记录</li>
-<li>划分训练集与测试集</li>
-<li>建立 <code>recipe(Ozone ~ ., data = aq_train)</code></li>
-<li>对数值型预测变量做中位数填补</li>
-<li>对数值型预测变量做标准化</li>
-<li><code>prep()</code> 后处理训练集与测试集.</li>
+<li>选择 <code>manufacturer</code>、<code>model</code>、<code>class</code>、<code>year</code>、<code>cty</code> 和 <code>hwy</code> 这几个变量，生成一个新的数据框</li>
+<li>使用 <code>stringr</code> 包中的函数，新建一列 <code>class_group</code>
+<ul>
+<li>若 <code>class</code> 中包含 <code>"suv"</code>，则记为 <code>"SUV"</code></li>
+<li>若 <code>class</code> 中包含 <code>"compact"</code>，则记为 <code>"Compact"</code></li>
+<li>其余车型记为 <code>"Other"</code></li>
+</ul></li>
+<li>仅保留 <code>class_group</code> 不为 <code>"Other"</code> 的观测</li>
+<li>使用 <code>pivot_longer()</code> 将 <code>cty</code> 和 <code>hwy</code> 两列整理为长格式，生成新列 <code>mileage_type</code> 和 <code>mpg_value</code></li>
+<li>将 <code>mileage_type</code> 中的值改为更易理解的形式:
+<ul>
+<li><code>cty</code> 改为 <code>"City"</code></li>
+<li><code>hwy</code> 改为 <code>"Highway"</code></li>
+</ul></li>
+<li>按 <code>manufacturer</code>、<code>class_group</code> 和 <code>mileage_type</code> 分组, 计算每组的:
+<ul>
+<li>样本量 <code>n</code></li>
+<li>平均油耗水平 <code>mean_mpg</code></li>
+<li>最大油耗水平 <code>max_mpg</code></li>
+</ul></li>
+<li>仅保留样本量不少于 3 的组别</li>
+<li>将结果按 <code>mean_mpg</code> 从高到低排序</li>
 </ul>
 <div>
 <div id="webr-9" class="exercise-cell">
 
 </div>
 <script type="webr-9-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShyc2FtcGxlKVxubGlicmFyeShyZWNpcGVzKVxuXG5kYXRhKFwiYWlycXVhbGl0eVwiKVxuc2V0LnNlZWQoMjAyNilcblxuIyDor7flnKjmraTooaXlhYXku6PnoIEifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KHN0cmluZ3IpXG5cbmRhdGEoXCJtcGdcIilcblxuIyDor7flnKjmraTooaXlhYXku6PnoIEifQ==
 </script>
 </div>
-</section>
-<section id="练习-2-特征工程" class="level3">
-<h3 class="anchored" data-anchor-id="练习-2-特征工程">练习 2: 特征工程</h3>
+<section id="练习-2" class="level3">
+<h3 class="anchored" data-anchor-id="练习-2">练习 2</h3>
 <p>使用 <code>modeldata::ames</code> 完成以下任务:</p>
 <ul>
 <li>划分训练集与测试集</li>
-<li>建立 <code>recipe(Sale_Price ~ ., data = ames_train)</code></li>
-<li>对响应变量做对数变换</li>
-<li>添加 <code>Neighborhood:Gr_Liv_Area</code> 交互项</li>
-<li>对数值型预测变量做 Yeo-Johnson 变换</li>
-<li><code>prep()</code> 后处理训练集与测试集.</li>
+<li>以训练集为基础，建立一个以 <code>Sale_Price</code> 作为响应变量，以 <code>Gr_Liv_Area</code>, <code>Year_Built</code>, <code>Full_Bath</code>, <code>Neighborhood</code>, <code>Bldg_Type</code> 作为预测变量的 <code>recipe</code> 对象</li>
+<li>对 Gr_Liv_Area 构造二阶多项式特征</li>
+<li>构造比例特征 <code>bath_ratio = Full_Bath / Gr_Liv_Area</code></li>
+<li>使用 step_interact() 添加 <code>Gr_Liv_Area:Year_Built</code> 交互项</li>
+<li><code>prep()</code> 后处理训练集与测试集</li>
 </ul>
 <div>
 <div id="webr-10" class="exercise-cell">
@@ -374,23 +390,23 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 </script>
 </div>
 </section>
-<section id="练习-3-不平衡数据" class="level3">
-<h3 class="anchored" data-anchor-id="练习-3-不平衡数据">练习 3: 不平衡数据</h3>
+<section id="练习-3" class="level3">
+<h3 class="anchored" data-anchor-id="练习-3">练习 3</h3>
 <p>使用 <code>modeldata::cells</code> 完成以下任务:</p>
 <ul>
-<li>将 <code>class</code> 作为响应变量;</li>
-<li>按 <code>class</code> 分层切分训练集与测试集;</li>
-<li>建立一个基础 <code>recipe(class ~ ., data = cells_train)</code>;</li>
-<li>将 <code>case</code> 变量的 role 设为 <code>id</code>;</li>
-<li>分别基于同一个基础 <code>recipe</code> 构造以下 4 种训练集:
+<li>将 <code>class</code> 作为响应变量</li>
+<li>按 <code>class</code> 分层切分训练集与测试集</li>
+<li>以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe</li>
+<li>将 <code>case</code> 变量的 role 设为 <code>id</code></li>
+<li>分别基于同一个基础 <code>recipe</code> 添加以下 step, 形成 4 个不同的 recipe 对象:
 <ul>
 <li><code>step_upsample(class)</code></li>
 <li><code>step_downsample(class)</code></li>
 <li><code>step_smote(class)</code></li>
 <li><code>step_rose(class)</code></li>
 </ul></li>
-<li><code>prep()</code> 后得到各自处理后的训练集;</li>
-<li>比较原始训练集与 4 种重采样结果中 <code>class</code> 的类别分布.</li>
+<li><code>prep()</code> 后得到各自处理后的训练集</li>
+<li>统计原始训练集与 4 种重采样结果中 <code>class</code> 的类别分布</li>
 </ul>
 <div>
 <div id="webr-11" class="exercise-cell">
@@ -400,6 +416,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEpXG5saWJyYXJ5KHJzYW1wbGUpXG5saWJyYXJ5KHJlY2lwZXMpXG5saWJyYXJ5KHRoZW1pcylcblxuZGF0YShcImNlbGxzXCIpXG5zZXQuc2VlZCgyMDI2KVxuXG4jIOivt+WcqOatpOihpeWFheS7o+eggSJ9
 </script>
 </div>
+<p><strong>tidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.</strong></p>
 
 
 <script type="webr-data">
