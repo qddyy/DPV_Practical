@@ -144,37 +144,46 @@ recipe(class ~ ., data = hpc_data0) %>%
 
 ## 练习
 
-### 练习 1: `recipes` 的基本使用
+## 练习 1
 
-使用 `airquality` 完成以下任务: 
+使用 `ggplot2::mpg` 完成以下任务:
 
-- 去除 `Ozone` 缺失记录
-- 划分训练集与测试集
-- 建立 `recipe(Ozone ~ ., data = aq_train)`
-- 对数值型预测变量做中位数填补
-- 对数值型预测变量做标准化
-- `prep()` 后处理训练集与测试集. 
+- 选择 `manufacturer`、`model`、`class`、`year`、`cty` 和 `hwy` 这几个变量，生成一个新的数据框
+- 使用 `stringr` 包中的函数，新建一列 `class_group`
+    - 若 `class` 中包含 `"suv"`，则记为 `"SUV"`
+    - 若 `class` 中包含 `"compact"`，则记为 `"Compact"`
+    - 其余车型记为 `"Other"`
+- 仅保留 `class_group` 不为 `"Other"` 的观测
+- 使用 `pivot_longer()` 将 `cty` 和 `hwy` 两列整理为长格式，生成新列 `mileage_type` 和 `mpg_value`
+- 将 `mileage_type` 中的值改为更易理解的形式:
+    - `cty` 改为 `"City"`
+    - `hwy` 改为 `"Highway"`
+- 按 `manufacturer`、`class_group` 和 `mileage_type` 分组, 计算每组的:
+    - 样本量 `n`
+    - 平均油耗水平 `mean_mpg`
+    - 最大油耗水平 `max_mpg`
+- 仅保留样本量不少于 3 的组别
+- 将结果按 `mean_mpg` 从高到低排序
 
 ```{webr}
-library(rsample)
-library(recipes)
+library(tidyverse)
+library(stringr)
 
-data("airquality")
-set.seed(2026)
+data("mpg")
 
 # 请在此补充代码
 ```
 
-### 练习 2: 特征工程
+### 练习 2
 
-使用 `modeldata::ames` 完成以下任务: 
+使用 `modeldata::ames` 完成以下任务:
 
 - 划分训练集与测试集
-- 建立 `recipe(Sale_Price ~ ., data = ames_train)`
-- 对响应变量做对数变换
-- 添加 `Neighborhood:Gr_Liv_Area` 交互项
-- 对数值型预测变量做 Yeo-Johnson 变换
-- `prep()` 后处理训练集与测试集. 
+- 以训练集为基础，建立一个以 `Sale_Price` 作为响应变量，以 `Gr_Liv_Area`, `Year_Built`, `Full_Bath`, `Neighborhood`, `Bldg_Type` 作为预测变量的 `recipe` 对象
+- 对 Gr_Liv_Area 构造二阶多项式特征
+- 构造比例特征 `bath_ratio = Full_Bath / Gr_Liv_Area`
+- 使用 step_interact() 添加 `Gr_Liv_Area:Year_Built` 交互项
+- `prep()` 后处理训练集与测试集
 
 ```{webr}
 library(modeldata)
@@ -187,21 +196,21 @@ set.seed(2026)
 # 请在此补充代码
 ```
 
-### 练习 3: 不平衡数据
+### 练习 3
 
-使用 `modeldata::cells` 完成以下任务: 
+使用 `modeldata::cells` 完成以下任务:
 
-- 将 `class` 作为响应变量;
-- 按 `class` 分层切分训练集与测试集;
-- 建立一个基础 `recipe(class ~ ., data = cells_train)`;
-- 将 `case` 变量的 role 设为 `id`; 
-- 分别基于同一个基础 `recipe` 构造以下 4 种训练集: 
+- 将 `class` 作为响应变量
+- 按 `class` 分层切分训练集与测试集
+- 以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe
+- 将 `case` 变量的 role 设为 `id`
+- 分别基于同一个基础 `recipe` 添加以下 step, 形成 4 个不同的 recipe 对象:
     - `step_upsample(class)`
     - `step_downsample(class)`
     - `step_smote(class)`
     - `step_rose(class)`
-- `prep()` 后得到各自处理后的训练集;
-- 比较原始训练集与 4 种重采样结果中 `class` 的类别分布. 
+- `prep()` 后得到各自处理后的训练集
+- 统计原始训练集与 4 种重采样结果中 `class` 的类别分布
 
 ```{webr}
 library(modeldata)
@@ -214,3 +223,5 @@ set.seed(2026)
 
 # 请在此补充代码
 ```
+
+**tidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.**
