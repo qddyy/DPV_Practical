@@ -219,8 +219,8 @@ div.csl-indent {
   <li><a href="#theme" id="toc-theme" class="nav-link" data-scroll-target="#theme">Theme</a></li>
   <li><a href="#拼图与保存" id="toc-拼图与保存" class="nav-link" data-scroll-target="#拼图与保存">拼图与保存</a>
   <ul class="collapse">
-  <li><a href="#plot_layout" id="toc-plot_layout" class="nav-link" data-scroll-target="#plot_layout">plot_layout()</a></li>
-  <li><a href="#plot_annotation" id="toc-plot_annotation" class="nav-link" data-scroll-target="#plot_annotation">plot_annotation()</a></li>
+  <li><a href="#ggsave" id="toc-ggsave" class="nav-link" data-scroll-target="#ggsave">ggsave()</a></li>
+  <li><a href="#patchwork" id="toc-patchwork" class="nav-link" data-scroll-target="#patchwork">patchwork</a></li>
   </ul></li>
   <li><a href="#cheatsheet" id="toc-cheatsheet" class="nav-link" data-scroll-target="#cheatsheet">Cheatsheet</a></li>
   <li><a href="#练习" id="toc-练习" class="nav-link" data-scroll-target="#练习">练习</a>
@@ -748,15 +748,20 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZ2dwbG90KG10Y2FycywgYWVz
 </section>
 <section id="拼图与保存" class="level2">
 <h2 class="anchored" data-anchor-id="拼图与保存">拼图与保存</h2>
+<section id="ggsave" class="level3">
+<h3 class="anchored" data-anchor-id="ggsave">ggsave()</h3>
 <p>要将 ggplot2 图片保存到文件, 可以使用 <code>ggsave()</code> 函数</p>
 <div>
 <div id="webr-38" class="exercise-cell">
 
 </div>
 <script type="webr-38-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiIyMgTm90IHJ1bjogXG5wIDwtIFxuICAgIGdncGxvdChtdGNhcnMsIGFlcyhtcGcsIHd0KSkgK1xuICAgIGdlb21fcG9pbnQoKVxuXG5wICU+JSBnZ3NhdmUoXG4gICAgIyBnZ3Bsb3QyIOiHquWKqOagueaNruaWh+S7tuWQjeWQjue8gOaOqOaWreaWh+S7tuexu+Wei1xuICAgIGZpbGVuYW1lID0gXCJtdGNhcnMucGRmXCIsXG4gICAgIyDlj6/ku6Xorr7nva7lm77niYflpKflsI9cbiAgICB3aWR0aCA9IDIwLCBoZWlnaHQgPSAyMCwgdW5pdHMgPSBcImNtXCJcbikifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicCA8LSBcbiAgICBnZ3Bsb3QobXRjYXJzLCBhZXMobXBnLCB3dCkpICtcbiAgICBnZW9tX3BvaW50KClcblxucCAlPiUgZ2dzYXZlKFxuICAgICMgZ2dwbG90MiDoh6rliqjmoLnmja7mlofku7blkI3lkI7nvIDmjqjmlq3mlofku7bnsbvlnotcbiAgICBmaWxlbmFtZSA9IFwibXRjYXJzLnBkZlwiLFxuICAgICMg5Y+v5Lul6K6+572u5Zu+54mH5aSn5bCPXG4gICAgd2lkdGggPSAyMCwgaGVpZ2h0ID0gMjAsIHVuaXRzID0gXCJjbVwiXG4pIn0=
 </script>
 </div>
+</section>
+<section id="patchwork" class="level3">
+<h3 class="anchored" data-anchor-id="patchwork">patchwork</h3>
 <p>有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下</p>
 <div>
 <div id="webr-39" class="exercise-cell">
@@ -785,8 +790,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiKHAxICsgcDIpIC8gcDMifQ==
 </script>
 </div>
 <p>与 ggplot2 一样, patchwork 拼成的图也可以使用 <code>ggsave()</code> 保存.</p>
-<section id="plot_layout" class="level3">
-<h3 class="anchored" data-anchor-id="plot_layout">plot_layout()</h3>
+<section id="plot_layout" class="level4">
+<h4 class="anchored" data-anchor-id="plot_layout">plot_layout()</h4>
 <p>可以添加一个 <code>plot_layout()</code> 来控制如何放置子图.</p>
 <div>
 <div id="webr-42" class="exercise-cell">
@@ -814,8 +819,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicDYgPC0gZ2dwbG90KG10Y2Fy
 </script>
 </div>
 </section>
-<section id="plot_annotation" class="level3">
-<h3 class="anchored" data-anchor-id="plot_annotation">plot_annotation()</h3>
+<section id="plot_annotation" class="level4">
+<h4 class="anchored" data-anchor-id="plot_annotation">plot_annotation()</h4>
 <p><code>plot_annotation()</code> 可用于控制拼图的标题, 编号等:</p>
 <div>
 <div id="webr-45" class="exercise-cell">
@@ -825,6 +830,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicDYgPC0gZ2dwbG90KG10Y2Fy
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicDEgKyBwMiArXG4gICAgcGxvdF9hbm5vdGF0aW9uKFxuICAgICAgICB0aXRsZSA9IFwiVGhpcyBpcyBhIHRpdGxlXCIsXG4gICAgICAgIGNhcHRpb24gPSBcIm1hZGUgd2l0aCBwYXRjaHdvcmtcIixcbiAgICAgICAgdGFnX2xldmVscyA9IFwiQVwiXG4gICAgKSJ9
 </script>
 </div>
+</section>
 </section>
 </section>
 <section id="cheatsheet" class="level2">

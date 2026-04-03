@@ -279,7 +279,7 @@
     "href": "课时二/ggplot2介绍.html#拼图与保存",
     "title": "ggplot2介绍",
     "section": "拼图与保存",
-    "text": "拼图与保存\n要将 ggplot2 图片保存到文件, 可以使用 ggsave() 函数\n\n\n\n\n\n\n有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下\n\n\n\n\n\n\npatchwork 继承了 ggplot2 的设计哲学, 可以直接将 ggplot 对象相加来拼图\n\n\n\n\n\n\n如果希望其竖向拼接, 可以使用 / 而不是 +:\n\n\n\n\n\n\n与 ggplot2 一样, patchwork 拼成的图也可以使用 ggsave() 保存.\n\nplot_layout()\n可以添加一个 plot_layout() 来控制如何放置子图.\n\n\n\n\n\n\n\n\n\n\n\n\nplot_layout() 的另一个实用参数是 guides:\n\n\n\n\n\n\n\n\nplot_annotation()\nplot_annotation() 可用于控制拼图的标题, 编号等:",
+    "text": "拼图与保存\n\nggsave()\n要将 ggplot2 图片保存到文件, 可以使用 ggsave() 函数\n\n\n\n\n\n\n\n\npatchwork\n有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下\n\n\n\n\n\n\npatchwork 继承了 ggplot2 的设计哲学, 可以直接将 ggplot 对象相加来拼图\n\n\n\n\n\n\n如果希望其竖向拼接, 可以使用 / 而不是 +:\n\n\n\n\n\n\n与 ggplot2 一样, patchwork 拼成的图也可以使用 ggsave() 保存.\n\nplot_layout()\n可以添加一个 plot_layout() 来控制如何放置子图.\n\n\n\n\n\n\n\n\n\n\n\n\nplot_layout() 的另一个实用参数是 guides:\n\n\n\n\n\n\n\n\nplot_annotation()\nplot_annotation() 可用于控制拼图的标题, 编号等:",
     "crumbs": [
       "课时二",
       "ggplot2介绍"
