@@ -345,18 +345,7 @@
     "href": "课时二/数据重塑.html#练习",
     "title": "数据重塑",
     "section": "练习",
-    "text": "练习",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html#练习-1",
-    "href": "课时二/数据重塑.html#练习-1",
-    "title": "数据重塑",
-    "section": "练习 1",
-    "text": "练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n选择 manufacturer、model、class、year、cty 和 hwy 这几个变量，生成一个新的数据框\n使用 stringr 包中的函数，新建一列 class_group\n\n若 class 中包含 \"suv\"，则记为 \"SUV\"\n若 class 中包含 \"compact\"，则记为 \"Compact\"\n其余车型记为 \"Other\"\n\n仅保留 class_group 不为 \"Other\" 的观测\n使用 pivot_longer() 将 cty 和 hwy 两列整理为长格式，生成新列 mileage_type 和 mpg_value\n将 mileage_type 中的值改为更易理解的形式:\n\ncty 改为 \"City\"\nhwy 改为 \"Highway\"\n\n按 manufacturer、class_group 和 mileage_type 分组, 计算每组的:\n\n样本量 n\n平均油耗水平 mean_mpg\n最大油耗水平 max_mpg\n\n仅保留样本量不少于 3 的组别\n将结果按 mean_mpg 从高到低排序\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::ames 完成以下任务:\n\n划分训练集与测试集\n以训练集为基础，建立一个以 Sale_Price 作为响应变量，以 Gr_Liv_Area, Year_Built, Full_Bath, Neighborhood, Bldg_Type 作为预测变量的 recipe 对象\n对 Gr_Liv_Area 构造二阶多项式特征\n构造比例特征 bath_ratio = Full_Bath / Gr_Liv_Area\n使用 step_interact() 添加 Gr_Liv_Area:Year_Built 交互项\nprep() 后处理训练集与测试集\n\n\n\n\n\n\n\n\n\n练习 3\n使用 modeldata::cells 完成以下任务:\n\n将 class 作为响应变量\n按 class 分层切分训练集与测试集\n以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe\n将 case 变量的 role 设为 id\n分别基于同一个基础 recipe 添加以下 step, 形成 4 个不同的 recipe 对象:\n\nstep_upsample(class)\nstep_downsample(class)\nstep_smote(class)\nstep_rose(class)\n\nprep() 后得到各自处理后的训练集\n统计原始训练集与 4 种重采样结果中 class 的类别分布\n\n\n\n\n\n\n\ntidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.",
+    "text": "练习\n\n练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n选择 manufacturer、model、class、year、cty 和 hwy 这几个变量，生成一个新的数据框\n使用 stringr 包中的函数，新建一列 class_group\n\n若 class 中包含 \"suv\"，则记为 \"SUV\"\n若 class 中包含 \"compact\"，则记为 \"Compact\"\n其余车型记为 \"Other\"\n\n仅保留 class_group 不为 \"Other\" 的观测\n使用 pivot_longer() 将 cty 和 hwy 两列整理为长格式，生成新列 mileage_type 和 mpg_value\n将 mileage_type 中的值改为更易理解的形式:\n\ncty 改为 \"City\"\nhwy 改为 \"Highway\"\n\n按 manufacturer、class_group 和 mileage_type 分组, 计算每组的:\n\n样本量 n\n平均油耗水平 mean_mpg\n最大油耗水平 max_mpg\n\n仅保留样本量不少于 3 的组别\n将结果按 mean_mpg 从高到低排序\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::ames 完成以下任务:\n\n划分训练集与测试集\n以训练集为基础，建立一个以 Sale_Price 作为响应变量，以 Gr_Liv_Area, Year_Built, Full_Bath, Neighborhood, Bldg_Type 作为预测变量的 recipe 对象\n对 Gr_Liv_Area 构造二阶多项式特征\n构造比例特征 bath_ratio = Full_Bath / Gr_Liv_Area\n使用 step_interact() 添加 Gr_Liv_Area:Year_Built 交互项\nprep() 后处理训练集与测试集\n\n\n\n\n\n\n\n\n\n练习 3\n使用 modeldata::cells 完成以下任务:\n\n将 class 作为响应变量\n按 class 分层切分训练集与测试集\n以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe\n将 case 变量的 role 设为 id\n分别基于同一个基础 recipe 添加以下 step, 形成 4 个不同的 recipe 对象:\n\nstep_upsample(class)\nstep_downsample(class)\nstep_smote(class)\nstep_rose(class)\n\nprep() 后得到各自处理后的训练集\n统计原始训练集与 4 种重采样结果中 class 的类别分布\n\n\n\n\n\n\n\ntidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.",
     "crumbs": [
       "课时二",
       "数据重塑"
