@@ -8,6 +8,7 @@ webr:
   packages:
     - ggplot2
     - ggh4x
+    - patchwork
     - magrittr
 ---
 
@@ -21,7 +22,7 @@ webr:
 - 坐标系 (coordinate system)
 - 分面 (facet)
 
-其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值展示在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最后, layer 决定了图中元素的类型, 如点, 线等.
+其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值映射在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最重要的是 layer, 其决定了图中元素的类型, 如点, 线等.
 
 ## ggplot 示例
 
@@ -45,7 +46,7 @@ ggplot() %>% class()
 
 ## Aesthetic Mapping
 
-美学映射 (aesthetic mapping) 将数据中的变量映射到图中的视觉属性, 包括位置、颜色、形状、大小等. 常用的视觉属性包括:
+美学映射 (aesthetic mapping) 用于指定数据中的变量在图中对应什么, 如可以指定某列作为 x/y 轴坐标, 另一列作为点的颜色. 常用的包括:
 
 - 位置 (x, y): 坐标轴上的位置
 - 颜色 (color): 点/线的颜色
@@ -54,14 +55,19 @@ ggplot() %>% class()
 - 大小 (size): 大小
 - 透明度 (alpha): 透明度
 
-ggplot 将各种类型的图所需要的属性名称高度统一, 例如 x 和 y 在各种图中都代表 x/y 轴坐标, fill 在各种图中都代表某种封闭结构内部的填充色. 这使得不同类型的图可以共用美学映射来简化代码.
-
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg, color = as.factor(cyl))) +
     geom_point()
 ```
 
-顺带一提, ggplot 中的美学映射是对 dataset 中的每个 observation 进行的. 因此, 如果要对所有 observation 进行相同的美学映射, 例如将所有点的颜色设置为红色, 则需要在图层中直接指定一个常量值 (而不是在 `aes()` 中指定):
+ggplot 将各种类型的图所需要的属性名称高度统一, 例如 x 和 y 总表示 x/y 轴坐标, color 总表示点/线的颜色, fill 总表示某种封闭结构内部的填充色. 这使得不同图层可以共用美学映射来简化代码.
+
+```{webr}
+ggplot(mtcars, aes(x = wt, color = as.factor(cyl))) +
+    geom_density()
+```
+
+ggplot 中的美学映射将 dataset 中的各列映射为某种视觉元素. 通常这个 dataset 是 tidy 的, 因此相当于是为其中每个 observation 指定不同的属性 (如之前为每个点按类别指定不同的颜色). 如果希望为所有 observation 指定同样的属性, 例如将所有点的颜色设置为红色, 可以直接在图层中直接指定一个常量值 (而不是在 `aes()` 中指定):
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -78,7 +84,7 @@ ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
     geom_line()    # 添加线图层
 ```
 
-ggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 可以在图层中指定数据集和美学映射:
+ggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 也可以在图层中指定数据集和美学映射:
 
 ```{webr}
 # 此时 ggplot() 只起一个创建 ggplot 对象的作用
@@ -98,7 +104,7 @@ ggplot(data = mtcars, mapping = aes(y = mpg)) +
     geom_boxplot()
 ```
 
-ggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 `geom_point()` 的几何对象名为 `"point"` (画一些点), 而统计变换名为 `"identity"` (不进行任何计算). 另一方面, `geom_boxplot()` 的几何对象名为 `"boxplot"` (画一些箱子), 而统计变换名为 `"boxplot"` (计算分位数).
+ggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 `geom_point()` 的几何对象名为 `"point"` (画一些点), 而统计变换名为 `"identity"` (不进行任何计算); `geom_boxplot()` 的几何对象名为 `"boxplot"` (画一些箱子), 而统计变换名为 `"boxplot"` (计算分位数). 后者的几何对象和统计变换同名只是因为它们都是箱线图专用的.
 
 图层中二者的地位是平等的, 因此创建一个图层有两种方式:
 
@@ -127,6 +133,13 @@ ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
     stat_identity() # geom 默认为 point
 ```
 
+大多数时候使用 `geom_*()` 即可, 但 `stat_*()` 也有其用处, 比如我我们希望利用 geom_boxplot 计算出的分位数, 但将其展现为 errorbar 的形式. (`geom_errorbar()` 也是 ggplot2 提供的一种图层类型)
+
+```{webr}
+ggplot(mpg, aes(class, hwy)) +
+    stat_boxplot(geom = "errorbar")
+```
+
 ### after_stat()
 
 有时候, 我们希望利用统计变换计算出的值来绘图. 例如, 我们希望将概率密度图中的密度放缩到 [0, 1] 之间.
@@ -148,7 +161,7 @@ ggplot(mtcars, aes(x = mpg)) +
 
 ## Scale
 
-Aesthetic mapping 只是指定了 dataset 中各个变量对应图中哪个部分, 而 scale 决定其值如何展示到图上.
+Aesthetic mapping 只是指定了 dataset 中各个变量对应图中哪个视觉元素, 而 scale 决定变量的值如何映射为图中展现的值.
 
 对于 `aes()` 中指定的每个美学映射, 都需要有一个对应的 scale. 未指定时, ggplot 都会自动为其创建一个默认的 scale. 例如, 对于 `aes(x = wt)` (数值型变量), ggplot 会创建一个 `scale_x_continuous()` 来将 wt 的值映射到 x 轴上. 对于 `aes(color = as.factor(cyl))` (因子型变量), ggplot 会创建一个 `scale_color_discrete()` 来将 cyl 的值映射到颜色上.
 
@@ -194,7 +207,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 - 超过 limits 的数据点会被设为 NA
 - expand 的计算依赖于数据范围
 
-因此这两个设置都可以视为对"如何将数据展示到坐标轴上"的调整, 而不是对坐标轴本身的调整. 这也是它们被归类在 position scales 中的原因.
+因此这两个设置都可以视为对"如何将数据映射/展示到坐标轴上"的调整, 而不是对坐标轴本身的调整. 这也是它们被归类在 position scales 中的原因.
 
 #### 刻度标签
 
@@ -211,7 +224,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     )
 ```
 
-其被归为 position scales 的原因是它们是对数据范围的一种视觉辅助, 依旧属于"如何将数据展示到坐标轴上"的范畴.
+其被归为 position scales 的原因是它们是对数据范围的一种视觉辅助, 依旧属于"如何将数据映射/展示到坐标轴上"的范畴.
 
 #### 轴变换
 
@@ -224,7 +237,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     scale_y_continuous(trans = "log10")
 ```
 
-显然轴变换也是对"如何将数据展示到坐标轴上"的调整, 因此被归为 position scales.
+显然轴变换也是对"如何将数据映射/展示到坐标轴上"的调整, 因此被归为 position scales.
 
 #### 双轴图
 
@@ -249,7 +262,9 @@ ggplot(economics, aes(date)) +
 
 常见的 mapping 中除了位置 (x/y) 以外, 还有颜色 (color), 填充 (fill), 形状 (shape), 大小 (size), 透明度 (alpha) 等. 这里我们以 color scale 为例介绍.
 
-color scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 `scale_color_continuous()` 和 `scale_color_discrete()`. 与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质相同, 因此其参数也大同小异.
+color scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 `scale_color_continuous()` 和 `scale_color_discrete()`.
+
+与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质都是以"刻度"的形式展示数据值, 因此其参数也大同小异.
 
 例如, 其也有 limits, breaks, labels 等参数, 用法与 position scales 中的相同.
 
@@ -273,11 +288,11 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = as.factor(cyl))) +
 
 ### Guides
 
-scales 将变量的值展示在图上时, 根据对应 mapping 的不同, 可能成为坐标轴 (position scales) 或图例 (other scales). 这两者统称为 guides.
+scales 将变量的值展示在图上时, 根据对应 mapping 的不同, 可能成为坐标轴 (position scales) 或图例等 (other scales). 这些统称为 guides.
 
-从哲学角度看, guides 可以视作是 scales 的逆映射, 其将图上展示的坐标轴或图例 (通过人眼) 映射回变量的值. 如, 在 position scales 中, guides 将坐标轴上的刻度标签映射回数据中的数值; 在 color scales 中, guides 将图例中的颜色映射回数据中的类别.
+从哲学角度看, guides 可以视作是 scales 的逆映射, 其将图上的坐标轴或图例 (通过人眼) 映射回变量的值. 如, 在 position scales 中, guides 将坐标轴上的刻度标签映射回数据中的数值; 在 color scales 中, guides 将图例中的颜色映射回数据中的类别.
 
-可以在设置 scale 的时候传入 guide 参数来调整, 如
+可以在设置 scale 的时候传入 guide 参数来调整其外观, 如
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -306,6 +321,35 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = as.factor(cyl))) +
 
 除了 `guide_axis()` 和 `guide_legend()` 以外, ggplot 还提供了 `guide_colorbar()` 对应 continuous color scales, `guide_none()` 对应不显示 guides, 等等.
 
+### labs() & lims()
+
+在对 scale 的控制中, 常见的需求是控制标题 (轴标题/图例标题) 和控制范围 (x/y轴范围). ggplot 为此提供了 `labs()` 和 `lims()` 函数.
+
+以下是一个 `labs()` 的使用示例. 注意其也可以控制图的标题.
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+    geom_point() +
+    # labs 中的参数名基本与 mapping 中的一致
+    labs(
+        title = "Fuel economy",
+        x = "Engine displacement",
+        y = "Highway mileage",
+        color = "Vehicle class"
+    )
+```
+
+lims() 的使用方法类似. 注意其也会将超出范围的值变为 NA.
+
+```{webr}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+    geom_point() +
+    lims(
+        x = c(2, 6),
+        color = c("f", "r")
+    )
+```
+
 ### after_scale()
 
 与 layer 的统计变换会在内部计算出一些值一样, scale 也会在内部计算出一些值, 如 color scale 会计算出每个颜色对应的 RGB 值.
@@ -326,9 +370,9 @@ ggplot(mtcars, aes(x = mpg, color = as.factor(cyl))) +
 
 ## Coordinate System
 
-position scales 只负责将变量值映射到坐标. 因此, 还需要指定坐标系在图上的摆放方式.
+position scales 只负责将变量值映射到坐标轴上. 因此, 其不能控制坐标轴在图上的摆放方式.
 
-ggplot 中的坐标系分为两大类
+ggplot 提供了坐标系以完成这个任务. 坐标系分为两大类
 
 - linear coordinate systems
     - `coord_cartesian()`
@@ -417,7 +461,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 ## Theme
 
-theme 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.
+`theme()` 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.
 
 ```{webr}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -436,6 +480,94 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ggplot(mtcars, aes(x = wt, y = mpg)) +
     geom_point() +
     theme_minimal() # 极简主题
+```
+
+##  拼图与保存
+
+要将 ggplot2 图片保存到文件, 可以使用 `ggsave()` 函数
+
+```{webr}
+## Not run: 
+p <- 
+    ggplot(mtcars, aes(mpg, wt)) +
+    geom_point()
+
+p %>% ggsave(
+    # ggplot2 自动根据文件名后缀推断文件类型
+    filename = "mtcars.pdf",
+    # 可以设置图片大小
+    width = 20, height = 20, units = "cm"
+)
+```
+
+有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下
+
+```{webr}
+library(patchwork)
+
+p1 <- ggplot(mtcars) + geom_point(aes(mpg, disp))
+p2 <- ggplot(mtcars) + geom_boxplot(aes(gear, disp, group = gear))
+p3 <- ggplot(mtcars) + geom_bar(aes(gear)) + facet_wrap(~ cyl)
+p4 <- ggplot(mtcars) + geom_bar(aes(carb))
+p5 <- ggplot(mtcars) + geom_violin(aes(cyl, mpg, group = cyl))
+```
+
+patchwork 继承了 ggplot2 的设计哲学, 可以直接将 ggplot 对象相加来拼图
+
+```{webr}
+p1 + p2 + p3
+```
+
+如果希望其竖向拼接, 可以使用 `/` 而不是 `+`:
+
+```{webr}
+(p1 + p2) / p3
+```
+
+与 ggplot2 一样, patchwork 拼成的图也可以使用 `ggsave()` 保存.
+
+### plot_layout()
+
+可以添加一个 `plot_layout()` 来控制如何放置子图.
+
+```{webr}
+p1 + p2 + p3 + p4 + p5 +
+    plot_layout(ncol = 2, widths = c(1, 2))
+```
+
+```{webr}
+design <- "
+    1##
+    123
+    ##3
+"
+
+p1 + p2 + p3 +
+    plot_layout(design = design)
+```
+
+`plot_layout()` 的另一个实用参数是 `guides`:
+
+```{r}
+p6 <- ggplot(mtcars) + geom_point(aes(mpg, disp, color = cyl))
+p7 <- ggplot(mtcars) + geom_point(aes(mpg, hp, color = cyl))
+
+# guides = "collect" 将合并重复的 guides
+p6 + p7 +
+    plot_layout(guides = "collect")
+```
+
+### plot_annotation()
+
+`plot_annotation()` 可用于控制拼图的标题, 编号等:
+
+```{webr}
+p1 + p2 +
+    plot_annotation(
+        title = "This is a title",
+        caption = "made with patchwork",
+        tag_levels = "A"
+    )
 ```
 
 ## Cheatsheet
