@@ -144,7 +144,7 @@ recipe(class ~ ., data = hpc_data0) %>%
 
 ## 练习
 
-## 练习 1
+### 练习 1
 
 使用 `ggplot2::mpg` 完成以下任务:
 
