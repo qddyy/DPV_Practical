@@ -484,10 +484,11 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 ##  拼图与保存
 
+### ggsave()
+
 要将 ggplot2 图片保存到文件, 可以使用 `ggsave()` 函数
 
 ```{webr}
-## Not run: 
 p <- 
     ggplot(mtcars, aes(mpg, wt)) +
     geom_point()
@@ -499,6 +500,8 @@ p %>% ggsave(
     width = 20, height = 20, units = "cm"
 )
 ```
+
+### patchwork
 
 有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下
 
@@ -526,7 +529,7 @@ p1 + p2 + p3
 
 与 ggplot2 一样, patchwork 拼成的图也可以使用 `ggsave()` 保存.
 
-### plot_layout()
+#### plot_layout()
 
 可以添加一个 `plot_layout()` 来控制如何放置子图.
 
@@ -557,7 +560,7 @@ p6 + p7 +
     plot_layout(guides = "collect")
 ```
 
-### plot_annotation()
+#### plot_annotation()
 
 `plot_annotation()` 可用于控制拼图的标题, 编号等:
 
