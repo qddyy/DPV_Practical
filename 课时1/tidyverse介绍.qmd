@@ -30,7 +30,6 @@ available.packages(repos = "https://cran.r-universe.dev") %>%
 
 要使用 tidyverse 中的各个包, 只需 `library(tidyverse)`
 
-<!-- TODO: 禁止修改 -->
 ```{webr}
 #| autorun: true
 
