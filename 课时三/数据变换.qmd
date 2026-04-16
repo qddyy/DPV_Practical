@@ -1,0 +1,586 @@
+---
+title: "数据变换"
+order: 1
+format: live-html
+toc: true
+webr:
+  packages:
+    - recipes
+    - embed
+    - modeldata
+    - magrittr
+    - tidyverse
+---
+
+基本原则: 介绍各种方法, 且用ggplot可视化展示效果
+
+必要时, 介绍自定义创建step, 以及补充S3方法介绍(对于其他面向对象系统, 如R6, 也可介绍稍作介绍, 但放在课程最后, 解释理由是第一次课考虑到时间关系没讲)
+
+对于step的创建, 就是对一个 recipe对象添加一个 step 对象. 这里之所以使用 add_step, 可能是内部有一套对recipe添加step的复杂机制. 所以接下来的任务是创建一个 step, 这里需要使用 step() 创建一个 S3 对象. 至于我们创造的step的具体细节, 藏在 prep 和 bake 的泛型方法中. 也就是说, prep 和 bake 的泛型方法是根据 step 对象的 class 来调用不同的函数. 因此, 我们需要为我们创建的 step 定义一个新的 class
+
+```{webr}
+#| autorun: true
+
+library(magrittr)
+library(tidyverse)
+library(modeldata)
+library(recipes)
+library(embed)
+```
+
+# 规范化
+
+## 定量变量规范化
+
+### 标准化
+
+标准化即将变量的位置和尺度作变换. 以 `modeldata::credit_data` 为例, 其包含不同尺度的数据:
+
+```{webr}
+credit <- 
+    modeldata::credit_data %>% 
+    drop_na() %>%
+    as_tibble() %T>% 
+    print()
+```
+
+```{webr}
+credit %>%
+    select(c(Income, Assets)) %>% 
+    pivot_longer(cols = everything()) %>% 
+    ggplot() +
+        geom_boxplot(aes(y = value), outliers = FALSE) +
+        facet_wrap(~ name, scales = "free_y")
+```
+
+由于其形式简单, 有多种实现方式
+
+- 使用 dplyr::mutate
+- 使用 `recipes::step_normalize`
+
+这里我们以前者为例:
+
+```{webr}
+credit_standardized <- 
+    credit %>% 
+    mutate(
+        across(c(Income, Assets), \(x) (x - mean(x)) / sd(x))
+    )
+
+credit_standardized %>% 
+    select(c(Income, Assets)) %>% 
+    pivot_longer(cols = everything()) %>% 
+    ggplot() +
+        geom_boxplot(aes(y = value), outliers = FALSE) +
+        facet_wrap(~ name)
+```
+
+手动进行变换的好处是可以完全控制变换的细节, 如使用均值/中位数作中心化, 使用标准差/四分位距作尺度化等. 但缺点是需要自己编写代码, 且不易与已有的建模框架集成.
+
+也可以使用 `recipes::step_normalize` 来实现标准化:
+
+```{webr}
+recipe(~ ., data = credit) %>% 
+    step_normalize(all_numeric_predictors()) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+```
+
+但 `recipes::step_normalize` 的默认实现是使用均值和标准差进行中心化和尺度化. 如果需要使用其他统计量, 则需要额外的工作, 我们之后介绍.
+
+### 最小值-最大值规范化
+
+在 `recipes` 中直接用 `step_range()` 即可, 默认把数值缩放到 `[0, 1]`.
+
+```{webr}
+credit_minmax <- 
+    recipe(~ ., data = credit) %>% 
+    step_range(c(Income, Assets)) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_minmax %>% 
+    select(c(Income, Assets)) %>% 
+    pivot_longer(cols = everything()) %>% 
+    ggplot() +
+        geom_boxplot(aes(y = value)) +
+        facet_wrap(~ name)
+```
+
+显然, 其受到异常值的影响.
+
+### 稳健规范化
+
+为解决规范化中异常值敏感的问题, 可以使用稳健规范化. 其中心化使用中位数, 尺度化使用四分位距.
+
+recipes 包中没有直接的稳健规范化函数, 需要[自定义一个 step](#自定义-step).
+
+### Box-Cox / Yeo-Johnson 变换
+
+Box-Cox 和 Yeo-Johnson 变换将非正态分布的数值变量转换为接近正态分布. Box-Cox 适用于正值数据，Yeo-Johnson 可扩展到包含零和负值的数据.
+
+可以使用 `step_BoxCox()` 和 `step_YeoJohnson()` 来实现这两种变换:
+
+```{webr}
+credit_boxcox_yeojohnson <- 
+    recipe(~ ., data = credit) %>% 
+    step_BoxCox(Income) %>% 
+    step_YeoJohnson(Assets) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+```
+
+```{webr}
+bind_rows(
+    credit %>%
+        select(Income, Assets) %>%
+        pivot_longer(cols = everything()) %>%
+        mutate(type = "Original"),
+    credit_boxcox_yeojohnson %>%
+        select(Income, Assets) %>%
+        pivot_longer(cols = everything()) %>%
+        mutate(type = "Transformed")
+) %>%
+    ggplot(aes(x = value, fill = name)) +
+        geom_density(alpha = 0.5) +
+        facet_wrap(name ~ type, scales = "free")
+```
+
+### 行归一化
+
+行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.
+
+`step_spatialsign` 可以实现行归一化:
+
+```{webr}
+credit_spatialsign <- 
+    recipe(~ ., data = credit) %>% 
+    step_spatialsign(all_numeric_predictors()) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+```
+
+<!-- 堆叠柱状图展示一下和=1 -->
+
+## 定性变量规范化
+
+### 独热编码
+
+独热编码将每个类别转换为一个二进制特征, 适用于无序的分类变量. 可以使用 `step_dummy()` 来实现独热编码:
+
+```{webr}
+credit_dummy <- 
+    recipe(~ ., data = credit) %>% 
+    step_dummy(Home) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+```
+
+其 `one_hot` 参数可以控制是否省略其中一个类别以避免多重共线性:
+
+```{webr}
+credit_dummy <- 
+    recipe(~ ., data = credit) %>% 
+    step_dummy(Home, one_hot = TRUE) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+```
+
+### 有序编码
+
+有时, 分类变量具有内在的顺序关系. 这种情况下, 可以使用有序编码将类别映射到整数值. 可以使用 `step_ordinalscore()` 来实现有序编码:
+
+```{webr}
+credit_ordinal <- 
+    credit %>%
+    mutate(Status = factor(Status, levels = c("bad", "good"), ordered = TRUE)) %>%
+    recipe(~ ., data = .) %>% 
+    step_ordinalscore(Status) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+```
+
+### 目标编码
+
+目标编码将分类变量的每个类别替换为该类别对应的目标变量的统计量(如均值). 适用于高基数的分类变量. 可以使用 `embed::step_lencode()` (Likelihood Encoding) 来实现目标编码:
+
+```{webr}
+credit_target <- 
+    recipe(~ ., data = credit) %>% 
+    step_lencode(Home, outcome = vars(Status)) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+```
+
+其暂时只支持数值/二分类目标变量. 对于数值型变量, 其提供 `smooth` 参数 (默认为 TRUE) 来控制是否进行平滑处理:
+
+```{webr}
+credit_target <- 
+    recipe(~ ., data = credit) %>% 
+    step_lencode(Home, outcome = vars(Income), smooth = TRUE) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+```
+
+# 离散化
+
+## 无监督离散化
+
+### 组距分组
+
+组距分组按照特定组距将数据分为若干个区间. 组距可以根据预定的组数/频数决定, 即等距分组/等频分组.
+
+使用 `step_cut()` 来实现等距分组:
+
+```{webr}
+credit_cut <- 
+    recipe(~ ., data = credit) %>% 
+    step_cut(
+        Income,
+        breaks = credit$Income %>% { seq(min(.), max(.), length.out = 5) }
+    ) %>% 
+    prep() %>% 
+    bake(new_data = NULL) %T>% 
+    str()
+
+credit_cut %>% 
+    ggplot() +
+        geom_bar(aes(x = Income))
+```
+
+注意其中等距只体现在我们设置的 break 上. 实际上 `step_cut()` 是一个相当通用的离散化函数, 其 break 参数指定为不同的值即可实现不同的离散化方法.
+
+使用 `step_discretize()` 来实现等频分组:
+
+```{webr}
+credit_discretize <- 
+    recipe(~ ., data = credit) %>% 
+    step_discretize(Income, num_breaks = 4) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_discretize %>% 
+    ggplot() +
+        geom_bar(aes(x = Income))
+```
+
+### 均值-标准差分组
+
+在 `step_cut()` 中设置 `breaks` 为 $\mu \pm \sigma$ 可以实现均值-标准差分组:
+
+```{webr}
+credit_cut_sd <- 
+    recipe(~ ., data = credit) %>% 
+    step_cut(
+        Income,
+        breaks = credit$Income %>% {
+            c(-Inf, mean(.) - sd(.), mean(.) + sd(.), Inf)
+        }
+    ) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_cut_sd %>% 
+    ggplot() +
+        geom_bar(aes(x = Income))
+```
+
+### K-means 分箱法
+
+recipes 包中没有直接的 K-means 分箱函数, 但可以通过向 `step_cut()` 提供 K-means 聚类中心的中点作为 breaks 来实现:
+
+```{webr}
+kmeans_result <- kmeans(credit$Income, centers = 3, nstart = 20)
+
+kmeans_breaks <- 
+    sort(kmeans_result$centers) %>% 
+    { c(-Inf, (.[-1] + .[-length(.)]) / 2, Inf) }
+
+credit_kmeans <- 
+    recipe(~ ., data = credit) %>% 
+    step_cut(Income, breaks = kmeans_breaks) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_kmeans %>% 
+    ggplot() +
+        geom_bar(aes(x = Income))
+```
+
+## 有监督离散化
+
+### ChiMerge 算法
+
+recipes 包中没有直接的 ChiMerge 分箱函数. 但 discretization 包提供了一个 `chiM()` 函数来实现 ChiMerge 算法:
+
+```{webr}
+chimerge_result <- 
+    credit %>%
+    select(Income, Status) %>%
+    mutate(Status = as.numeric(Status == "good")) %>%
+    as.data.frame() %>% 
+    discretization::chiM(alpha = 0.05)
+
+chimerge_result$Disc.data %>% str()
+```
+
+也可以将结果中的 cutp 设为 `step_cut()` 的 breaks, 实现 ChiMerge 分箱:
+
+```{webr}
+chimerge_breaks <- c(-Inf, chimerge_result$cutp[[1]], Inf)
+
+credit_chimerge <- 
+    recipe(~ ., data = credit) %>% 
+    step_cut(Income, breaks = chimerge_breaks) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_chimerge %>%
+    ggplot() +
+        geom_bar(aes(x = Income))
+```
+
+### 决策树离散化
+
+目前 recipes 包没有内置的决策树分箱 step，但可以通过自定义 breaks 实现类似效果. 只需用 `rpart` 包训练决策树，然后提取分割点作为 breaks 即可:
+
+```{webr}
+tree <- rpart::rpart(
+    Status ~ Income, data = credit,
+    control = rpart::rpart.control(cp = 0.002)
+)
+
+tree_breaks <- sort(unique(c(-Inf, tree$splits[, "index"], Inf)))
+
+credit_tree <- 
+    recipe(~ ., data = credit) %>% 
+    step_cut(Income, breaks = tree_breaks) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_tree %>%
+    ggplot() +
+    geom_bar(aes(x = Income))
+```
+
+## 自定义 step
+
+recipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括
+
+1. 定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.
+2. 对这个 S3 类实现 `prep` 和 `bake` 方法, 在其中定义 step 的处理细节.
+3. 创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.
+
+### step_robust_normalize()
+
+下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.
+
+首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:
+
+```{webr}
+step_robust_normalize_new <- function(
+    # 必须包含的参数
+    terms, role, trained,
+    # 稳健规范化需要用到的中间量 (即在 bake 中计算的量)
+    median, iqr,
+    # 必须包含的参数
+    skip, id
+) {
+    step(
+        # 设置 S3 子类名, 一般设为 step_ 后的名称
+        subclass = "robust_normalize",
+        # 以下照抄即可
+        terms = terms,
+        role = role,
+        trained = trained,
+        median = median,
+        iqr = iqr,
+        skip = skip,
+        id = id
+    )
+}
+```
+
+接下来, 为这个 S3 类实现 `prep` 和 `bake` 方法:
+
+```{webr}
+prep.step_robust_normalize <- function(
+    # 必须是这样的参数列表
+    x,        # step 对象
+    training, # 训练数据
+    info = NULL,
+    ...
+) {
+    # 使用 recipes_eval_select 来选择需要处理的列
+    # 这一步是因为 recipes 在选择列时使用了自制语法, 需要解析
+    col_names <- recipes_eval_select(x$terms, training, info)
+
+    # 计算中位数
+    medians <- training %>%
+        summarize(across(all_of(col_names), median))
+
+    # 计算四分位距
+    iqr <- training %>%
+        summarize(across(all_of(col_names), IQR))
+
+    step_robust_normalize_new(
+        terms = x$terms,
+        role = x$role,
+        # 设置 trained  = TRUE, 表示已经计算了中间量
+        trained = TRUE,
+        # 将中位数和四分位距存储在新的 step 对象中
+        median = medians,
+        iqr = iqr,
+        skip = x$skip,
+        id = x$id
+    )
+}
+```
+
+```{webr}
+bake.step_robust_normalize <- function(
+    # 必须是这样的参数列表
+    object, # 已经过 bake 的 step 对象
+    new_data, # 需要处理的新数据
+    ...
+) {
+    # 从 step 对象中提取中位数和四分位距
+    medians <- object$median
+    iqr <- object$iqr
+
+    col_names <- names(medians)
+
+    new_data[col_names] <- 
+        map2_dfc(
+            new_data[col_names], col_names,
+            \(col, col_name) (col - medians[[col_name]]) / iqr[[col_name]]
+        )
+
+    new_data
+}
+```
+
+最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.
+
+注意在此我们才开始添加默认参数, 以便用户使用.
+
+```{webr}
+step_robust_normalize <- function(
+    recipe,
+    ...,
+    role = NA,
+    trained = FALSE,
+    median = NULL,
+    iqr = NULL,
+    skip = FALSE,
+    id = rand_id("robust_normalize")
+) {
+    add_step(
+        recipe,
+        step_robust_normalize_new(
+            terms = enquos(...),
+            role = role,
+            trained = trained,
+            median = median,
+            iqr = iqr,
+            skip = skip,
+            id = id
+        )
+    )
+}
+```
+
+我们验证一下这个 step 的效果:
+
+```{webr}
+credit_robust_normalized <- 
+    recipe(~ ., data = credit) %>% 
+    step_robust_normalize(c(Income, Assets)) %>% 
+    prep() %>% 
+    bake(new_data = NULL)
+
+credit_robust_normalized %>% 
+    select(c(Income, Assets)) %>%
+    pivot_longer(cols = everything()) %>% 
+    ggplot() +
+        geom_boxplot(aes(y = value), outliers = FALSE) +
+        facet_wrap(~ name)
+```
+
+可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.
+
+## 练习
+
+### 练习 1
+
+使用 `modeldata::credit_data` 完成以下任务:
+
+- 去除缺失值, 并仅保留 `Income`、`Assets` 与 `Status` 这几个变量
+- 划分训练集与测试集
+- 以训练集为基础, 建立一个以 `Income` 和 `Assets` 为自变量的基础 `recipe` 对象
+- 参考 `step_robust_normalize()` 的实现方式, 自定义 `step_whiten()`
+    - 在 `prep()` 中计算所选变量的中心化向量与协方差矩阵
+    - 通过特征值分解或奇异值分解构造白化矩阵
+    - 在 `bake()` 中对新数据完成白化变换
+- 使用 `step_whiten()` 对训练集和测试集进行处理, 并检查白化后 `Income` 与 `Assets` 的协方差矩阵是否接近单位矩阵
+- 再基于同一个基础 `recipe`, 分别完成以下规范化:
+    - `step_normalize()`
+    - `step_range()`
+- 分组计算不同方法下 `Income` 与 `Assets` 的:
+    - 均值
+    - 标准差
+    - 相关系数
+- 使用 `ggplot2` 可视化比较不同方法的效果:
+    - 用散点图比较 `Income` 与 `Assets` 的联合分布
+    - 用箱线图、密度图或直方图比较两变量的边际分布
+
+```{webr}
+library(modeldata)
+library(rsample)
+library(recipes)
+library(tidyverse)
+
+data("credit_data")
+set.seed(2026)
+
+# 请在此补充代码
+```
+
+### 练习 2
+
+使用 `modeldata::credit_data` 完成以下任务:
+
+- 去除缺失值, 并仅保留 `Income` 与 `Status` 这两个变量
+- 划分训练集与测试集
+- 以训练集为基础, 建立一个对 `Income` 进行离散化的基础 `recipe` 对象
+- 参考 K-means 分箱法一节, 自定义 `step_kmeans_cut()`
+    - 在 `prep()` 中对 `Income` 进行 `kmeans()` 聚类
+    - 将相邻聚类中心的中点作为 breaks
+    - 在 `bake()` 中使用 `cut()` 输出分箱结果
+- 使用 `step_kmeans_cut(Income, centers = 4)` 对 `Income` 分箱
+- 再基于同一份基础 `recipe`, 分别使用以下方法对 `Income` 离散化:
+    - `step_cut()` 实现等距分组
+    - `step_discretize()` 实现等频分组
+    - `step_cut()` 实现均值-标准差分组
+- `prep()` 后分别处理训练集与测试集
+- 比较不同方法在箱数、箱宽/箱频以及类别分布上的差异
+- 使用 `ggplot2` 可视化比较不同方法的效果:
+    - 用柱状图比较各方法下各箱的样本量
+    - 用点图、折线图或分面图比较各箱中的 `good` 比例
+
+```{webr}
+library(modeldata)
+library(rsample)
+library(recipes)
+library(tidyverse)
+
+data("credit_data")
+set.seed(2026)
+
+# 请在此补充代码
+```
