@@ -62,58 +62,69 @@
     ]
   },
   {
-    "objectID": "课时1/R语言介绍.html",
-    "href": "课时1/R语言介绍.html",
-    "title": "R语言介绍",
-    "section": "",
-    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n\n\n\n\n\n\n几乎所有语句都是函数调用\n\n例子: 赋值\n\n\n\n\n\n\n\n\n\n\n\n\n例子: for 循环\n\n\n\n\n\n\n\n\n\n\n\n\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncall\n\n\n\n\n\n\n\n\n\n\n\n\n\nR 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.\n函数调用以可修改的列表形式存储\n\n\n\n\n\n\n这与 Lisp 中”代码即数据”类似.\n\n此处 对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n\n\n\n\n\n\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n\n\n\n\n\n\n管道操作符的一个简略实现如下:\n\n\n\n\n\n\n基于 AST 将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "objectID": "课时3/数据变换.html#定量变量规范化",
+    "href": "课时3/数据变换.html#定量变量规范化",
+    "title": "数据变换",
+    "section": "定量变量规范化",
+    "text": "定量变量规范化\n\n标准化\n标准化即将变量的位置和尺度作变换. 以 modeldata::credit_data 为例, 其包含不同尺度的数据:\n\n\n\n\n\n\n\n\n\n\n\n\n由于其形式简单, 有多种实现方式\n\n使用 dplyr::mutate\n使用 recipes::step_normalize\n\n这里我们以前者为例:\n\n\n\n\n\n\n手动进行变换的好处是可以完全控制变换的细节, 如使用均值/中位数作中心化, 使用标准差/四分位距作尺度化等. 但缺点是需要自己编写代码, 且不易与已有的建模框架集成.\n也可以使用 recipes::step_normalize 来实现标准化:\n\n\n\n\n\n\n但 recipes::step_normalize 的默认实现是使用均值和标准差进行中心化和尺度化. 如果需要使用其他统计量, 则需要额外的工作, 我们之后介绍.\n\n\n最小值-最大值规范化\n在 recipes 中直接用 step_range() 即可, 默认把数值缩放到 [0, 1].\n\n\n\n\n\n\n显然, 其受到异常值的影响.\n\n\n稳健规范化\n为解决规范化中异常值敏感的问题, 可以使用稳健规范化. 其中心化使用中位数, 尺度化使用四分位距.\nrecipes 包中没有直接的稳健规范化函数, 需要自定义一个 step.\n\n\nBox-Cox / Yeo-Johnson 变换\nBox-Cox 和 Yeo-Johnson 变换将非正态分布的数值变量转换为接近正态分布. Box-Cox 适用于正值数据，Yeo-Johnson 可扩展到包含零和负值的数据.\n可以使用 step_BoxCox() 和 step_YeoJohnson() 来实现这两种变换:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n行归一化\n行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.\nstep_spatialsign 可以实现行归一化:",
     "crumbs": [
-      "课时1",
-      "R语言介绍"
+      "课时3",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时1/R基础.html",
-    "href": "课时1/R基础.html",
-    "title": "R基础",
-    "section": "",
-    "text": "R 中对任何函数使用 ? 或 help 可以打开对应的介绍文档, 如\n对于任意 R object, 都可以使用 typeof() 和 str() 查看其类型与内部结构, 如\n请同学们在接下来的内容中必要时使用这些特性自行探索.",
+    "objectID": "课时3/数据变换.html#定性变量规范化",
+    "href": "课时3/数据变换.html#定性变量规范化",
+    "title": "数据变换",
+    "section": "定性变量规范化",
+    "text": "定性变量规范化\n\n独热编码\n独热编码将每个类别转换为一个二进制特征, 适用于无序的分类变量. 可以使用 step_dummy() 来实现独热编码:\n\n\n\n\n\n\n其 one_hot 参数可以控制是否省略其中一个类别以避免多重共线性:\n\n\n\n\n\n\n\n\n有序编码\n有时, 分类变量具有内在的顺序关系. 这种情况下, 可以使用有序编码将类别映射到整数值. 可以使用 step_ordinalscore() 来实现有序编码:\n\n\n\n\n\n\n\n\n目标编码\n目标编码将分类变量的每个类别替换为该类别对应的目标变量的统计量(如均值). 适用于高基数的分类变量. 可以使用 embed::step_lencode() (Likelihood Encoding) 来实现目标编码:\n\n\n\n\n\n\n其暂时只支持数值/二分类目标变量. 对于数值型变量, 其提供 smooth 参数 (默认为 TRUE) 来控制是否进行平滑处理:",
     "crumbs": [
-      "课时1",
-      "R基础"
+      "课时3",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时1/R基础.html#基本数据结构",
-    "href": "课时1/R基础.html#基本数据结构",
-    "title": "R基础",
-    "section": "基本数据结构",
-    "text": "基本数据结构\nR 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.\n\n\n\n维度\n同质\n异质\n\n\n\n\n1d\nAtomic vector\nList\n\n\n2d\nMatrix\nData frame\n\n\nnd\nArray\n\n\n\n\n\n原子向量\n原子向量根据其存储的数据类型不同, 分为\n\n逻辑向量 (logical)\n整数向量 (integer)\n数值向量 (numeric)\n字符向量 (character)\n\n以及两种不常见的类型\n\n原始向量 (raw)\n复数向量 (complex)\n\n\n创建\n原子向量通常用 c() 创建 (combine 的缩写):\n\n\n\n\n\n\n实际上 c() 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).\n一些便捷函数可以快速创建具有特定规律的数值类向量:\n\n\n\n\n\n\n\n\n取子集\n可以使用另一个向量作为索引取得向量的子集. R 中使用 [] 对向量取子集, 支持三种索引:\n\n正数索引\n\n\n\n\n\n\n负数索引\n\n\n\n\n\n\n逻辑索引\n\n\n\n\n\n\n\n*R 中取向量子集的 [] 也是一个函数:\n\n\n\n\n\n\n\n\n相互转换\n不同原子向量可以通过 as.*() 函数族转换, 如:\n\n\n\n\n\n\n对于直观上不可相互转换的类型, 强行转换会产生 NA 值:\n\n\n\n\n\n\n\n\n\n列表\n与原子向量不同, 列表的元素可以是任意类型的 R object.\n\n创建\n可以使用 list() 创建列表\n\n\n\n\n\n\n类似地, 可以用 c() 合并多个列表\n\n\n\n\n\n\n\n\n取子集\n对列表取子集操作分为两种\n\n[] 取出子列表\n\n\n\n\n\n\n这与原子向量的 [] 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.\n[[]] 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引\n\n\n\n\n\n\n\n\n\n\n特殊向量\n原子向量和列表统称为向量. 所有向量都具有三个基本属性:\n\ntype: 存储的数据类型\n\n\n\n\n\n\nlength: 长度\n\n\n\n\n\n\nattributes: 属性/元数据 普通的原子向量/列表无额外 attributes\n\n\n\n\n\n\n\n若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.\n\n命名向量\n若在创建向量时使用命名参数, 其会拥有 names 属性\n\n\n\n\n\n\n具有 names 属性的向量可以使用 name 取子集\n\n\n\n\n\n\n\n\n矩阵\n矩阵本质是具有 dims 属性的向量.\n可以用 matrix 创建矩阵:\n\n\n\n\n\n\n矩阵额外支持二维索引 (分别指定子集所在的行和列):\n\n\n\n\n\n\n\n\n因子\n因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 levels 和 class=\"factor\" 属性的整数向量.\n可以用 factor 创建因子:\n\n\n\n\n\n\n\n\n数据框\n数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 names, row.names 和 class=\"data.frame\" 属性, 所有元素都是等长向量的列表.\n可以用 data.frame 创建数据框:\n\n\n\n\n\n\n作为和矩阵一样的二维结构, 数据框也额外支持二维索引:\n\n\n\n\n\n\n在 2026 年, R 自带的 data.frame 类型已经有更加现代化的替代品 (如 tibble, data.table). 不过对 data.frame 的基础操作同样适用于这些新的数据框类型.",
+    "objectID": "课时3/数据变换.html#无监督离散化",
+    "href": "课时3/数据变换.html#无监督离散化",
+    "title": "数据变换",
+    "section": "无监督离散化",
+    "text": "无监督离散化\n\n组距分组\n组距分组按照特定组距将数据分为若干个区间. 组距可以根据预定的组数/频数决定, 即等距分组/等频分组.\n使用 step_cut() 来实现等距分组:\n\n\n\n\n\n\n注意其中等距只体现在我们设置的 break 上. 实际上 step_cut() 是一个相当通用的离散化函数, 其 break 参数指定为不同的值即可实现不同的离散化方法.\n使用 step_discretize() 来实现等频分组:\n\n\n\n\n\n\n\n\n均值-标准差分组\n在 step_cut() 中设置 breaks 为 \\(\\mu \\pm \\sigma\\) 可以实现均值-标准差分组:\n\n\n\n\n\n\n\n\nK-means 分箱法\nrecipes 包中没有直接的 K-means 分箱函数, 但可以通过向 step_cut() 提供 K-means 聚类中心的中点作为 breaks 来实现:",
     "crumbs": [
-      "课时1",
-      "R基础"
+      "课时3",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时1/R基础.html#基本语法",
-    "href": "课时1/R基础.html#基本语法",
-    "title": "R基础",
-    "section": "基本语法",
-    "text": "基本语法\n\n变量命名与赋值\nR 中使用 &lt;- 给变量赋值. R 的基本变量命名规则如下:\n\n不能以数字开头\n不能包含空格或特殊符号 (如 @, #, $ 等)\n不能使用保留字 (如 for, if)\n\n使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则\n\n\n\n\n\n\n\n\n控制流\n\nif 条件控制 基本语法为 if (condition) expression else alternative_expression\n\n\n\n\n\n\nif 有返回值 (返回 expression 部分):\n\n\n\n\n\n\nfor 循环 基本语法为 for (variable in sequence) expression\n\n\n\n\n\n\n\n\n\n函数\n在 R 中创建函数的语法为 function(arg_list) expression 或 \\(arg_list) expression, 其将返回一个 closure 类型的值:\n\n\n\n\n\n\n参数可以有默认值, 且具有惰性求值机制:\n\n\n\n\n\n\n此外, 存在可变长参数 ..., 通常用于转发不定数量的参数给其他函数\n\n\n\n\n\n\nHadley 的 Advanced R 中总结了 base R 中常用的函数.",
+    "objectID": "课时3/数据变换.html#有监督离散化",
+    "href": "课时3/数据变换.html#有监督离散化",
+    "title": "数据变换",
+    "section": "有监督离散化",
+    "text": "有监督离散化\n\nChiMerge 算法\nrecipes 包中没有直接的 ChiMerge 分箱函数. 但 discretization 包提供了一个 chiM() 函数来实现 ChiMerge 算法:\n\n\n\n\n\n\n也可以将结果中的 cutp 设为 step_cut() 的 breaks, 实现 ChiMerge 分箱:\n\n\n\n\n\n\n\n\n决策树离散化\n目前 recipes 包没有内置的决策树分箱 step，但可以通过自定义 breaks 实现类似效果. 只需用 rpart 包训练决策树，然后提取分割点作为 breaks 即可:",
     "crumbs": [
-      "课时1",
-      "R基础"
+      "课时3",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时1/R基础.html#源代码组织",
-    "href": "课时1/R基础.html#源代码组织",
-    "title": "R基础",
-    "section": "源代码组织",
-    "text": "源代码组织\n\nsource\n项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. source 用于运行其他 R 文件中的代码:\n\n\n\n\n\n\n\n\nR package\n另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.\n我们重点关注如何使用别人的 R 包. 可以使用 library() 来加载本地已安装的 R 包, 之后可以使用包里的全部函数\n\n\n\n\n\n\n由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 :: 访问包中的特定函数:\n\n\n\n\n\n\n与 :: 类似的是 :::, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.",
+    "objectID": "课时3/数据变换.html#自定义-step",
+    "href": "课时3/数据变换.html#自定义-step",
+    "title": "数据变换",
+    "section": "自定义 step",
+    "text": "自定义 step\nrecipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括\n\n定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.\n对这个 S3 类实现 prep 和 bake 方法, 在其中定义 step 的处理细节.\n创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.\n\n\nstep_robust_normalize()\n下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.\n首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:\n\n\n\n\n\n\n接下来, 为这个 S3 类实现 prep 和 bake 方法:\n\n\n\n\n\n\n\n\n\n\n\n\n最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.\n注意在此我们才开始添加默认参数, 以便用户使用.\n\n\n\n\n\n\n我们验证一下这个 step 的效果:\n\n\n\n\n\n\n可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.",
     "crumbs": [
-      "课时1",
-      "R基础"
+      "课时3",
+      "数据变换"
+    ]
+  },
+  {
+    "objectID": "课时3/数据变换.html#练习",
+    "href": "课时3/数据变换.html#练习",
+    "title": "数据变换",
+    "section": "练习",
+    "text": "练习\n\n练习 1\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income、Assets 与 Status 这几个变量\n划分训练集与测试集\n以训练集为基础, 建立一个以 Income 和 Assets 为自变量的基础 recipe 对象\n参考 step_robust_normalize() 的实现方式, 自定义 step_whiten()\n\n在 prep() 中计算所选变量的中心化向量与协方差矩阵\n通过特征值分解或奇异值分解构造白化矩阵\n在 bake() 中对新数据完成白化变换\n\n使用 step_whiten() 对训练集和测试集进行处理, 并检查白化后 Income 与 Assets 的协方差矩阵是否接近单位矩阵\n再基于同一个基础 recipe, 分别完成以下规范化:\n\nstep_normalize()\nstep_range()\n\n分组计算不同方法下 Income 与 Assets 的:\n\n均值\n标准差\n相关系数\n\n使用 ggplot2 可视化比较不同方法的效果:\n\n用散点图比较 Income 与 Assets 的联合分布\n用箱线图、密度图或直方图比较两变量的边际分布\n\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income 与 Status 这两个变量\n划分训练集与测试集\n以训练集为基础, 建立一个对 Income 进行离散化的基础 recipe 对象\n参考 K-means 分箱法一节, 自定义 step_kmeans_cut()\n\n在 prep() 中对 Income 进行 kmeans() 聚类\n将相邻聚类中心的中点作为 breaks\n在 bake() 中使用 cut() 输出分箱结果\n\n使用 step_kmeans_cut(Income, centers = 4) 对 Income 分箱\n再基于同一份基础 recipe, 分别使用以下方法对 Income 离散化:\n\nstep_cut() 实现等距分组\nstep_discretize() 实现等频分组\nstep_cut() 实现均值-标准差分组\n\nprep() 后分别处理训练集与测试集\n比较不同方法在箱数、箱宽/箱频以及类别分布上的差异\n使用 ggplot2 可视化比较不同方法的效果:\n\n用柱状图比较各方法下各箱的样本量\n用点图、折线图或分面图比较各箱中的 good 比例",
+    "crumbs": [
+      "课时3",
+      "数据变换"
     ]
   },
   {
@@ -282,69 +293,69 @@
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#定量变量规范化",
-    "href": "课时3/数据变换.html#定量变量规范化",
-    "title": "数据变换",
-    "section": "定量变量规范化",
-    "text": "定量变量规范化\n\n标准化\n标准化即将变量的位置和尺度作变换. 以 modeldata::credit_data 为例, 其包含不同尺度的数据:\n\n\n\n\n\n\n\n\n\n\n\n\n由于其形式简单, 有多种实现方式\n\n使用 dplyr::mutate\n使用 recipes::step_normalize\n\n这里我们以前者为例:\n\n\n\n\n\n\n手动进行变换的好处是可以完全控制变换的细节, 如使用均值/中位数作中心化, 使用标准差/四分位距作尺度化等. 但缺点是需要自己编写代码, 且不易与已有的建模框架集成.\n也可以使用 recipes::step_normalize 来实现标准化:\n\n\n\n\n\n\n但 recipes::step_normalize 的默认实现是使用均值和标准差进行中心化和尺度化. 如果需要使用其他统计量, 则需要额外的工作, 我们之后介绍.\n\n\n最小值-最大值规范化\n在 recipes 中直接用 step_range() 即可, 默认把数值缩放到 [0, 1].\n\n\n\n\n\n\n显然, 其受到异常值的影响.\n\n\n稳健规范化\n为解决规范化中异常值敏感的问题, 可以使用稳健规范化. 其中心化使用中位数, 尺度化使用四分位距.\nrecipes 包中没有直接的稳健规范化函数, 需要自定义一个 step.\n\n\nBox-Cox / Yeo-Johnson 变换\nBox-Cox 和 Yeo-Johnson 变换将非正态分布的数值变量转换为接近正态分布. Box-Cox 适用于正值数据，Yeo-Johnson 可扩展到包含零和负值的数据.\n可以使用 step_BoxCox() 和 step_YeoJohnson() 来实现这两种变换:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n行归一化\n行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.\nstep_spatialsign 可以实现行归一化:",
+    "objectID": "课时1/R基础.html",
+    "href": "课时1/R基础.html",
+    "title": "R基础",
+    "section": "",
+    "text": "R 中对任何函数使用 ? 或 help 可以打开对应的介绍文档, 如\n对于任意 R object, 都可以使用 typeof() 和 str() 查看其类型与内部结构, 如\n请同学们在接下来的内容中必要时使用这些特性自行探索.",
     "crumbs": [
-      "课时3",
-      "数据变换"
+      "课时1",
+      "R基础"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#定性变量规范化",
-    "href": "课时3/数据变换.html#定性变量规范化",
-    "title": "数据变换",
-    "section": "定性变量规范化",
-    "text": "定性变量规范化\n\n独热编码\n独热编码将每个类别转换为一个二进制特征, 适用于无序的分类变量. 可以使用 step_dummy() 来实现独热编码:\n\n\n\n\n\n\n其 one_hot 参数可以控制是否省略其中一个类别以避免多重共线性:\n\n\n\n\n\n\n\n\n有序编码\n有时, 分类变量具有内在的顺序关系. 这种情况下, 可以使用有序编码将类别映射到整数值. 可以使用 step_ordinalscore() 来实现有序编码:\n\n\n\n\n\n\n\n\n目标编码\n目标编码将分类变量的每个类别替换为该类别对应的目标变量的统计量(如均值). 适用于高基数的分类变量. 可以使用 embed::step_lencode() (Likelihood Encoding) 来实现目标编码:\n\n\n\n\n\n\n其暂时只支持数值/二分类目标变量. 对于数值型变量, 其提供 smooth 参数 (默认为 TRUE) 来控制是否进行平滑处理:",
+    "objectID": "课时1/R基础.html#基本数据结构",
+    "href": "课时1/R基础.html#基本数据结构",
+    "title": "R基础",
+    "section": "基本数据结构",
+    "text": "基本数据结构\nR 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.\n\n\n\n维度\n同质\n异质\n\n\n\n\n1d\nAtomic vector\nList\n\n\n2d\nMatrix\nData frame\n\n\nnd\nArray\n\n\n\n\n\n原子向量\n原子向量根据其存储的数据类型不同, 分为\n\n逻辑向量 (logical)\n整数向量 (integer)\n数值向量 (numeric)\n字符向量 (character)\n\n以及两种不常见的类型\n\n原始向量 (raw)\n复数向量 (complex)\n\n\n创建\n原子向量通常用 c() 创建 (combine 的缩写):\n\n\n\n\n\n\n实际上 c() 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).\n一些便捷函数可以快速创建具有特定规律的数值类向量:\n\n\n\n\n\n\n\n\n取子集\n可以使用另一个向量作为索引取得向量的子集. R 中使用 [] 对向量取子集, 支持三种索引:\n\n正数索引\n\n\n\n\n\n\n负数索引\n\n\n\n\n\n\n逻辑索引\n\n\n\n\n\n\n\n*R 中取向量子集的 [] 也是一个函数:\n\n\n\n\n\n\n\n\n相互转换\n不同原子向量可以通过 as.*() 函数族转换, 如:\n\n\n\n\n\n\n对于直观上不可相互转换的类型, 强行转换会产生 NA 值:\n\n\n\n\n\n\n\n\n\n列表\n与原子向量不同, 列表的元素可以是任意类型的 R object.\n\n创建\n可以使用 list() 创建列表\n\n\n\n\n\n\n类似地, 可以用 c() 合并多个列表\n\n\n\n\n\n\n\n\n取子集\n对列表取子集操作分为两种\n\n[] 取出子列表\n\n\n\n\n\n\n这与原子向量的 [] 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.\n[[]] 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引\n\n\n\n\n\n\n\n\n\n\n特殊向量\n原子向量和列表统称为向量. 所有向量都具有三个基本属性:\n\ntype: 存储的数据类型\n\n\n\n\n\n\nlength: 长度\n\n\n\n\n\n\nattributes: 属性/元数据 普通的原子向量/列表无额外 attributes\n\n\n\n\n\n\n\n若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.\n\n命名向量\n若在创建向量时使用命名参数, 其会拥有 names 属性\n\n\n\n\n\n\n具有 names 属性的向量可以使用 name 取子集\n\n\n\n\n\n\n\n\n矩阵\n矩阵本质是具有 dims 属性的向量.\n可以用 matrix 创建矩阵:\n\n\n\n\n\n\n矩阵额外支持二维索引 (分别指定子集所在的行和列):\n\n\n\n\n\n\n\n\n因子\n因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 levels 和 class=\"factor\" 属性的整数向量.\n可以用 factor 创建因子:\n\n\n\n\n\n\n\n\n数据框\n数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 names, row.names 和 class=\"data.frame\" 属性, 所有元素都是等长向量的列表.\n可以用 data.frame 创建数据框:\n\n\n\n\n\n\n作为和矩阵一样的二维结构, 数据框也额外支持二维索引:\n\n\n\n\n\n\n在 2026 年, R 自带的 data.frame 类型已经有更加现代化的替代品 (如 tibble, data.table). 不过对 data.frame 的基础操作同样适用于这些新的数据框类型.",
     "crumbs": [
-      "课时3",
-      "数据变换"
+      "课时1",
+      "R基础"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#无监督离散化",
-    "href": "课时3/数据变换.html#无监督离散化",
-    "title": "数据变换",
-    "section": "无监督离散化",
-    "text": "无监督离散化\n\n组距分组\n组距分组按照特定组距将数据分为若干个区间. 组距可以根据预定的组数/频数决定, 即等距分组/等频分组.\n使用 step_cut() 来实现等距分组:\n\n\n\n\n\n\n注意其中等距只体现在我们设置的 break 上. 实际上 step_cut() 是一个相当通用的离散化函数, 其 break 参数指定为不同的值即可实现不同的离散化方法.\n使用 step_discretize() 来实现等频分组:\n\n\n\n\n\n\n\n\n均值-标准差分组\n在 step_cut() 中设置 breaks 为 \\(\\mu \\pm \\sigma\\) 可以实现均值-标准差分组:\n\n\n\n\n\n\n\n\nK-means 分箱法\nrecipes 包中没有直接的 K-means 分箱函数, 但可以通过向 step_cut() 提供 K-means 聚类中心的中点作为 breaks 来实现:",
+    "objectID": "课时1/R基础.html#基本语法",
+    "href": "课时1/R基础.html#基本语法",
+    "title": "R基础",
+    "section": "基本语法",
+    "text": "基本语法\n\n变量命名与赋值\nR 中使用 &lt;- 给变量赋值. R 的基本变量命名规则如下:\n\n不能以数字开头\n不能包含空格或特殊符号 (如 @, #, $ 等)\n不能使用保留字 (如 for, if)\n\n使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则\n\n\n\n\n\n\n\n\n控制流\n\nif 条件控制 基本语法为 if (condition) expression else alternative_expression\n\n\n\n\n\n\nif 有返回值 (返回 expression 部分):\n\n\n\n\n\n\nfor 循环 基本语法为 for (variable in sequence) expression\n\n\n\n\n\n\n\n\n\n函数\n在 R 中创建函数的语法为 function(arg_list) expression 或 \\(arg_list) expression, 其将返回一个 closure 类型的值:\n\n\n\n\n\n\n参数可以有默认值, 且具有惰性求值机制:\n\n\n\n\n\n\n此外, 存在可变长参数 ..., 通常用于转发不定数量的参数给其他函数\n\n\n\n\n\n\nHadley 的 Advanced R 中总结了 base R 中常用的函数.",
     "crumbs": [
-      "课时3",
-      "数据变换"
+      "课时1",
+      "R基础"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#有监督离散化",
-    "href": "课时3/数据变换.html#有监督离散化",
-    "title": "数据变换",
-    "section": "有监督离散化",
-    "text": "有监督离散化\n\nChiMerge 算法\nrecipes 包中没有直接的 ChiMerge 分箱函数. 但 discretization 包提供了一个 chiM() 函数来实现 ChiMerge 算法:\n\n\n\n\n\n\n也可以将结果中的 cutp 设为 step_cut() 的 breaks, 实现 ChiMerge 分箱:\n\n\n\n\n\n\n\n\n决策树离散化\n目前 recipes 包没有内置的决策树分箱 step，但可以通过自定义 breaks 实现类似效果. 只需用 rpart 包训练决策树，然后提取分割点作为 breaks 即可:",
+    "objectID": "课时1/R基础.html#源代码组织",
+    "href": "课时1/R基础.html#源代码组织",
+    "title": "R基础",
+    "section": "源代码组织",
+    "text": "源代码组织\n\nsource\n项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. source 用于运行其他 R 文件中的代码:\n\n\n\n\n\n\n\n\nR package\n另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.\n我们重点关注如何使用别人的 R 包. 可以使用 library() 来加载本地已安装的 R 包, 之后可以使用包里的全部函数\n\n\n\n\n\n\n由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 :: 访问包中的特定函数:\n\n\n\n\n\n\n与 :: 类似的是 :::, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.",
     "crumbs": [
-      "课时3",
-      "数据变换"
+      "课时1",
+      "R基础"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#自定义-step",
-    "href": "课时3/数据变换.html#自定义-step",
-    "title": "数据变换",
-    "section": "自定义 step",
-    "text": "自定义 step\nrecipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括\n\n定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.\n对这个 S3 类实现 prep 和 bake 方法, 在其中定义 step 的处理细节.\n创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.\n\n\nstep_robust_normalize()\n下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.\n首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:\n\n\n\n\n\n\n接下来, 为这个 S3 类实现 prep 和 bake 方法:\n\n\n\n\n\n\n\n\n\n\n\n\n最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.\n注意在此我们才开始添加默认参数, 以便用户使用.\n\n\n\n\n\n\n我们验证一下这个 step 的效果:\n\n\n\n\n\n\n可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.",
+    "objectID": "课时1/R语言介绍.html",
+    "href": "课时1/R语言介绍.html",
+    "title": "R语言介绍",
+    "section": "",
+    "text": "摘自CRAN:\n\nR is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) by John Chambers and colleagues.\n\n此外, R 还受到了 Lisp 的影响, 因此偏向函数式编程. R 有时也被视为一种 Lisp 方言, 因其具有 Lisp 的许多特征:\n\n函数是一等公民\n\n\n\n\n\n\n几乎所有语句都是函数调用\n\n例子: 赋值\n\n\n\n\n\n\n\n\n\n\n\n\n例子: for 循环\n\n\n\n\n\n\n\n\n\n\n\n\n\n存在未求值状态的 symbol/call (二者都被称为 language objects)\n\nsymbol\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ncall\n\n\n\n\n\n\n\n\n\n\n\n\n\nR 中一切语句的执行基本可以概括为 symbol/call 在特定 environment 中求值, 具有高度的简洁性和一致性.\n函数调用以可修改的列表形式存储\n\n\n\n\n\n\n这与 Lisp 中”代码即数据”类似.\n\n此处 对 R 与 Lisp 的关系有更多讨论.\n这些与 Lisp 相近的特征使得 R 能原生实现各种类似宏/元编程的效果, 如:\n\nData-Masking\n\n\n\n\n\n\n管道操作符: magrittr 包实现了一系列管道操作符, 避免嵌套多个函数\n\n\n\n\n\n\n管道操作符的一个简略实现如下:\n\n\n\n\n\n\n基于 AST 将 R 函数翻译为其他语言: quickr 包将 R 翻译到 Fortran 以提高性能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
     "crumbs": [
-      "课时3",
-      "数据变换"
+      "课时1",
+      "R语言介绍"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#练习",
-    "href": "课时3/数据变换.html#练习",
-    "title": "数据变换",
-    "section": "练习",
-    "text": "练习\n\n练习 1\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income、Assets 与 Status 这几个变量\n划分训练集与测试集\n以训练集为基础, 建立一个以 Income 和 Assets 为自变量的基础 recipe 对象\n参考 step_robust_normalize() 的实现方式, 自定义 step_whiten()\n\n在 prep() 中计算所选变量的中心化向量与协方差矩阵\n通过特征值分解或奇异值分解构造白化矩阵\n在 bake() 中对新数据完成白化变换\n\n使用 step_whiten() 对训练集和测试集进行处理, 并检查白化后 Income 与 Assets 的协方差矩阵是否接近单位矩阵\n再基于同一个基础 recipe, 分别完成以下规范化:\n\nstep_normalize()\nstep_range()\n\n分组计算不同方法下 Income 与 Assets 的:\n\n均值\n标准差\n相关系数\n\n使用 ggplot2 可视化比较不同方法的效果:\n\n用散点图比较 Income 与 Assets 的联合分布\n用箱线图、密度图或直方图比较两变量的边际分布\n\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income 与 Status 这两个变量\n划分训练集与测试集\n以训练集为基础, 建立一个对 Income 进行离散化的基础 recipe 对象\n参考 K-means 分箱法一节, 自定义 step_kmeans_cut()\n\n在 prep() 中对 Income 进行 kmeans() 聚类\n将相邻聚类中心的中点作为 breaks\n在 bake() 中使用 cut() 输出分箱结果\n\n使用 step_kmeans_cut(Income, centers = 4) 对 Income 分箱\n再基于同一份基础 recipe, 分别使用以下方法对 Income 离散化:\n\nstep_cut() 实现等距分组\nstep_discretize() 实现等频分组\nstep_cut() 实现均值-标准差分组\n\nprep() 后分别处理训练集与测试集\n比较不同方法在箱数、箱宽/箱频以及类别分布上的差异\n使用 ggplot2 可视化比较不同方法的效果:\n\n用柱状图比较各方法下各箱的样本量\n用点图、折线图或分面图比较各箱中的 good 比例",
+    "objectID": "课时3/step_lencode.html",
+    "href": "课时3/step_lencode.html",
+    "title": "数据处理与可视化-实践课程",
+    "section": "",
+    "text": "#| include: false\n\n#' Likelihood encoding using analytical formula\n#'\n#' `step_lencode()` creates a *specification* of a recipe step that will convert\n#' a nominal (i.e. factor) predictor into a single set of scores derived\n#' analytically.\n#'\n#' @param recipe A recipe object. The step will be added to the sequence of\n#'   operations for this recipe.\n#' @param ... One or more selector functions to choose variables. For\n#'   `step_lencode()`, this indicates the variables to be encoded into a\n#'   numeric format. See [recipes::selections()] for more details. For the\n#'   `tidy` method, these are not currently used.\n#' @param role Not used by this step since no new variables are created.\n#' @param outcome A call to `vars` to specify which variable is used as the\n#'   outcome. Only numeric and two-level factors are currently supported.\n#' @param smooth A logical, default to `TRUE`, should the estimates of groups\n#'   with low counts be pulled towards the gobal estimate? Defaults to `TRUE`.\n#'   See Details for how this is done. This is also known as partial pooling or\n#'   shrinkage. Only works for numeric outcomes.\n#' @param mapping A list of tibble results that define the encoding. This is\n#'   `NULL` until the step is trained by [recipes::prep()].\n#' @param skip A logical. Should the step be skipped when the recipe is baked by\n#'   [recipes::bake()]? While all operations are baked when [recipes::prep()] is\n#'   run, some operations may not be able to be conducted on new data (e.g.\n#'   processing the outcome variable(s)). Care should be taken when using `skip\n#'   = TRUE` as it may affect the computations for subsequent operations\n#' @param trained A logical to indicate if the quantities for preprocessing have\n#'   been estimated.\n#' @param id A character string that is unique to this step to identify it.\n#' @return An updated version of `recipe` with the new step added to the\n#'   sequence of existing steps (if any). For the `tidy` method, a tibble with\n#'   columns `terms` (the selectors or variables for encoding), `level` (the\n#'   factor levels), and `value` (the encodings).\n#' @keywords datagen\n#' @concept preprocessing encoding\n#' @details\n#'\n#' Each selected nominal predictor will be replaced by a numeric predictor.\n#' Each unique value of the nominal predictor is replaced by a numeric value.\n#' Thse values are calculated differently depending on the type of the outcome.\n#'\n#' For **numeric** outcomes each value is the average value of the outcome\n#' inside each of the levels of the predictor. Unseen levels of the predictor\n#' will be using the global mean of the predictor.\n#' If case weights are used then a weighted mean is calculated instead.\n#'\n#' For **nominal** outcomes each value is the log odds of the of the first level\n#' of the outcome variable being present, within each level of the levels of the\n#' predictor. Unseen levels will be replaced by the global log odds without\n#' stratification.\n#' If case weights are used then a weighted log odds is calculated.\n#'\n#' If no or all occurances happens then the log odds is calculated using\n#' `p = (2 * nrow(data) - 1) / (2 * nrow(data))` to avoid infinity that would\n#' happen by taking the log of `0`.\n#'\n#' For numeric outcomes where `smooth = TRUE`, the following adjustment is done.\n#'\n#' \\deqn{\n#' estimate = (n / global_{var}) /\n#' (n / global_{var} + 1 / outcome_{var}) *\n#'  estimate +\n#'  (1 / outcome_{var}) / (n / global_{var} + 1 / outcome_{var}) * global_{mean}\n#' }\n#'\n#' Where \\eqn{n} is the number of observations in the group.\n#'\n#' # Tidying\n#'\n#' When you [`tidy()`][recipes::tidy.recipe] this step, a tibble is returned\n#' with columns `level`, `value`, `terms`, and `id`:\n#'\n#' \\describe{\n#'   \\item{level}{character, the factor levels}\n#'   \\item{value}{numeric, the encoding}\n#'   \\item{terms}{character, the selectors or variables selected}\n#'   \\item{id}{character, id of this step}\n#' }\n#'\n#' @template case-weights-supervised\n#'\n#' @references\n#'\n#' Micci-Barreca D (2001) \"A preprocessing scheme for high-cardinality\n#' categorical attributes in classification and prediction problems,\" ACM SIGKDD\n#' Explorations Newsletter, 3(1), 27-32.\n#'\n#' Zumel N and Mount J (2017) \"vtreat: a data.frame Processor for Predictive\n#' Modeling,\" arXiv:1611.09477\n#'\n#' @examplesIf rlang::is_installed(\"modeldata\")\n#' library(recipes)\n#' library(dplyr)\n#' library(modeldata)\n#'\n#' data(grants)\n#'\n#' set.seed(1)\n#' grants_other &lt;- sample_n(grants_other, 500)\n#' reencoded &lt;- recipe(class ~ sponsor_code, data = grants_other) |&gt;\n#'   step_lencode(sponsor_code, outcome = vars(class), smooth = FALSE) |&gt;\n#'   prep()\n#'\n#' bake(reencoded, grants_other)\n#'\n#' tidy(reencoded, 1)\n#' @seealso [step_lencode_bayes()], [step_lencode_glm()], [step_lencode_mixed()]\n#' @export\nstep_lencode &lt;-\n  function(\n    recipe,\n    ...,\n    role = NA,\n    trained = FALSE,\n    outcome = NULL,\n    smooth = TRUE,\n    mapping = NULL,\n    skip = FALSE,\n    id = rand_id(\"lencode\")\n  ) {\n    if (is.null(outcome)) {\n      cli::cli_abort(\"Please list a variable in {.arg outcome}.\")\n    }\n    add_step(\n      recipe,\n      step_lencode_new(\n        terms = enquos(...),\n        role = role,\n        trained = trained,\n        outcome = outcome,\n        smooth = smooth,\n        mapping = mapping,\n        skip = skip,\n        id = id,\n        case_weights = NULL\n      )\n    )\n  }\n\nstep_lencode_new &lt;-\n  function(\n    terms,\n    role,\n    trained,\n    outcome,\n    smooth,\n    mapping,\n    skip,\n    id,\n    case_weights\n  ) {\n    step(\n      subclass = \"lencode\",\n      terms = terms,\n      role = role,\n      trained = trained,\n      outcome = outcome,\n      smooth = smooth,\n      mapping = mapping,\n      skip = skip,\n      id = id,\n      case_weights = case_weights\n    )\n  }\n\n#' @export\nprep.step_lencode &lt;- function(x, training, info = NULL, ...) {\n  col_names &lt;- recipes_eval_select(x$terms, training, info)\n\n  wts &lt;- get_case_weights(info, training)\n  were_weights_used &lt;- are_weights_used(wts)\n  if (isFALSE(were_weights_used) || is.null(wts)) {\n    wts &lt;- NULL\n  }\n\n  if (length(col_names) &gt; 0) {\n    check_type(training[, col_names], types = c(\"string\", \"factor\", \"ordered\"))\n    y_name &lt;- recipes_eval_select(x$outcome, training, info)\n    res &lt;- purrr::map(\n      training[, col_names],\n      lencode_calc,\n      y = training[[y_name]],\n      wts = wts,\n      smooth = x$smooth\n    )\n  } else {\n    res &lt;- list()\n  }\n  step_lencode_new(\n    terms = x$terms,\n    role = x$role,\n    trained = TRUE,\n    outcome = x$outcome,\n    smooth = x$smooth,\n    mapping = res,\n    skip = x$skip,\n    id = x$id,\n    case_weights = were_weights_used\n  )\n}\nlencode_calc &lt;- function(x, y, wts = NULL, smooth = TRUE) {\n  if (!is.numeric(y) && !is.factor(y) && !is.character(y)) {\n    cli::cli_abort(\n      \"Only works nominal or numeric {.arg outcome}, \n      not {.obj_type_friendly {y}}.\"\n    )\n  }\n\n  data &lt;- tibble::new_tibble(\n    list(..level = x, ..value = y, wts = wts)\n  )\n\n  if (is.numeric(y)) {\n    fns &lt;- list(\"weighted\" = stats::weighted.mean, \"unweighted\" = mean)\n  }\n  if (is.factor(y) || is.character(y)) {\n    fns &lt;- list(\"weighted\" = weighted_log_odds, \"unweighted\" = log_odds)\n  }\n\n  if (is.null(wts)) {\n    call &lt;- rlang::call2(fns$unweighted)\n    call &lt;- rlang::call_modify(call, quote(..value))\n  } else {\n    call &lt;- rlang::call2(fns$weighted)\n    call &lt;- rlang::call_modify(call, quote(..value), quote(wts))\n  }\n\n  res &lt;- dplyr::summarise(\n    data,\n    ..value := {{ call }},\n    .by = ..level\n  )\n\n  unseen_value &lt;- rlang::eval_tidy(call, data)\n\n  if (is.factor(y) || is.character(y)) {\n    res$..value &lt;- adjust_infinities(res$..value, n = nrow(data))\n  }\n\n  if (smooth) {\n    if (!is.numeric(y)) {\n      cli::cli_abort(\"{.code smooth = TRUE} only works for numeric outcomes.\")\n    }\n\n    global_var &lt;- var(data$..value)\n    global_mean &lt;- mean(data$..value)\n\n    counts &lt;- dplyr::summarise(\n      data,\n      n = dplyr::n(),\n      var_outcome = var(..value),\n      .by = ..level\n    )\n\n    res &lt;- dplyr::left_join(res, counts, by = \"..level\")\n\n    res &lt;- res |&gt;\n      dplyr::mutate(\n        ..value = (n / global_var) /\n          (n / global_var + 1 / var_outcome) *\n          ..value +\n          (1 / var_outcome) / (n / global_var + 1 / var_outcome) * global_mean\n      ) |&gt;\n      dplyr::select(-n, -var_outcome)\n  }\n\n  unseen &lt;- tibble::new_tibble(\n    list(\n      ..level = \"..new\",\n      ..value = unseen_value\n    )\n  )\n\n  dplyr::bind_rows(res, unseen)\n}\n\nlog_odds &lt;- function(x) {\n  p &lt;- (sum(x == levels(x)[1])) / length(x)\n  log(p / (1 - p))\n}\n\nweighted_log_odds &lt;- function(x, wts) {\n  wts &lt;- as.numeric(wts)\n  p &lt;- (sum((x == levels(x)[1]) * wts)) / sum(wts)\n  log(p / (1 - p))\n}\n\nadjust_infinities &lt;- function(x, n) {\n  p &lt;- (2 * n - 1) / (2 * n)\n  log_odds &lt;- log(p / (1 - p))\n\n  dplyr::if_else(is.infinite(x), log_odds, x)\n}\n\n#' @export\nbake.step_lencode &lt;- function(object, new_data, ...) {\n  col_names &lt;- names(object$mapping)\n  check_new_data(col_names, object, new_data)\n\n  for (col_name in col_names) {\n    new_data[[col_name]] &lt;- map_glm_coef(\n      dat = new_data[, col_name], # map_glm_coef() expects a tibble\n      mapping = object$mapping[[col_name]]\n    )\n  }\n\n  new_data\n}\n\n#' @export\nprint.step_lencode &lt;-\n  function(x, width = max(20, options()$width - 31), ...) {\n    title &lt;- \"Linear embedding for factors via GLM for \"\n    print_step(\n      names(x$mapping),\n      x$terms,\n      x$trained,\n      title,\n      width,\n      case_weights = x$case_weights\n    )\n    invisible(x)\n  }\n\n#' @rdname step_lencode\n#' @usage NULL\n#' @export\ntidy.step_lencode &lt;- function(x, ...) {\n  if (is_trained(x)) {\n    if (length(x$mapping) == 0) {\n      res &lt;- tibble(\n        terms = character(),\n        level = character(),\n        value = double()\n      )\n    } else {\n      for (i in seq_along(x$mapping)) {\n        x$mapping[[i]]$terms &lt;- names(x$mapping)[i]\n      }\n      res &lt;- bind_rows(x$mapping)\n      names(res) &lt;- gsub(\"^\\\\.\\\\.\", \"\", names(res))\n    }\n  } else {\n    term_names &lt;- sel2char(x$terms)\n    res &lt;- tibble(\n      terms = term_names,\n      level = rep(na_chr, length(term_names)),\n      value = rep(na_dbl, length(term_names))\n    )\n  }\n  res$id &lt;- x$id\n  res\n}\n\n#' @rdname required_pkgs.embed\n#' @export\nrequired_pkgs.step_lencode &lt;- function(x, ...) {\n  c(\"embed\")\n}\n\n\n\n Back to top",
     "crumbs": [
       "课时3",
-      "数据变换"
+      "Step Lencode"
     ]
   },
   {
