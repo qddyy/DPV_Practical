@@ -1,5 +1,8 @@
 project:
   type: website
+  render:
+    - "**/*.qmd"
+    - "!课时3/step_lencode.qmd"
 
 website:
   title: "数据处理与可视化-实践课程"
