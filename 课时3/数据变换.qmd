@@ -6,7 +6,6 @@ toc: true
 webr:
   packages:
     - recipes
-    - embed
     - modeldata
     - magrittr
     - tidyverse
@@ -20,8 +19,9 @@ library(magrittr)
 library(tidyverse)
 library(modeldata)
 library(recipes)
-library(embed)
 ```
+
+{{< include step_lencode.qmd >}}
 
 # 规范化
 
