@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Index",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
+  },
+  {
     "objectID": "课时一/R语言介绍.html",
     "href": "课时一/R语言介绍.html",
     "title": "R语言介绍",
@@ -8,6 +15,237 @@
     "crumbs": [
       "课时一",
       "R语言介绍"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html",
+    "href": "课时一/R基础.html",
+    "title": "R基础",
+    "section": "",
+    "text": "R 中对任何函数使用 ? 或 help 可以打开对应的介绍文档, 如\n对于任意 R object, 都可以使用 typeof() 和 str() 查看其类型与内部结构, 如\n请同学们在接下来的内容中必要时使用这些特性自行探索.",
+    "crumbs": [
+      "课时一",
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html#基本数据结构",
+    "href": "课时一/R基础.html#基本数据结构",
+    "title": "R基础",
+    "section": "基本数据结构",
+    "text": "基本数据结构\nR 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.\n\n\n\n维度\n同质\n异质\n\n\n\n\n1d\nAtomic vector\nList\n\n\n2d\nMatrix\nData frame\n\n\nnd\nArray\n\n\n\n\n\n原子向量\n原子向量根据其存储的数据类型不同, 分为\n\n逻辑向量 (logical)\n整数向量 (integer)\n数值向量 (numeric)\n字符向量 (character)\n\n以及两种不常见的类型\n\n原始向量 (raw)\n复数向量 (complex)\n\n\n创建\n原子向量通常用 c() 创建 (combine 的缩写):\n\n\n\n\n\n\n实际上 c() 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).\n一些便捷函数可以快速创建具有特定规律的数值类向量:\n\n\n\n\n\n\n\n\n取子集\n可以使用另一个向量作为索引取得向量的子集. R 中使用 [] 对向量取子集, 支持三种索引:\n\n正数索引\n\n\n\n\n\n\n负数索引\n\n\n\n\n\n\n逻辑索引\n\n\n\n\n\n\n\n*R 中取向量子集的 [] 也是一个函数:\n\n\n\n\n\n\n\n\n相互转换\n不同原子向量可以通过 as.*() 函数族转换, 如:\n\n\n\n\n\n\n对于直观上不可相互转换的类型, 强行转换会产生 NA 值:\n\n\n\n\n\n\n\n\n\n列表\n与原子向量不同, 列表的元素可以是任意类型的 R object.\n\n创建\n可以使用 list() 创建列表\n\n\n\n\n\n\n类似地, 可以用 c() 合并多个列表\n\n\n\n\n\n\n\n\n取子集\n对列表取子集操作分为两种\n\n[] 取出子列表\n\n\n\n\n\n\n这与原子向量的 [] 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.\n[[]] 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引\n\n\n\n\n\n\n\n\n\n\n特殊向量\n原子向量和列表统称为向量. 所有向量都具有三个基本属性:\n\ntype: 存储的数据类型\n\n\n\n\n\n\nlength: 长度\n\n\n\n\n\n\nattributes: 属性/元数据 普通的原子向量/列表无额外 attributes\n\n\n\n\n\n\n\n若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.\n\n命名向量\n若在创建向量时使用命名参数, 其会拥有 names 属性\n\n\n\n\n\n\n具有 names 属性的向量可以使用 name 取子集\n\n\n\n\n\n\n\n\n矩阵\n矩阵本质是具有 dims 属性的向量.\n可以用 matrix 创建矩阵:\n\n\n\n\n\n\n矩阵额外支持二维索引 (分别指定子集所在的行和列):\n\n\n\n\n\n\n\n\n因子\n因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 levels 和 class=\"factor\" 属性的整数向量.\n可以用 factor 创建因子:\n\n\n\n\n\n\n\n\n数据框\n数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 names, row.names 和 class=\"data.frame\" 属性, 所有元素都是等长向量的列表.\n可以用 data.frame 创建数据框:\n\n\n\n\n\n\n作为和矩阵一样的二维结构, 数据框也额外支持二维索引:\n\n\n\n\n\n\n在 2026 年, R 自带的 data.frame 类型已经有更加现代化的替代品 (如 tibble, data.table). 不过对 data.frame 的基础操作同样适用于这些新的数据框类型.",
+    "crumbs": [
+      "课时一",
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html#基本语法",
+    "href": "课时一/R基础.html#基本语法",
+    "title": "R基础",
+    "section": "基本语法",
+    "text": "基本语法\n\n变量命名与赋值\nR 中使用 &lt;- 给变量赋值. R 的基本变量命名规则如下:\n\n不能以数字开头\n不能包含空格或特殊符号 (如 @, #, $ 等)\n不能使用保留字 (如 for, if)\n\n使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则\n\n\n\n\n\n\n\n\n控制流\n\nif 条件控制 基本语法为 if (condition) expression else alternative_expression\n\n\n\n\n\n\nif 有返回值 (返回 expression 部分):\n\n\n\n\n\n\nfor 循环 基本语法为 for (variable in sequence) expression\n\n\n\n\n\n\n\n\n\n函数\n在 R 中创建函数的语法为 function(arg_list) expression 或 \\(arg_list) expression, 其将返回一个 closure 类型的值:\n\n\n\n\n\n\n参数可以有默认值, 且具有惰性求值机制:\n\n\n\n\n\n\n此外, 存在可变长参数 ..., 通常用于转发不定数量的参数给其他函数\n\n\n\n\n\n\nHadley 的 Advanced R 中总结了 base R 中常用的函数.",
+    "crumbs": [
+      "课时一",
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时一/R基础.html#源代码组织",
+    "href": "课时一/R基础.html#源代码组织",
+    "title": "R基础",
+    "section": "源代码组织",
+    "text": "源代码组织\n\nsource\n项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. source 用于运行其他 R 文件中的代码:\n\n\n\n\n\n\n\n\nR package\n另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.\n我们重点关注如何使用别人的 R 包. 可以使用 library() 来加载本地已安装的 R 包, 之后可以使用包里的全部函数\n\n\n\n\n\n\n由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 :: 访问包中的特定函数:\n\n\n\n\n\n\n与 :: 类似的是 :::, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.",
+    "crumbs": [
+      "课时一",
+      "R基础"
+    ]
+  },
+  {
+    "objectID": "课时二/数据重塑.html",
+    "href": "课时二/数据重塑.html",
+    "title": "数据重塑",
+    "section": "",
+    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
+    "objectID": "课时二/数据重塑.html#tidymodels",
+    "href": "课时二/数据重塑.html#tidymodels",
+    "title": "数据重塑",
+    "section": "",
+    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
+    "objectID": "课时二/数据重塑.html#特征衍生",
+    "href": "课时二/数据重塑.html#特征衍生",
+    "title": "数据重塑",
+    "section": "特征衍生",
+    "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 多项式特征\nstep_ns(): 自然样条特征\nstep_pca(): 主成分特征\nstep_interact(): 生成特征交互项\n…\n\n这里以 step_poly() 为例, 在 mtcars 数据集中生成 mpg 的二次项:",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
+    "objectID": "课时二/数据重塑.html#类别不平衡问题",
+    "href": "课时二/数据重塑.html#类别不平衡问题",
+    "title": "数据重塑",
+    "section": "类别不平衡问题",
+    "text": "类别不平衡问题\nthemis 包对 recipe 包作补充, 提供了一系列处理不平衡数据的 step.\n\n过采样\n\nstep_upsample(): 简单过采样\nstep_smote(): SMOTE 算法\nstep_smotenc(): SMOTENC 算法\nstep_bsmote(): borderline-SMOTE 算法\nstep_adasyn(): ADASYN 算法\nstep_rose(): ROSE 算法\n\n欠采样\n\nstep_downsample(): 简单欠采样\nstep_nearmiss(): NearMiss 算法\nstep_tomek(): Tomek Links 算法\n\n\n其和 recipes 中的用法完全一致:",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
+    "objectID": "课时二/数据重塑.html#练习",
+    "href": "课时二/数据重塑.html#练习",
+    "title": "数据重塑",
+    "section": "练习",
+    "text": "练习\n\n练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n选择 manufacturer、model、class、year、cty 和 hwy 这几个变量，生成一个新的数据框\n使用 stringr 包中的函数，新建一列 class_group\n\n若 class 中包含 \"suv\"，则记为 \"SUV\"\n若 class 中包含 \"compact\"，则记为 \"Compact\"\n其余车型记为 \"Other\"\n\n仅保留 class_group 不为 \"Other\" 的观测\n使用 pivot_longer() 将 cty 和 hwy 两列整理为长格式，生成新列 mileage_type 和 mpg_value\n将 mileage_type 中的值改为更易理解的形式:\n\ncty 改为 \"City\"\nhwy 改为 \"Highway\"\n\n按 manufacturer、class_group 和 mileage_type 分组, 计算每组的:\n\n样本量 n\n平均油耗水平 mean_mpg\n最大油耗水平 max_mpg\n\n仅保留样本量不少于 3 的组别\n将结果按 mean_mpg 从高到低排序\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::ames 完成以下任务:\n\n划分训练集与测试集\n以训练集为基础，建立一个以 Sale_Price 作为响应变量，以 Gr_Liv_Area, Year_Built, Full_Bath, Neighborhood, Bldg_Type 作为预测变量的 recipe 对象\n对 Gr_Liv_Area 构造二阶多项式特征\n构造比例特征 bath_ratio = Full_Bath / Gr_Liv_Area\n使用 step_interact() 添加 Gr_Liv_Area:Year_Built 交互项\nprep() 后处理训练集与测试集\n\n\n\n\n\n\n\n\n\n练习 3\n使用 modeldata::cells 完成以下任务:\n\n将 class 作为响应变量\n按 class 分层切分训练集与测试集\n以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe\n将 case 变量的 role 设为 id\n分别基于同一个基础 recipe 添加以下 step, 形成 4 个不同的 recipe 对象:\n\nstep_upsample(class)\nstep_downsample(class)\nstep_smote(class)\nstep_rose(class)\n\nprep() 后得到各自处理后的训练集\n统计原始训练集与 4 种重采样结果中 class 的类别分布\n\n\n\n\n\n\n\ntidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.",
+    "crumbs": [
+      "课时二",
+      "数据重塑"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html",
+    "href": "课时二/ggplot2介绍.html",
+    "title": "ggplot2介绍",
+    "section": "",
+    "text": "基于 Wilkinson (2005) 创造的图形语法 (The Grammar of Graphics), Wickham (2009) 创造了分层图形语法 (Layered Grammar of Graphics). 其定义一个 plot 的组成部分:\n\n默认的数据集 (dataset) 和美学映射 (aesthetic mapping)\n每个美学映射对应的标度 (scale)\n一个或多个图层 (layer)，每个图层包含一个几何对象 (geometric object), 一个统计变换 (statistical transformation), 一个位置调整 (position adjustment), 以及 (可能存在的) 各自的数据集和美学映射\n坐标系 (coordinate system)\n分面 (facet)\n\n其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值映射在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最重要的是 layer, 其决定了图中元素的类型, 如点, 线等.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#图形语法",
+    "href": "课时二/ggplot2介绍.html#图形语法",
+    "title": "ggplot2介绍",
+    "section": "",
+    "text": "基于 Wilkinson (2005) 创造的图形语法 (The Grammar of Graphics), Wickham (2009) 创造了分层图形语法 (Layered Grammar of Graphics). 其定义一个 plot 的组成部分:\n\n默认的数据集 (dataset) 和美学映射 (aesthetic mapping)\n每个美学映射对应的标度 (scale)\n一个或多个图层 (layer)，每个图层包含一个几何对象 (geometric object), 一个统计变换 (statistical transformation), 一个位置调整 (position adjustment), 以及 (可能存在的) 各自的数据集和美学映射\n坐标系 (coordinate system)\n分面 (facet)\n\n其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值映射在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最重要的是 layer, 其决定了图中元素的类型, 如点, 线等.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#ggplot-示例",
+    "href": "课时二/ggplot2介绍.html#ggplot-示例",
+    "title": "ggplot2介绍",
+    "section": "ggplot 示例",
+    "text": "ggplot 示例\n\n\n\n\n\n\n\n\n\n\n\n\n其实以 ggplot() 开头只是为了创建一个 ggplot 对象, 使得在其上可以进行自定义的 + 运算符. 在 ggplot2 &gt;= 4.0.0 中, ggplot() 创建一个 S7 对象.\n\n\n\n\n\n\n此外, ggplot() 也提供了一个全局设置的机会, 如设置默认的数据集和美学映射. 之后的每个图层都将继承这些设置.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#aesthetic-mapping",
+    "href": "课时二/ggplot2介绍.html#aesthetic-mapping",
+    "title": "ggplot2介绍",
+    "section": "Aesthetic Mapping",
+    "text": "Aesthetic Mapping\n美学映射 (aesthetic mapping) 用于指定数据中的变量在图中对应什么, 如可以指定某列作为 x/y 轴坐标, 另一列作为点的颜色. 常用的包括:\n\n位置 (x, y): 坐标轴上的位置\n颜色 (color): 点/线的颜色\n填充 (fill): 内部的填充色\n形状 (shape): 形状\n大小 (size): 大小\n透明度 (alpha): 透明度\n\n\n\n\n\n\n\nggplot 将各种类型的图所需要的属性名称高度统一, 例如 x 和 y 总表示 x/y 轴坐标, color 总表示点/线的颜色, fill 总表示某种封闭结构内部的填充色. 这使得不同图层可以共用美学映射来简化代码.\n\n\n\n\n\n\nggplot 中的美学映射将 dataset 中的各列映射为某种视觉元素. 通常这个 dataset 是 tidy 的, 因此相当于是为其中每个 observation 指定不同的属性 (如之前为每个点按类别指定不同的颜色). 如果希望为所有 observation 指定同样的属性, 例如将所有点的颜色设置为红色, 可以直接在图层中直接指定一个常量值 (而不是在 aes() 中指定):",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#layer",
+    "href": "课时二/ggplot2介绍.html#layer",
+    "title": "ggplot2介绍",
+    "section": "Layer",
+    "text": "Layer\n有时候, 我们需要在同一张图上绘制多个元素, 例如同时绘制点和线. ggplot 从中抽离出图层的概念.\n\n\n\n\n\n\nggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 也可以在图层中指定数据集和美学映射:\n\n\n\n\n\n\n这就相当于 base R 中的 plot(x = mtcars$wt, y = mtcars$mpg). 因此, 可以说图层是 ggplot 绘图的基本单位.\n\nGeometric Object & Statistical Transformation\n有些图需要从数据中计算出一些统计量, 例如箱线图需要计算出四分位数. 由于这种可能存在的计算是图层级别的 (只有箱线图需要计算分位数), ggplot 将这样的计算作为每个图层自己的特征.\n\n\n\n\n\n\nggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 geom_point() 的几何对象名为 \"point\" (画一些点), 而统计变换名为 \"identity\" (不进行任何计算); geom_boxplot() 的几何对象名为 \"boxplot\" (画一些箱子), 而统计变换名为 \"boxplot\" (计算分位数). 后者的几何对象和统计变换同名只是因为它们都是箱线图专用的.\n图层中二者的地位是平等的, 因此创建一个图层有两种方式:\n\n使用 geom_*() 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 geom_point(), geom_line(), geom_boxplot().\n使用 stat_*() 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 stat_identity(), stat_boxplot().\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot 以默认参数的形式自动为 geom/stat 推断其缺失的另一半.\n\n\n\n\n\n\n\n\n\n\n\n\n大多数时候使用 geom_*() 即可, 但 stat_*() 也有其用处, 比如我我们希望利用 geom_boxplot 计算出的分位数, 但将其展现为 errorbar 的形式. (geom_errorbar() 也是 ggplot2 提供的一种图层类型)\n\n\n\n\n\n\n\n\nafter_stat()\n有时候, 我们希望利用统计变换计算出的值来绘图. 例如, 我们希望将概率密度图中的密度放缩到 [0, 1] 之间.\n\n\n\n\n\n\n由于密度是 geom_density() 图层在自己的统计变换中计算的, 因此无法直接对其进行操作. 对于这种需求, ggplot 提供了 after_stat() 函数, 允许我们在图层中访问统计变换计算出的值. geom_density() 计算出的密度在内部被命名为 density, 因此我们可以通过 after_stat(density) 来访问它.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#scale",
+    "href": "课时二/ggplot2介绍.html#scale",
+    "title": "ggplot2介绍",
+    "section": "Scale",
+    "text": "Scale\nAesthetic mapping 只是指定了 dataset 中各个变量对应图中哪个视觉元素, 而 scale 决定变量的值如何映射为图中展现的值.\n对于 aes() 中指定的每个美学映射, 都需要有一个对应的 scale. 未指定时, ggplot 都会自动为其创建一个默认的 scale. 例如, 对于 aes(x = wt) (数值型变量), ggplot 会创建一个 scale_x_continuous() 来将 wt 的值映射到 x 轴上. 对于 aes(color = as.factor(cyl)) (因子型变量), ggplot 会创建一个 scale_color_discrete() 来将 cyl 的值映射到颜色上.\n具体而言, scales 分为两大类:\n\nposition scales\n\ncontinuous position scales\ndiscrete position scales\ndate/time position scales\n\nother Scales\n\ncolor scales\n\ncontinuous color scales\ndiscrete color scales\n\nsize scales\nshape scales\nfill scales\nalpha scales\n…\n\n\n\nPosition Scales\nposition scales 包括\n\ncontinuous position scales: scale_x_continuous(), scale_y_continuous()\ndiscrete position scales: scale_x_discrete(), scale_y_discrete()\n\n其中 x/y 仅仅表示该 scale 作用于 x/y 轴, 用法相同. 而 continuous/discrete 则表示该 scale 作用于连续/离散变量, 用法 (参数) 略有不同. 下介绍一些常用参数.\n\n数据范围\n\nlimits: 控制坐标轴显示的数据范围，通常接受一个长度为 2 的向量\nexpand: 控制坐标轴两端与数据边际之间的留白\n\n\n\n\n\n\n\n由于\n\n超过 limits 的数据点会被设为 NA\nexpand 的计算依赖于数据范围\n\n因此这两个设置都可以视为对”如何将数据映射/展示到坐标轴上”的调整, 而不是对坐标轴本身的调整. 这也是它们被归类在 position scales 中的原因.\n\n\n刻度标签\n\nbreaks/minor_breaks: 控制主/次刻度, 接受一个数值向量或一个函数\nlabels: 控制刻度标签, 接受一个字符向量或一个函数\n\n\n\n\n\n\n\n其被归为 position scales 的原因是它们是对数据范围的一种视觉辅助, 依旧属于”如何将数据映射/展示到坐标轴上”的范畴.\n\n\n轴变换\n\ntrans: 对坐标轴进行数学变换，接受一个字符串 (如 “log10”) 或一个 transformation object (如 scales::log_trans())\n\n\n\n\n\n\n\n显然轴变换也是对”如何将数据映射/展示到坐标轴上”的调整, 因此被归为 position scales.\n\n\n双轴图\nscale_x_continuous()/scale_y_continuous() 的一个特殊参数是 sec.axis, 用于创建双轴图.\nHadley Wickham 本人并不提倡使用双轴图 (如双 y 轴图), 详见 stackoverflow 上的回答. 因此在很长一段时间内 ggplot2 中完全无法创建双轴图. 直到 ggplot2 2.2.0 中引入了 sec.axis 参数才打破这一限制.\n尽管 ggplot2 向用户需求妥协了, 但其双轴图依然实现得极为别扭, 需要用户手动进行各种变换来使得两个轴的刻度对齐. 因此, 推荐使用 ggh4x 包提供的 help_secondary() 函数实现双轴图.\n\n\n\n\n\n\n\n\n\nOther Scales\n常见的 mapping 中除了位置 (x/y) 以外, 还有颜色 (color), 填充 (fill), 形状 (shape), 大小 (size), 透明度 (alpha) 等. 这里我们以 color scale 为例介绍.\ncolor scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 scale_color_continuous() 和 scale_color_discrete().\n与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质都是以”刻度”的形式展示数据值, 因此其参数也大同小异.\n例如, 其也有 limits, breaks, labels 等参数, 用法与 position scales 中的相同.\n\n\n\n\n\n\ncolor scale 接受一个特殊参数: palette (调色盘)\n\n\n\n\n\n\n\n\nGuides\nscales 将变量的值展示在图上时, 根据对应 mapping 的不同, 可能成为坐标轴 (position scales) 或图例等 (other scales). 这些统称为 guides.\n从哲学角度看, guides 可以视作是 scales 的逆映射, 其将图上的坐标轴或图例 (通过人眼) 映射回变量的值. 如, 在 position scales 中, guides 将坐标轴上的刻度标签映射回数据中的数值; 在 color scales 中, guides 将图例中的颜色映射回数据中的类别.\n可以在设置 scale 的时候传入 guide 参数来调整其外观, 如\n\n\n\n\n\n\n\n\n\n\n\n\n除了 guide_axis() 和 guide_legend() 以外, ggplot 还提供了 guide_colorbar() 对应 continuous color scales, guide_none() 对应不显示 guides, 等等.\n\n\nlabs() & lims()\n在对 scale 的控制中, 常见的需求是控制标题 (轴标题/图例标题) 和控制范围 (x/y轴范围). ggplot 为此提供了 labs() 和 lims() 函数.\n以下是一个 labs() 的使用示例. 注意其也可以控制图的标题.\n\n\n\n\n\n\nlims() 的使用方法类似. 注意其也会将超出范围的值变为 NA.\n\n\n\n\n\n\n\n\nafter_scale()\n与 layer 的统计变换会在内部计算出一些值一样, scale 也会在内部计算出一些值, 如 color scale 会计算出每个颜色对应的 RGB 值.\n有时我们希望使用这些值, 如在密度图中将填充色设为淡化的轮廓颜色.\n\n\n\n\n\n\n与 after_stat() 类似, ggplot 提供了 after_scale() 函数来访问这些值.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#coordinate-system",
+    "href": "课时二/ggplot2介绍.html#coordinate-system",
+    "title": "ggplot2介绍",
+    "section": "Coordinate System",
+    "text": "Coordinate System\nposition scales 只负责将变量值映射到坐标轴上. 因此, 其不能控制坐标轴在图上的摆放方式.\nggplot 提供了坐标系以完成这个任务. 坐标系分为两大类\n\nlinear coordinate systems\n\ncoord_cartesian()\ncoord_flip()\ncoord_fixed()\n\nnon-linear coordinate systems\n\ncoord_polar()\ncoord_trans()\ncoord_map()/coord_quickmap()/coord_sf()\n\n\n这里我们仅介绍两种最常用的坐标系: coord_cartesian() 和 coord_polar()\n\ncoord_cartesian()\ncoord_cartesian() (笛卡尔坐标系) 是 ggplot 的默认坐标系. 对于没有显式指定坐标系的图, ggplot 会自动添加一个 coord_cartesian().\nggplot 提供了一系列参数以对 coord_cartesian() 进行微调\n\n\n\n\n\n\n注意这里的 xlim/ylim 与 scale_x_continuous()/scale_y_continuous() 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.\n\n\ncoord_polar()\ncoord_polar() (极坐标系) 将笛卡尔坐标系转换为极坐标系.\n\n\n\n\n\n\n\n\n\n\n\n\ncoord_polar() 最常见的还是创建饼图. 其由堆叠条形图变化而来.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#facet",
+    "href": "课时二/ggplot2介绍.html#facet",
+    "title": "ggplot2介绍",
+    "section": "Facet",
+    "text": "Facet\n除了将类别变量展示为颜色/填充/形状外, 还可以根据分类变量的值将图分为多个小块. 分面提供了这样的功能.\n\n\n\n\n\n\n上述例子中, facet_wrap(~ cyl) 根据 cyl 的值将图分为三个小块, 分别展示 cyl = 4, cyl = 6, cyl = 8 的数据.\nggplot 还提供了 facet_grid() 来同时根据两个分类变量进行分面.\n\n\n\n\n\n\n没有指定分面时, ggplot 自动添加 facet_null() (不分面). facet 也是 ggplot 图的一个必要组成部分.\nfacet_*() 中最重要的参数是 scales, 用于控制所有面板中位置刻度是否统一",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#theme",
+    "href": "课时二/ggplot2介绍.html#theme",
+    "title": "ggplot2介绍",
+    "section": "Theme",
+    "text": "Theme\ntheme() 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.\n\n\n\n\n\n\ntheme() 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.\n除了使用 theme() 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 theme_bw(), theme_minimal(), theme_classic() 等.",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#拼图与保存",
+    "href": "课时二/ggplot2介绍.html#拼图与保存",
+    "title": "ggplot2介绍",
+    "section": "拼图与保存",
+    "text": "拼图与保存\n\nggsave()\n要将 ggplot2 图片保存到文件, 可以使用 ggsave() 函数\n\n\n\n\n\n\n\n\npatchwork\n有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下\n\n\n\n\n\n\npatchwork 继承了 ggplot2 的设计哲学, 可以直接将 ggplot 对象相加来拼图\n\n\n\n\n\n\n如果希望其竖向拼接, 可以使用 / 而不是 +:\n\n\n\n\n\n\n与 ggplot2 一样, patchwork 拼成的图也可以使用 ggsave() 保存.\n\nplot_layout()\n可以添加一个 plot_layout() 来控制如何放置子图.\n\n\n\n\n\n\n\n\n\n\n\n\nplot_layout() 的另一个实用参数是 guides:\n\n\n\n\n\n\n\n\nplot_annotation()\nplot_annotation() 可用于控制拼图的标题, 编号等:",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#cheatsheet",
+    "href": "课时二/ggplot2介绍.html#cheatsheet",
+    "title": "ggplot2介绍",
+    "section": "Cheatsheet",
+    "text": "Cheatsheet",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
+    ]
+  },
+  {
+    "objectID": "课时二/ggplot2介绍.html#练习",
+    "href": "课时二/ggplot2介绍.html#练习",
+    "title": "ggplot2介绍",
+    "section": "练习",
+    "text": "练习\n\n练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n绘制 displ 与 hwy 的散点图\n将 drv 映射到颜色\n设置点的透明度为 0.7\n添加一条线性拟合曲线，不显示置信区间\n设置 x 轴刻度为 2 到 7\n设置标题、副标题和坐标轴标签\n使用 theme_minimal()\n\n\n\n\n\n\n\n\n\n练习 2\n继续使用 ggplot2::mpg 完成以下任务:\n\n绘制 class 的柱状图\n将 drv 映射到填充颜色\n使用 position = \"fill\" 展示各 class 中不同 drv 的比例\n将 y 轴标签显示为百分比\n翻转坐标轴\n将图例放到底部，并设置图例标题\n使用 theme_bw()\n\n\n\n\n\n\n\n\n\n练习 3\n使用 ggplot2::diamonds 完成以下任务:\n\n绘制 carat 的直方图\n使用 after_stat(density) 将 y 轴改为密度\n叠加一条密度曲线\n按 cut 分面\n仅显示 carat 在 0 到 3 之间的部分\n使用 theme_classic()\n设置标题和 x / y 轴标签",
+    "crumbs": [
+      "课时二",
+      "ggplot2介绍"
     ]
   },
   {
@@ -176,241 +414,80 @@
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html",
-    "href": "课时二/ggplot2介绍.html",
-    "title": "ggplot2介绍",
+    "objectID": "课时三/数据变换.html",
+    "href": "课时三/数据变换.html",
+    "title": "数据变换",
     "section": "",
-    "text": "基于 Wilkinson (2005) 创造的图形语法 (The Grammar of Graphics), Wickham (2009) 创造了分层图形语法 (Layered Grammar of Graphics). 其定义一个 plot 的组成部分:\n\n默认的数据集 (dataset) 和美学映射 (aesthetic mapping)\n每个美学映射对应的标度 (scale)\n一个或多个图层 (layer)，每个图层包含一个几何对象 (geometric object), 一个统计变换 (statistical transformation), 一个位置调整 (position adjustment), 以及 (可能存在的) 各自的数据集和美学映射\n坐标系 (coordinate system)\n分面 (facet)\n\n其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值映射在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最重要的是 layer, 其决定了图中元素的类型, 如点, 线等.",
+    "text": "基本原则: 介绍各种方法, 且用ggplot可视化展示效果\n必要时, 介绍自定义创建step, 以及补充S3方法介绍(对于其他面向对象系统, 如R6, 也可介绍稍作介绍, 但放在课程最后, 解释理由是第一次课考虑到时间关系没讲)\n对于step的创建, 就是对一个 recipe对象添加一个 step 对象. 这里之所以使用 add_step, 可能是内部有一套对recipe添加step的复杂机制. 所以接下来的任务是创建一个 step, 这里需要使用 step() 创建一个 S3 对象. 至于我们创造的step的具体细节, 藏在 prep 和 bake 的泛型方法中. 也就是说, prep 和 bake 的泛型方法是根据 step 对象的 class 来调用不同的函数. 因此, 我们需要为我们创建的 step 定义一个新的 class",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#图形语法",
-    "href": "课时二/ggplot2介绍.html#图形语法",
-    "title": "ggplot2介绍",
-    "section": "",
-    "text": "基于 Wilkinson (2005) 创造的图形语法 (The Grammar of Graphics), Wickham (2009) 创造了分层图形语法 (Layered Grammar of Graphics). 其定义一个 plot 的组成部分:\n\n默认的数据集 (dataset) 和美学映射 (aesthetic mapping)\n每个美学映射对应的标度 (scale)\n一个或多个图层 (layer)，每个图层包含一个几何对象 (geometric object), 一个统计变换 (statistical transformation), 一个位置调整 (position adjustment), 以及 (可能存在的) 各自的数据集和美学映射\n坐标系 (coordinate system)\n分面 (facet)\n\n其中 aesthetic mapping 指定 dataset 中的变量在图中扮演的角色, 如位置, 颜色, 形状, 大小等. 而 scale 则决定如何将它们的值映射在图上, 如将位置值映射到对数坐标轴上, 将颜色值映射到某个调色盘上等. 最重要的是 layer, 其决定了图中元素的类型, 如点, 线等.",
+    "objectID": "课时三/数据变换.html#定量变量规范化",
+    "href": "课时三/数据变换.html#定量变量规范化",
+    "title": "数据变换",
+    "section": "定量变量规范化",
+    "text": "定量变量规范化\n\n标准化\n标准化即将变量的位置和尺度作变换. 以 modeldata::credit_data 为例, 其包含不同尺度的数据:\n\n\n\n\n\n\n\n\n\n\n\n\n由于其形式简单, 有多种实现方式\n\n使用 dplyr::mutate\n使用 recipes::step_normalize\n\n这里我们以前者为例:\n\n\n\n\n\n\n手动进行变换的好处是可以完全控制变换的细节, 如使用均值/中位数作中心化, 使用标准差/四分位距作尺度化等. 但缺点是需要自己编写代码, 且不易与已有的建模框架集成.\n也可以使用 recipes::step_normalize 来实现标准化:\n\n\n\n\n\n\n但 recipes::step_normalize 的默认实现是使用均值和标准差进行中心化和尺度化. 如果需要使用其他统计量, 则需要额外的工作, 我们之后介绍.\n\n\n最小值-最大值规范化\n在 recipes 中直接用 step_range() 即可, 默认把数值缩放到 [0, 1].\n\n\n\n\n\n\n显然, 其受到异常值的影响.\n\n\n稳健规范化\n为解决规范化中异常值敏感的问题, 可以使用稳健规范化. 其中心化使用中位数, 尺度化使用四分位距.\nrecipes 包中没有直接的稳健规范化函数, 需要自定义一个 step.\n\n\nBox-Cox / Yeo-Johnson 变换\nBox-Cox 和 Yeo-Johnson 变换将非正态分布的数值变量转换为接近正态分布. Box-Cox 适用于正值数据，Yeo-Johnson 可扩展到包含零和负值的数据.\n可以使用 step_BoxCox() 和 step_YeoJohnson() 来实现这两种变换:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n行归一化\n行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.\nstep_spatialsign 可以实现行归一化:",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#ggplot-示例",
-    "href": "课时二/ggplot2介绍.html#ggplot-示例",
-    "title": "ggplot2介绍",
-    "section": "ggplot 示例",
-    "text": "ggplot 示例\n\n\n\n\n\n\n\n\n\n\n\n\n其实以 ggplot() 开头只是为了创建一个 ggplot 对象, 使得在其上可以进行自定义的 + 运算符. 在 ggplot2 &gt;= 4.0.0 中, ggplot() 创建一个 S7 对象.\n\n\n\n\n\n\n此外, ggplot() 也提供了一个全局设置的机会, 如设置默认的数据集和美学映射. 之后的每个图层都将继承这些设置.",
+    "objectID": "课时三/数据变换.html#定性变量规范化",
+    "href": "课时三/数据变换.html#定性变量规范化",
+    "title": "数据变换",
+    "section": "定性变量规范化",
+    "text": "定性变量规范化\n\n独热编码\n独热编码将每个类别转换为一个二进制特征, 适用于无序的分类变量. 可以使用 step_dummy() 来实现独热编码:\n\n\n\n\n\n\n其 one_hot 参数可以控制是否省略其中一个类别以避免多重共线性:\n\n\n\n\n\n\n\n\n有序编码\n有时, 分类变量具有内在的顺序关系. 这种情况下, 可以使用有序编码将类别映射到整数值. 可以使用 step_ordinalscore() 来实现有序编码:\n\n\n\n\n\n\n\n\n目标编码\n目标编码将分类变量的每个类别替换为该类别对应的目标变量的统计量(如均值). 适用于高基数的分类变量. 可以使用 embed::step_lencode() (Likelihood Encoding) 来实现目标编码:\n\n\n\n\n\n\n其暂时只支持数值/二分类目标变量. 对于数值型变量, 其提供 smooth 参数 (默认为 TRUE) 来控制是否进行平滑处理:",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#aesthetic-mapping",
-    "href": "课时二/ggplot2介绍.html#aesthetic-mapping",
-    "title": "ggplot2介绍",
-    "section": "Aesthetic Mapping",
-    "text": "Aesthetic Mapping\n美学映射 (aesthetic mapping) 用于指定数据中的变量在图中对应什么, 如可以指定某列作为 x/y 轴坐标, 另一列作为点的颜色. 常用的包括:\n\n位置 (x, y): 坐标轴上的位置\n颜色 (color): 点/线的颜色\n填充 (fill): 内部的填充色\n形状 (shape): 形状\n大小 (size): 大小\n透明度 (alpha): 透明度\n\n\n\n\n\n\n\nggplot 将各种类型的图所需要的属性名称高度统一, 例如 x 和 y 总表示 x/y 轴坐标, color 总表示点/线的颜色, fill 总表示某种封闭结构内部的填充色. 这使得不同图层可以共用美学映射来简化代码.\n\n\n\n\n\n\nggplot 中的美学映射将 dataset 中的各列映射为某种视觉元素. 通常这个 dataset 是 tidy 的, 因此相当于是为其中每个 observation 指定不同的属性 (如之前为每个点按类别指定不同的颜色). 如果希望为所有 observation 指定同样的属性, 例如将所有点的颜色设置为红色, 可以直接在图层中直接指定一个常量值 (而不是在 aes() 中指定):",
+    "objectID": "课时三/数据变换.html#无监督离散化",
+    "href": "课时三/数据变换.html#无监督离散化",
+    "title": "数据变换",
+    "section": "无监督离散化",
+    "text": "无监督离散化\n\n组距分组\n组距分组按照特定组距将数据分为若干个区间. 组距可以根据预定的组数/频数决定, 即等距分组/等频分组.\n使用 step_cut() 来实现等距分组:\n\n\n\n\n\n\n注意其中等距只体现在我们设置的 break 上. 实际上 step_cut() 是一个相当通用的离散化函数, 其 break 参数指定为不同的值即可实现不同的离散化方法.\n使用 step_discretize() 来实现等频分组:\n\n\n\n\n\n\n\n\n均值-标准差分组\n在 step_cut() 中设置 breaks 为 \\(\\mu \\pm \\sigma\\) 可以实现均值-标准差分组:\n\n\n\n\n\n\n\n\nK-means 分箱法\nrecipes 包中没有直接的 K-means 分箱函数, 但可以通过向 step_cut() 提供 K-means 聚类中心的中点作为 breaks 来实现:",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#layer",
-    "href": "课时二/ggplot2介绍.html#layer",
-    "title": "ggplot2介绍",
-    "section": "Layer",
-    "text": "Layer\n有时候, 我们需要在同一张图上绘制多个元素, 例如同时绘制点和线. ggplot 从中抽离出图层的概念.\n\n\n\n\n\n\nggplot 的一个图层基本相当于其他绘图系统中的一句绘图命令. 例如, 也可以在图层中指定数据集和美学映射:\n\n\n\n\n\n\n这就相当于 base R 中的 plot(x = mtcars$wt, y = mtcars$mpg). 因此, 可以说图层是 ggplot 绘图的基本单位.\n\nGeometric Object & Statistical Transformation\n有些图需要从数据中计算出一些统计量, 例如箱线图需要计算出四分位数. 由于这种可能存在的计算是图层级别的 (只有箱线图需要计算分位数), ggplot 将这样的计算作为每个图层自己的特征.\n\n\n\n\n\n\nggplot 中的每个图层都由一个几何对象 (geometric object) 和一个统计变换 (statistical transformation) 构成. 其中几何对象表示该图层呈现数据的形式, 而统计变换则表示该图层需要进行的计算. 例如, 刚刚 geom_point() 的几何对象名为 \"point\" (画一些点), 而统计变换名为 \"identity\" (不进行任何计算); geom_boxplot() 的几何对象名为 \"boxplot\" (画一些箱子), 而统计变换名为 \"boxplot\" (计算分位数). 后者的几何对象和统计变换同名只是因为它们都是箱线图专用的.\n图层中二者的地位是平等的, 因此创建一个图层有两种方式:\n\n使用 geom_*() 函数指定几何对象, 使用 stat 参数指定统计变换, 例如 geom_point(), geom_line(), geom_boxplot().\n使用 stat_*() 函数指定统计变换, 使用 geom 参数指定几何对象, 例如 stat_identity(), stat_boxplot().\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot 以默认参数的形式自动为 geom/stat 推断其缺失的另一半.\n\n\n\n\n\n\n\n\n\n\n\n\n大多数时候使用 geom_*() 即可, 但 stat_*() 也有其用处, 比如我我们希望利用 geom_boxplot 计算出的分位数, 但将其展现为 errorbar 的形式. (geom_errorbar() 也是 ggplot2 提供的一种图层类型)\n\n\n\n\n\n\n\n\nafter_stat()\n有时候, 我们希望利用统计变换计算出的值来绘图. 例如, 我们希望将概率密度图中的密度放缩到 [0, 1] 之间.\n\n\n\n\n\n\n由于密度是 geom_density() 图层在自己的统计变换中计算的, 因此无法直接对其进行操作. 对于这种需求, ggplot 提供了 after_stat() 函数, 允许我们在图层中访问统计变换计算出的值. geom_density() 计算出的密度在内部被命名为 density, 因此我们可以通过 after_stat(density) 来访问它.",
+    "objectID": "课时三/数据变换.html#有监督离散化",
+    "href": "课时三/数据变换.html#有监督离散化",
+    "title": "数据变换",
+    "section": "有监督离散化",
+    "text": "有监督离散化\n\nChiMerge 算法\nrecipes 包中没有直接的 ChiMerge 分箱函数. 但 discretization 包提供了一个 chiM() 函数来实现 ChiMerge 算法:\n\n\n\n\n\n\n也可以将结果中的 cutp 设为 step_cut() 的 breaks, 实现 ChiMerge 分箱:\n\n\n\n\n\n\n\n\n决策树离散化\n目前 recipes 包没有内置的决策树分箱 step，但可以通过自定义 breaks 实现类似效果. 只需用 rpart 包训练决策树，然后提取分割点作为 breaks 即可:",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#scale",
-    "href": "课时二/ggplot2介绍.html#scale",
-    "title": "ggplot2介绍",
-    "section": "Scale",
-    "text": "Scale\nAesthetic mapping 只是指定了 dataset 中各个变量对应图中哪个视觉元素, 而 scale 决定变量的值如何映射为图中展现的值.\n对于 aes() 中指定的每个美学映射, 都需要有一个对应的 scale. 未指定时, ggplot 都会自动为其创建一个默认的 scale. 例如, 对于 aes(x = wt) (数值型变量), ggplot 会创建一个 scale_x_continuous() 来将 wt 的值映射到 x 轴上. 对于 aes(color = as.factor(cyl)) (因子型变量), ggplot 会创建一个 scale_color_discrete() 来将 cyl 的值映射到颜色上.\n具体而言, scales 分为两大类:\n\nposition scales\n\ncontinuous position scales\ndiscrete position scales\ndate/time position scales\n\nother Scales\n\ncolor scales\n\ncontinuous color scales\ndiscrete color scales\n\nsize scales\nshape scales\nfill scales\nalpha scales\n…\n\n\n\nPosition Scales\nposition scales 包括\n\ncontinuous position scales: scale_x_continuous(), scale_y_continuous()\ndiscrete position scales: scale_x_discrete(), scale_y_discrete()\n\n其中 x/y 仅仅表示该 scale 作用于 x/y 轴, 用法相同. 而 continuous/discrete 则表示该 scale 作用于连续/离散变量, 用法 (参数) 略有不同. 下介绍一些常用参数.\n\n数据范围\n\nlimits: 控制坐标轴显示的数据范围，通常接受一个长度为 2 的向量\nexpand: 控制坐标轴两端与数据边际之间的留白\n\n\n\n\n\n\n\n由于\n\n超过 limits 的数据点会被设为 NA\nexpand 的计算依赖于数据范围\n\n因此这两个设置都可以视为对”如何将数据映射/展示到坐标轴上”的调整, 而不是对坐标轴本身的调整. 这也是它们被归类在 position scales 中的原因.\n\n\n刻度标签\n\nbreaks/minor_breaks: 控制主/次刻度, 接受一个数值向量或一个函数\nlabels: 控制刻度标签, 接受一个字符向量或一个函数\n\n\n\n\n\n\n\n其被归为 position scales 的原因是它们是对数据范围的一种视觉辅助, 依旧属于”如何将数据映射/展示到坐标轴上”的范畴.\n\n\n轴变换\n\ntrans: 对坐标轴进行数学变换，接受一个字符串 (如 “log10”) 或一个 transformation object (如 scales::log_trans())\n\n\n\n\n\n\n\n显然轴变换也是对”如何将数据映射/展示到坐标轴上”的调整, 因此被归为 position scales.\n\n\n双轴图\nscale_x_continuous()/scale_y_continuous() 的一个特殊参数是 sec.axis, 用于创建双轴图.\nHadley Wickham 本人并不提倡使用双轴图 (如双 y 轴图), 详见 stackoverflow 上的回答. 因此在很长一段时间内 ggplot2 中完全无法创建双轴图. 直到 ggplot2 2.2.0 中引入了 sec.axis 参数才打破这一限制.\n尽管 ggplot2 向用户需求妥协了, 但其双轴图依然实现得极为别扭, 需要用户手动进行各种变换来使得两个轴的刻度对齐. 因此, 推荐使用 ggh4x 包提供的 help_secondary() 函数实现双轴图.\n\n\n\n\n\n\n\n\n\nOther Scales\n常见的 mapping 中除了位置 (x/y) 以外, 还有颜色 (color), 填充 (fill), 形状 (shape), 大小 (size), 透明度 (alpha) 等. 这里我们以 color scale 为例介绍.\ncolor scale 也包括 continuous color scale 和 discrete color scale 两种类型, 分别对应 scale_color_continuous() 和 scale_color_discrete().\n与 position scales 相比, 其只是表现形式不同 (在图上成为图例而不是坐标轴) 但本质都是以”刻度”的形式展示数据值, 因此其参数也大同小异.\n例如, 其也有 limits, breaks, labels 等参数, 用法与 position scales 中的相同.\n\n\n\n\n\n\ncolor scale 接受一个特殊参数: palette (调色盘)\n\n\n\n\n\n\n\n\nGuides\nscales 将变量的值展示在图上时, 根据对应 mapping 的不同, 可能成为坐标轴 (position scales) 或图例等 (other scales). 这些统称为 guides.\n从哲学角度看, guides 可以视作是 scales 的逆映射, 其将图上的坐标轴或图例 (通过人眼) 映射回变量的值. 如, 在 position scales 中, guides 将坐标轴上的刻度标签映射回数据中的数值; 在 color scales 中, guides 将图例中的颜色映射回数据中的类别.\n可以在设置 scale 的时候传入 guide 参数来调整其外观, 如\n\n\n\n\n\n\n\n\n\n\n\n\n除了 guide_axis() 和 guide_legend() 以外, ggplot 还提供了 guide_colorbar() 对应 continuous color scales, guide_none() 对应不显示 guides, 等等.\n\n\nlabs() & lims()\n在对 scale 的控制中, 常见的需求是控制标题 (轴标题/图例标题) 和控制范围 (x/y轴范围). ggplot 为此提供了 labs() 和 lims() 函数.\n以下是一个 labs() 的使用示例. 注意其也可以控制图的标题.\n\n\n\n\n\n\nlims() 的使用方法类似. 注意其也会将超出范围的值变为 NA.\n\n\n\n\n\n\n\n\nafter_scale()\n与 layer 的统计变换会在内部计算出一些值一样, scale 也会在内部计算出一些值, 如 color scale 会计算出每个颜色对应的 RGB 值.\n有时我们希望使用这些值, 如在密度图中将填充色设为淡化的轮廓颜色.\n\n\n\n\n\n\n与 after_stat() 类似, ggplot 提供了 after_scale() 函数来访问这些值.",
+    "objectID": "课时三/数据变换.html#自定义-step",
+    "href": "课时三/数据变换.html#自定义-step",
+    "title": "数据变换",
+    "section": "自定义 step",
+    "text": "自定义 step\nrecipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括\n\n定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.\n对这个 S3 类实现 prep 和 bake 方法, 在其中定义 step 的处理细节.\n创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.\n\n\nstep_robust_normalize()\n下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.\n首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:\n\n\n\n\n\n\n接下来, 为这个 S3 类实现 prep 和 bake 方法:\n\n\n\n\n\n\n\n\n\n\n\n\n最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.\n注意在此我们才开始添加默认参数, 以便用户使用.\n\n\n\n\n\n\n我们验证一下这个 step 的效果:\n\n\n\n\n\n\n可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
+      "课时三",
+      "数据变换"
     ]
   },
   {
-    "objectID": "课时二/ggplot2介绍.html#coordinate-system",
-    "href": "课时二/ggplot2介绍.html#coordinate-system",
-    "title": "ggplot2介绍",
-    "section": "Coordinate System",
-    "text": "Coordinate System\nposition scales 只负责将变量值映射到坐标轴上. 因此, 其不能控制坐标轴在图上的摆放方式.\nggplot 提供了坐标系以完成这个任务. 坐标系分为两大类\n\nlinear coordinate systems\n\ncoord_cartesian()\ncoord_flip()\ncoord_fixed()\n\nnon-linear coordinate systems\n\ncoord_polar()\ncoord_trans()\ncoord_map()/coord_quickmap()/coord_sf()\n\n\n这里我们仅介绍两种最常用的坐标系: coord_cartesian() 和 coord_polar()\n\ncoord_cartesian()\ncoord_cartesian() (笛卡尔坐标系) 是 ggplot 的默认坐标系. 对于没有显式指定坐标系的图, ggplot 会自动添加一个 coord_cartesian().\nggplot 提供了一系列参数以对 coord_cartesian() 进行微调\n\n\n\n\n\n\n注意这里的 xlim/ylim 与 scale_x_continuous()/scale_y_continuous() 中不同. 前者只是调整坐标轴显示的范围, 不会丢弃超出范围的数据, 后者则会将超出范围的数据设为 NA.\n\n\ncoord_polar()\ncoord_polar() (极坐标系) 将笛卡尔坐标系转换为极坐标系.\n\n\n\n\n\n\n\n\n\n\n\n\ncoord_polar() 最常见的还是创建饼图. 其由堆叠条形图变化而来.",
-    "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/ggplot2介绍.html#facet",
-    "href": "课时二/ggplot2介绍.html#facet",
-    "title": "ggplot2介绍",
-    "section": "Facet",
-    "text": "Facet\n除了将类别变量展示为颜色/填充/形状外, 还可以根据分类变量的值将图分为多个小块. 分面提供了这样的功能.\n\n\n\n\n\n\n上述例子中, facet_wrap(~ cyl) 根据 cyl 的值将图分为三个小块, 分别展示 cyl = 4, cyl = 6, cyl = 8 的数据.\nggplot 还提供了 facet_grid() 来同时根据两个分类变量进行分面.\n\n\n\n\n\n\n没有指定分面时, ggplot 自动添加 facet_null() (不分面). facet 也是 ggplot 图的一个必要组成部分.\nfacet_*() 中最重要的参数是 scales, 用于控制所有面板中位置刻度是否统一",
-    "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/ggplot2介绍.html#theme",
-    "href": "课时二/ggplot2介绍.html#theme",
-    "title": "ggplot2介绍",
-    "section": "Theme",
-    "text": "Theme\ntheme() 用于设置 ggplot 的整体外观. ggplot 的理念是, 先使用前述的声明式语法 (declarative syntax) 来指定数据该如何展示在图中, 再使用 theme 系统控制图中每个部分如何渲染其外观.\n\n\n\n\n\n\ntheme() 的参数非常多, 可以控制图中几乎每个部分的外观. 详见其文档.\n除了使用 theme() 来单独设置每个部分的外观以外, ggplot 还提供了一些预设的主题函数, 如 theme_bw(), theme_minimal(), theme_classic() 等.",
-    "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/ggplot2介绍.html#拼图与保存",
-    "href": "课时二/ggplot2介绍.html#拼图与保存",
-    "title": "ggplot2介绍",
-    "section": "拼图与保存",
-    "text": "拼图与保存\n\nggsave()\n要将 ggplot2 图片保存到文件, 可以使用 ggsave() 函数\n\n\n\n\n\n\n\n\npatchwork\n有时候, 我们需要将多个不同的 ggplot2 图拼成一个大图, 此时可以使用 patchwork 包. 其基本用法如下\n\n\n\n\n\n\npatchwork 继承了 ggplot2 的设计哲学, 可以直接将 ggplot 对象相加来拼图\n\n\n\n\n\n\n如果希望其竖向拼接, 可以使用 / 而不是 +:\n\n\n\n\n\n\n与 ggplot2 一样, patchwork 拼成的图也可以使用 ggsave() 保存.\n\nplot_layout()\n可以添加一个 plot_layout() 来控制如何放置子图.\n\n\n\n\n\n\n\n\n\n\n\n\nplot_layout() 的另一个实用参数是 guides:\n\n\n\n\n\n\n\n\nplot_annotation()\nplot_annotation() 可用于控制拼图的标题, 编号等:",
-    "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/ggplot2介绍.html#cheatsheet",
-    "href": "课时二/ggplot2介绍.html#cheatsheet",
-    "title": "ggplot2介绍",
-    "section": "Cheatsheet",
-    "text": "Cheatsheet",
-    "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/ggplot2介绍.html#练习",
-    "href": "课时二/ggplot2介绍.html#练习",
-    "title": "ggplot2介绍",
+    "objectID": "课时三/数据变换.html#练习",
+    "href": "课时三/数据变换.html#练习",
+    "title": "数据变换",
     "section": "练习",
-    "text": "练习\n\n练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n绘制 displ 与 hwy 的散点图\n将 drv 映射到颜色\n设置点的透明度为 0.7\n添加一条线性拟合曲线，不显示置信区间\n设置 x 轴刻度为 2 到 7\n设置标题、副标题和坐标轴标签\n使用 theme_minimal()\n\n\n\n\n\n\n\n\n\n练习 2\n继续使用 ggplot2::mpg 完成以下任务:\n\n绘制 class 的柱状图\n将 drv 映射到填充颜色\n使用 position = \"fill\" 展示各 class 中不同 drv 的比例\n将 y 轴标签显示为百分比\n翻转坐标轴\n将图例放到底部，并设置图例标题\n使用 theme_bw()\n\n\n\n\n\n\n\n\n\n练习 3\n使用 ggplot2::diamonds 完成以下任务:\n\n绘制 carat 的直方图\n使用 after_stat(density) 将 y 轴改为密度\n叠加一条密度曲线\n按 cut 分面\n仅显示 carat 在 0 到 3 之间的部分\n使用 theme_classic()\n设置标题和 x / y 轴标签",
+    "text": "练习\n\n练习 1\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income、Assets 与 Status 这几个变量\n划分训练集与测试集\n以训练集为基础, 建立一个以 Income 和 Assets 为自变量的基础 recipe 对象\n参考 step_robust_normalize() 的实现方式, 自定义 step_whiten()\n\n在 prep() 中计算所选变量的中心化向量与协方差矩阵\n通过特征值分解或奇异值分解构造白化矩阵\n在 bake() 中对新数据完成白化变换\n\n使用 step_whiten() 对训练集和测试集进行处理, 并检查白化后 Income 与 Assets 的协方差矩阵是否接近单位矩阵\n再基于同一个基础 recipe, 分别完成以下规范化:\n\nstep_normalize()\nstep_range()\n\n分组计算不同方法下 Income 与 Assets 的:\n\n均值\n标准差\n相关系数\n\n使用 ggplot2 可视化比较不同方法的效果:\n\n用散点图比较 Income 与 Assets 的联合分布\n用箱线图、密度图或直方图比较两变量的边际分布\n\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income 与 Status 这两个变量\n划分训练集与测试集\n以训练集为基础, 建立一个对 Income 进行离散化的基础 recipe 对象\n参考 K-means 分箱法一节, 自定义 step_kmeans_cut()\n\n在 prep() 中对 Income 进行 kmeans() 聚类\n将相邻聚类中心的中点作为 breaks\n在 bake() 中使用 cut() 输出分箱结果\n\n使用 step_kmeans_cut(Income, centers = 4) 对 Income 分箱\n再基于同一份基础 recipe, 分别使用以下方法对 Income 离散化:\n\nstep_cut() 实现等距分组\nstep_discretize() 实现等频分组\nstep_cut() 实现均值-标准差分组\n\nprep() 后分别处理训练集与测试集\n比较不同方法在箱数、箱宽/箱频以及类别分布上的差异\n使用 ggplot2 可视化比较不同方法的效果:\n\n用柱状图比较各方法下各箱的样本量\n用点图、折线图或分面图比较各箱中的 good 比例",
     "crumbs": [
-      "课时二",
-      "ggplot2介绍"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html",
-    "href": "课时二/数据重塑.html",
-    "title": "数据重塑",
-    "section": "",
-    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html#tidymodels",
-    "href": "课时二/数据重塑.html#tidymodels",
-    "title": "数据重塑",
-    "section": "",
-    "text": "The tidymodels framework is a collection of packages for modeling and machine learning using tidyverse principles.\n\ntidymodels 系列包提供了数据建模与分析的一整套流程. 主要的包包括:\n\nrecipes: 数据预处理与特征工程\nparsnip: 接口/后端分离的模型指定\nyardstick: 提供各种模型性能指标\nrsample: 基于重采样的模型评估 (如 bootstrap, cross-validation)\ntune: 模型超参数调优\nworkflows: 将预处理/建模打包为工作流\n\n\n\nrecipes 包用于以声明式 (declarative) 语法组织数据预处理流程. 其基本思想是将”对数据做什么变换”与”何时真正执行这些变换”分离. 现介绍其基本用法\n我们先利用 rsample 包切分出训练集和测试集\n\n\n\n\n\n\n接下来, 我们基于训练集创建一个 recipe 对象, 并为其添加想要的 step.\n\n\n\n\n\n\n此时我们已经完成了一份菜谱, 其中记录了烹饪的步骤. 接下来, 我们需要为其准备调料, 比如中心化和标准化中需要计算出均值和标准差作为调料.\n\n\n\n\n\n\n最后, 我们基于这些烹饪步骤和佐料, 真正对数据进行预处理.\n\n\n\n\n\n\n之所以要将预处理拆分为 prep()/bake() 是为了将同一套预处理流程用于多个数据集. 比如, 为了防止测试集信息泄露, 在中心化/标准化时应只使用训练集的均值和标准差, 对测试集预处理时也应使用训练集的归一化参数. 这与 sklearn 中 fit_transform 和 transform 方法的设计原则类似.",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html#特征衍生",
-    "href": "课时二/数据重塑.html#特征衍生",
-    "title": "数据重塑",
-    "section": "特征衍生",
-    "text": "特征衍生\nrecipes 提供了一系列特征工程工具:\n\nstep_poly(): 多项式特征\nstep_ns(): 自然样条特征\nstep_pca(): 主成分特征\nstep_interact(): 生成特征交互项\n…\n\n这里以 step_poly() 为例, 在 mtcars 数据集中生成 mpg 的二次项:",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html#类别不平衡问题",
-    "href": "课时二/数据重塑.html#类别不平衡问题",
-    "title": "数据重塑",
-    "section": "类别不平衡问题",
-    "text": "类别不平衡问题\nthemis 包对 recipe 包作补充, 提供了一系列处理不平衡数据的 step.\n\n过采样\n\nstep_upsample(): 简单过采样\nstep_smote(): SMOTE 算法\nstep_smotenc(): SMOTENC 算法\nstep_bsmote(): borderline-SMOTE 算法\nstep_adasyn(): ADASYN 算法\nstep_rose(): ROSE 算法\n\n欠采样\n\nstep_downsample(): 简单欠采样\nstep_nearmiss(): NearMiss 算法\nstep_tomek(): Tomek Links 算法\n\n\n其和 recipes 中的用法完全一致:",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "课时二/数据重塑.html#练习",
-    "href": "课时二/数据重塑.html#练习",
-    "title": "数据重塑",
-    "section": "练习",
-    "text": "练习\n\n练习 1\n使用 ggplot2::mpg 完成以下任务:\n\n选择 manufacturer、model、class、year、cty 和 hwy 这几个变量，生成一个新的数据框\n使用 stringr 包中的函数，新建一列 class_group\n\n若 class 中包含 \"suv\"，则记为 \"SUV\"\n若 class 中包含 \"compact\"，则记为 \"Compact\"\n其余车型记为 \"Other\"\n\n仅保留 class_group 不为 \"Other\" 的观测\n使用 pivot_longer() 将 cty 和 hwy 两列整理为长格式，生成新列 mileage_type 和 mpg_value\n将 mileage_type 中的值改为更易理解的形式:\n\ncty 改为 \"City\"\nhwy 改为 \"Highway\"\n\n按 manufacturer、class_group 和 mileage_type 分组, 计算每组的:\n\n样本量 n\n平均油耗水平 mean_mpg\n最大油耗水平 max_mpg\n\n仅保留样本量不少于 3 的组别\n将结果按 mean_mpg 从高到低排序\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::ames 完成以下任务:\n\n划分训练集与测试集\n以训练集为基础，建立一个以 Sale_Price 作为响应变量，以 Gr_Liv_Area, Year_Built, Full_Bath, Neighborhood, Bldg_Type 作为预测变量的 recipe 对象\n对 Gr_Liv_Area 构造二阶多项式特征\n构造比例特征 bath_ratio = Full_Bath / Gr_Liv_Area\n使用 step_interact() 添加 Gr_Liv_Area:Year_Built 交互项\nprep() 后处理训练集与测试集\n\n\n\n\n\n\n\n\n\n练习 3\n使用 modeldata::cells 完成以下任务:\n\n将 class 作为响应变量\n按 class 分层切分训练集与测试集\n以训练集为基础，建立一个以 class 为响应变量、其余变量为预测变量的基础 recipe\n将 case 变量的 role 设为 id\n分别基于同一个基础 recipe 添加以下 step, 形成 4 个不同的 recipe 对象:\n\nstep_upsample(class)\nstep_downsample(class)\nstep_smote(class)\nstep_rose(class)\n\nprep() 后得到各自处理后的训练集\n统计原始训练集与 4 种重采样结果中 class 的类别分布\n\n\n\n\n\n\n\ntidyverse, ggplot2 以及数据重塑相关的全部练习为第一次作业.",
-    "crumbs": [
-      "课时二",
-      "数据重塑"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Index",
-    "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top"
-  },
-  {
-    "objectID": "课时一/R基础.html",
-    "href": "课时一/R基础.html",
-    "title": "R基础",
-    "section": "",
-    "text": "R 中对任何函数使用 ? 或 help 可以打开对应的介绍文档, 如\n对于任意 R object, 都可以使用 typeof() 和 str() 查看其类型与内部结构, 如\n请同学们在接下来的内容中必要时使用这些特性自行探索.",
-    "crumbs": [
-      "课时一",
-      "R基础"
-    ]
-  },
-  {
-    "objectID": "课时一/R基础.html#基本数据结构",
-    "href": "课时一/R基础.html#基本数据结构",
-    "title": "R基础",
-    "section": "基本数据结构",
-    "text": "基本数据结构\nR 语言的基本数据结构可以根据其维度 (一维, 二维, 多维) 以及同质性 (所有内容必须为同一类型) 或异质性 (内容可以是不同类型) 分类.\n\n\n\n维度\n同质\n异质\n\n\n\n\n1d\nAtomic vector\nList\n\n\n2d\nMatrix\nData frame\n\n\nnd\nArray\n\n\n\n\n\n原子向量\n原子向量根据其存储的数据类型不同, 分为\n\n逻辑向量 (logical)\n整数向量 (integer)\n数值向量 (numeric)\n字符向量 (character)\n\n以及两种不常见的类型\n\n原始向量 (raw)\n复数向量 (complex)\n\n\n创建\n原子向量通常用 c() 创建 (combine 的缩写):\n\n\n\n\n\n\n实际上 c() 的本意是连接多个向量, 上述例子中实际是连接了多个长度为 1 的向量 (标量).\n一些便捷函数可以快速创建具有特定规律的数值类向量:\n\n\n\n\n\n\n\n\n取子集\n可以使用另一个向量作为索引取得向量的子集. R 中使用 [] 对向量取子集, 支持三种索引:\n\n正数索引\n\n\n\n\n\n\n负数索引\n\n\n\n\n\n\n逻辑索引\n\n\n\n\n\n\n\n*R 中取向量子集的 [] 也是一个函数:\n\n\n\n\n\n\n\n\n相互转换\n不同原子向量可以通过 as.*() 函数族转换, 如:\n\n\n\n\n\n\n对于直观上不可相互转换的类型, 强行转换会产生 NA 值:\n\n\n\n\n\n\n\n\n\n列表\n与原子向量不同, 列表的元素可以是任意类型的 R object.\n\n创建\n可以使用 list() 创建列表\n\n\n\n\n\n\n类似地, 可以用 c() 合并多个列表\n\n\n\n\n\n\n\n\n取子集\n对列表取子集操作分为两种\n\n[] 取出子列表\n\n\n\n\n\n\n这与原子向量的 [] 索引类似, 支持前述各种索引, 取子集后对象保持原有类型.\n[[]] 取出列表元素 与原子向量不同, 长度为 1 的列表并不等同于其元素. 因此 R 为取出列表元素设计了额外的索引\n\n\n\n\n\n\n\n\n\n\n特殊向量\n原子向量和列表统称为向量. 所有向量都具有三个基本属性:\n\ntype: 存储的数据类型\n\n\n\n\n\n\nlength: 长度\n\n\n\n\n\n\nattributes: 属性/元数据 普通的原子向量/列表无额外 attributes\n\n\n\n\n\n\n\n若对向量添加特定的 attributes, 可以使其具有额外的性质. 以下介绍常见的 attributes.\n\n命名向量\n若在创建向量时使用命名参数, 其会拥有 names 属性\n\n\n\n\n\n\n具有 names 属性的向量可以使用 name 取子集\n\n\n\n\n\n\n\n\n矩阵\n矩阵本质是具有 dims 属性的向量.\n可以用 matrix 创建矩阵:\n\n\n\n\n\n\n矩阵额外支持二维索引 (分别指定子集所在的行和列):\n\n\n\n\n\n\n\n\n因子\n因子是 R 中用于表示分类变量 (categorical variable) 的特殊向量类型. 本质是一个带有 levels 和 class=\"factor\" 属性的整数向量.\n可以用 factor 创建因子:\n\n\n\n\n\n\n\n\n数据框\n数据框是 R 中最常见的数据结构之一, 通常每一行表示一个样本, 每一列表示一个特征. 本质是一个带有 names, row.names 和 class=\"data.frame\" 属性, 所有元素都是等长向量的列表.\n可以用 data.frame 创建数据框:\n\n\n\n\n\n\n作为和矩阵一样的二维结构, 数据框也额外支持二维索引:\n\n\n\n\n\n\n在 2026 年, R 自带的 data.frame 类型已经有更加现代化的替代品 (如 tibble, data.table). 不过对 data.frame 的基础操作同样适用于这些新的数据框类型.",
-    "crumbs": [
-      "课时一",
-      "R基础"
-    ]
-  },
-  {
-    "objectID": "课时一/R基础.html#基本语法",
-    "href": "课时一/R基础.html#基本语法",
-    "title": "R基础",
-    "section": "基本语法",
-    "text": "基本语法\n\n变量命名与赋值\nR 中使用 &lt;- 给变量赋值. R 的基本变量命名规则如下:\n\n不能以数字开头\n不能包含空格或特殊符号 (如 @, #, $ 等)\n不能使用保留字 (如 for, if)\n\n使用反引号可以强制让引号内的字符作为一个 name, 打破上述一切规则\n\n\n\n\n\n\n\n\n控制流\n\nif 条件控制 基本语法为 if (condition) expression else alternative_expression\n\n\n\n\n\n\nif 有返回值 (返回 expression 部分):\n\n\n\n\n\n\nfor 循环 基本语法为 for (variable in sequence) expression\n\n\n\n\n\n\n\n\n\n函数\n在 R 中创建函数的语法为 function(arg_list) expression 或 \\(arg_list) expression, 其将返回一个 closure 类型的值:\n\n\n\n\n\n\n参数可以有默认值, 且具有惰性求值机制:\n\n\n\n\n\n\n此外, 存在可变长参数 ..., 通常用于转发不定数量的参数给其他函数\n\n\n\n\n\n\nHadley 的 Advanced R 中总结了 base R 中常用的函数.",
-    "crumbs": [
-      "课时一",
-      "R基础"
-    ]
-  },
-  {
-    "objectID": "课时一/R基础.html#源代码组织",
-    "href": "课时一/R基础.html#源代码组织",
-    "title": "R基础",
-    "section": "源代码组织",
-    "text": "源代码组织\n\nsource\n项目太大时, 通常会将不同用途的代码分散在多个 R 文件中, 并互相调用. source 用于运行其他 R 文件中的代码:\n\n\n\n\n\n\n\n\nR package\n另一种组织 R 代码的方式是将代码放入一个 R 包. R 之所以好用也是因为存在众多 R 包.\n我们重点关注如何使用别人的 R 包. 可以使用 library() 来加载本地已安装的 R 包, 之后可以使用包里的全部函数\n\n\n\n\n\n\n由于 R 缺乏从包中选择性导出函数的机制, 当仅用到包里的几个函数时, 导入整个包并不明智 (引发命名冲突等). 此时我们可以使用 :: 访问包中的特定函数:\n\n\n\n\n\n\n与 :: 类似的是 :::, 其可强行访问包中没有被作者导出的对象, 在查看包中的代码细节时很有用.",
-    "crumbs": [
-      "课时一",
-      "R基础"
+      "课时三",
+      "数据变换"
     ]
   }
 ]
