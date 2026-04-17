@@ -683,7 +683,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RlcF9yb2J1c3Rfbm9ybWFs
 <li>参考 <code>step_normalize()</code> 与 <code>step_robust_normalize()</code> 的实现方式, 自定义 <code>step_mad_normalize()</code>
 <ul>
 <li>在 <code>prep()</code> 中计算所选变量的中位数与中位数绝对偏差 (<span class="math inline">\(m(x) = median(|x - median(x)|)\)</span>)</li>
-<li>在 <code>bake()</code> 中对新数据完成变换</li>
+<li>使用中位数作为中心化参数, 使用中位数绝对偏差作为尺度化参数, 在 <code>bake()</code> 中对新数据完成变换</li>
 </ul></li>
 <li>使用 <code>step_mad_normalize()</code> 对训练集和测试集进行处理, 并检查变换后各变量的中位数是否接近 0</li>
 <li>再基于同一个基础 <code>recipe</code>, 分别完成以下规范化:
@@ -722,8 +722,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 <li>以训练集为基础, 建立一个对 <code>Income</code> 进行离散化的基础 <code>recipe</code> 对象</li>
 <li>参考 K-means 分箱法一节, 自定义 <code>step_kmeans_cut()</code>
 <ul>
-<li>在 <code>prep()</code> 中对 <code>Income</code> 进行 <code>kmeans()</code> 聚类, 计算相邻聚类中心的中点作为 breaks</li>
-<li>在 <code>bake()</code> 中使用 <code>cut()</code> 进行分箱</li>
+<li>在 <code>prep()</code> 中对 <code>Income</code> 进行 <code>kmeans()</code> 聚类, 保存聚类结果</li>
+<li>在 <code>bake()</code> 中根据聚类结果对新数据进行离散化</li>
 </ul></li>
 <li>使用 <code>step_kmeans_cut(Income, centers = 4)</code> 对 <code>Income</code> 分箱</li>
 <li>再基于同一份基础 <code>recipe</code>, 分别使用以下方法对 <code>Income</code> 离散化:
