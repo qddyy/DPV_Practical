@@ -635,7 +635,7 @@ recipe(~ ., data = credit) %>%
     - 用散点图比较 `Income` 与 `Assets` 的联合分布
     - 用箱线图、密度图或直方图比较两变量的边际分布
 
-```{r}
+```{webr}
 library(modeldata)
 library(rsample)
 library(recipes)
