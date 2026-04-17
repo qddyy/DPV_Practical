@@ -9,6 +9,8 @@ webr:
     - modeldata
     - magrittr
     - tidyverse
+    - discretization
+    - rpart
 ---
 
 
@@ -204,7 +206,7 @@ credit_ordinal <-
 ```{webr}
 credit_target <- 
     recipe(~ ., data = credit) %>% 
-    step_lencode(Home, outcome = vars(Status)) %>% 
+    step_lencode(Home, outcome = vars(Status), smooth = FALSE) %>% 
     prep() %>% 
     bake(new_data = NULL) %T>% 
     str()

@@ -1,3 +1,22 @@
+<!-- https://github.com/tidymodels/embed/blob/001c9f3671cd3c701140d1d3663d31f3d1694014/R/lencode_glm.R#L195 -->
+
+```{webr}
+#| include: false
+
+map_glm_coef <- function(dat, mapping) {
+  new_val <- mapping$..value[mapping$..level == "..new"]
+  dat <- dat |>
+    mutate(..order = seq_len(nrow(dat))) |>
+    set_names(c("..level", "..order")) |>
+    mutate(..level = as.character(..level))
+  mapping <- mapping |> dplyr::filter(..level != "..new")
+  dat <- left_join(dat, mapping, by = "..level") |>
+    arrange(..order)
+  dat$..value[is.na(dat$..value)] <- new_val
+  dat$..value
+}
+```
+
 <!-- https://github.com/tidymodels/embed/blob/main/R/lencode.R -->
 
 ```{webr}
