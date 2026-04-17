@@ -621,7 +621,7 @@ recipe(~ ., data = credit) %>%
 - 以训练集为基础, 建立一个以 `Income` 和 `Assets` 为自变量的基础 `recipe` 对象
 - 参考 `step_normalize()` 与 `step_robust_normalize()` 的实现方式, 自定义 `step_mad_normalize()`
     - 在 `prep()` 中计算所选变量的中位数与中位数绝对偏差 ($m(x) = median(|x - median(x)|)$)
-    - 在 `bake()` 中对新数据完成变换
+    - 使用中位数作为中心化参数, 使用中位数绝对偏差作为尺度化参数, 在 `bake()` 中对新数据完成变换
 - 使用 `step_mad_normalize()` 对训练集和测试集进行处理, 并检查变换后各变量的中位数是否接近 0
 - 再基于同一个基础 `recipe`, 分别完成以下规范化:
     - `step_normalize()`
@@ -655,8 +655,8 @@ set.seed(2026)
 - 划分训练集与测试集
 - 以训练集为基础, 建立一个对 `Income` 进行离散化的基础 `recipe` 对象
 - 参考 K-means 分箱法一节, 自定义 `step_kmeans_cut()`
-    - 在 `prep()` 中对 `Income` 进行 `kmeans()` 聚类, 计算相邻聚类中心的中点作为 breaks
-    - 在 `bake()` 中使用 `cut()` 进行分箱
+    - 在 `prep()` 中对 `Income` 进行 `kmeans()` 聚类, 保存聚类结果
+    - 在 `bake()` 中根据聚类结果对新数据进行离散化
 - 使用 `step_kmeans_cut(Income, centers = 4)` 对 `Income` 分箱
 - 再基于同一份基础 `recipe`, 分别使用以下方法对 `Income` 离散化:
     - `step_cut()` 实现等距分组
