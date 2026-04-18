@@ -44,22 +44,44 @@
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#自定义-step",
-    "href": "课时3/数据变换.html#自定义-step",
+    "objectID": "课时3/数据变换.html#step_robust_normalize",
+    "href": "课时3/数据变换.html#step_robust_normalize",
     "title": "数据变换",
-    "section": "自定义 step",
-    "text": "自定义 step\nrecipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括\n\n定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.\n对这个 S3 类实现 prep() 和 bake() 方法, 在其中定义 step 的处理细节.\n创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.\n\n\nstep_robust_normalize()\n下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.\n首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:\n\n\n\n\n\n\n接下来, 为这个 S3 类实现 prep() 和 bake() 方法:\n\n\n\n\n\n\n\n\n\n\n\n\n最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.\n注意在此我们才开始添加默认参数, 以便用户使用.\n\n\n\n\n\n\n我们验证一下这个 step 的效果:\n\n\n\n\n\n\n可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.\n\n\n元编程\n可以看到, 刚刚编写的几个函数具有很强的规律性, 如 step_*_new() 中只是简单调用了 step(), step_*() 中只是简单调用了 add_step(). 真正自定义的部分只包含在 prep.step_*() 和 bake.step_*() 中. 因此, 理论上可以通过元编程来自动生成这些函数. 以下是为任意 step constructor 生成对应的面向用户的 step_*() 函数的一个示例:\n\n\n\n\n\n\n我们验证其生成的 step_robust_normalize() 是否正常工作:\n\n\n\n\n\n\n上述 generate_step_user() 只是一个启发性的例子. 对于其他函数/泛型方法的生成在理论上也是可行的.",
+    "section": "step_robust_normalize()",
+    "text": "step_robust_normalize()\n下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.\n首先定义一个 step constructor, 其在内部调用 recipes 提供的 step() 来创建一个 step 对象:\n\n\n\n\n\n\n接下来, 为这个 S3 类实现 prep() 和 bake() 方法:\n\n\n\n\n\n\n\n\n\n\n\n\n最后, 创建一个面向用户的 step_robust_normalize(), 其调用 step constructor 来创建 step 对象, 并使用 recipes 包提供的 add_step() 将其添加到 recipe 中.\n注意在此我们才开始添加默认参数, 以便用户使用.\n\n\n\n\n\n\n我们验证一下这个 step 的效果:\n\n\n\n\n\n\n可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.",
     "crumbs": [
       "课时3",
       "数据变换"
     ]
   },
   {
-    "objectID": "课时3/数据变换.html#练习",
-    "href": "课时3/数据变换.html#练习",
+    "objectID": "课时3/数据变换.html#元编程",
+    "href": "课时3/数据变换.html#元编程",
     "title": "数据变换",
-    "section": "练习",
-    "text": "练习\n\n练习 1\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income、Assets 与 Status 这几个变量\n划分训练集与测试集\n以训练集为基础, 建立一个以 Income 和 Assets 为自变量的基础 recipe 对象\n参考 step_normalize() 与 step_robust_normalize() 的实现方式, 自定义 step_mad_normalize()\n\n在 prep() 中计算所选变量的中位数与中位数绝对偏差 (\\(m(x) = median(|x - median(x)|)\\))\n使用中位数作为中心化参数, 使用中位数绝对偏差作为尺度化参数, 在 bake() 中对新数据完成变换\n\n使用 step_mad_normalize() 对训练集和测试集进行处理, 并检查变换后各变量的中位数是否接近 0\n再基于同一个基础 recipe, 分别完成以下规范化:\n\nstep_normalize()\nstep_range()\n\n分别计算不同方法下 Income 与 Assets 的:\n\n均值\n标准差\n中位数\n四分位距\n\n使用 ggplot2 可视化比较不同方法的效果:\n\n用散点图比较 Income 与 Assets 的联合分布\n用箱线图、密度图或直方图比较两变量的边际分布\n\n\n\n\n\n\n\n\n\n\n练习 2\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income 与 Status 这两个变量\n划分训练集与测试集\n以训练集为基础, 建立一个对 Income 进行离散化的基础 recipe 对象\n参考 K-means 分箱法一节, 自定义 step_kmeans_cut()\n\n在 prep() 中对 Income 进行 kmeans() 聚类, 保存聚类结果\n在 bake() 中根据聚类结果对新数据进行离散化\n\n使用 step_kmeans_cut(Income, centers = 4) 对 Income 分箱\n再基于同一份基础 recipe, 分别使用以下方法对 Income 离散化:\n\nstep_cut() 实现等距分组\nstep_discretize() 实现等频分组\n\nprep() 后分别处理训练集与测试集\n比较不同方法在箱数、箱宽/箱频以及类别分布上的差异\n使用 ggplot2 可视化比较不同方法的效果:\n\n比较各方法下各箱的样本量\n比较各方法下各箱中 Status 的 \"good\" 比例",
+    "section": "元编程",
+    "text": "元编程\n可以看到, 刚刚编写的几个函数具有很强的规律性, 如 step_*_new() 中只是简单调用了 step(), step_*() 中只是简单调用了 add_step(). 真正自定义的部分只包含在 prep.step_*() 和 bake.step_*() 中. 因此, 理论上可以通过元编程来自动生成这些函数. 以下是为任意 step constructor 生成对应的面向用户的 step_*() 函数的一个示例:\n\n\n\n\n\n\n我们验证其生成的 step_robust_normalize() 是否正常工作:\n\n\n\n\n\n\n上述 generate_step_user() 只是一个启发性的例子. 对于其他函数/泛型方法的生成在理论上也是可行的.",
+    "crumbs": [
+      "课时3",
+      "数据变换"
+    ]
+  },
+  {
+    "objectID": "课时3/数据变换.html#练习-1",
+    "href": "课时3/数据变换.html#练习-1",
+    "title": "数据变换",
+    "section": "练习 1",
+    "text": "练习 1\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income、Assets 与 Status 这几个变量\n划分训练集与测试集\n以训练集为基础, 建立一个以 Income 和 Assets 为自变量的基础 recipe 对象\n参考 step_normalize() 与 step_robust_normalize() 的实现方式, 自定义 step_mad_normalize()\n\n在 prep() 中计算所选变量的中位数与中位数绝对偏差 (\\(m(x) = median(|x - median(x)|)\\))\n使用中位数作为中心化参数, 使用中位数绝对偏差作为尺度化参数, 在 bake() 中对新数据完成变换\n\n使用 step_mad_normalize() 对训练集和测试集进行处理, 并检查变换后各变量的中位数是否接近 0\n再基于同一个基础 recipe, 分别完成以下规范化:\n\nstep_normalize()\nstep_range()\n\n分别计算不同方法下 Income 与 Assets 的:\n\n均值\n标准差\n中位数\n四分位距\n\n使用 ggplot2 可视化比较不同方法的效果:\n\n用散点图比较 Income 与 Assets 的联合分布\n用箱线图、密度图或直方图比较两变量的边际分布",
+    "crumbs": [
+      "课时3",
+      "数据变换"
+    ]
+  },
+  {
+    "objectID": "课时3/数据变换.html#练习-2",
+    "href": "课时3/数据变换.html#练习-2",
+    "title": "数据变换",
+    "section": "练习 2",
+    "text": "练习 2\n使用 modeldata::credit_data 完成以下任务:\n\n去除缺失值, 并仅保留 Income 与 Status 这两个变量\n划分训练集与测试集\n以训练集为基础, 建立一个对 Income 进行离散化的基础 recipe 对象\n参考 K-means 分箱法一节, 自定义 step_kmeans_cut()\n\n在 prep() 中对 Income 进行 kmeans() 聚类, 保存聚类结果\n在 bake() 中根据聚类结果对新数据进行离散化\n\n使用 step_kmeans_cut(Income, centers = 4) 对 Income 分箱\n再基于同一份基础 recipe, 分别使用以下方法对 Income 离散化:\n\nstep_cut() 实现等距分组\nstep_discretize() 实现等频分组\n\nprep() 后分别处理训练集与测试集\n比较不同方法在箱数、箱宽/箱频以及类别分布上的差异\n使用 ggplot2 可视化比较不同方法的效果:\n\n比较各方法下各箱的样本量\n比较各方法下各箱中 Status 的 \"good\" 比例",
     "crumbs": [
       "课时3",
       "数据变换"

@@ -249,6 +249,7 @@ window.Quarto = {
   <li><a href="#chimerge-算法" id="toc-chimerge-算法" class="nav-link" data-scroll-target="#chimerge-算法">ChiMerge 算法</a></li>
   <li><a href="#决策树离散化" id="toc-决策树离散化" class="nav-link" data-scroll-target="#决策树离散化">决策树离散化</a></li>
   </ul></li>
+  </ul></li>
   <li><a href="#自定义-step" id="toc-自定义-step" class="nav-link" data-scroll-target="#自定义-step">自定义 step</a>
   <ul class="collapse">
   <li><a href="#step_robust_normalize" id="toc-step_robust_normalize" class="nav-link" data-scroll-target="#step_robust_normalize">step_robust_normalize()</a></li>
@@ -258,7 +259,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#练习-1" id="toc-练习-1" class="nav-link" data-scroll-target="#练习-1">练习 1</a></li>
   <li><a href="#练习-2" id="toc-练习-2" class="nav-link" data-scroll-target="#练习-2">练习 2</a></li>
-  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/qddyy/DPV_Practical/blob/main/课时3/数据变换.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/qddyy/DPV_Practical/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -590,16 +590,17 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidHJlZSA8LSBycGFydDo6cnBh
 </div>
 </section>
 </section>
-<section id="自定义-step" class="level2">
-<h2 class="anchored" data-anchor-id="自定义-step">自定义 step</h2>
+</section>
+<section id="自定义-step" class="level1">
+<h1>自定义 step</h1>
 <p>recipes 包提供了一个框架, 允许用户创建自定义的 step 来实现特定的数据预处理. 其基本步骤包括</p>
 <ol type="1">
 <li>定义一个 step constructor, 其接受必要的参数并返回一个带有特定 S3 类属性的 step 对象.</li>
 <li>对这个 S3 类实现 <code>prep()</code> 和 <code>bake()</code> 方法, 在其中定义 step 的处理细节.</li>
 <li>创建一个面向用户的 step_*() 函数, 其调用 step constructor 来创建 step 对象, 并使用 add_step() 将其添加到 recipe 中.</li>
 </ol>
-<section id="step_robust_normalize" class="level3">
-<h3 class="anchored" data-anchor-id="step_robust_normalize">step_robust_normalize()</h3>
+<section id="step_robust_normalize" class="level2">
+<h2 class="anchored" data-anchor-id="step_robust_normalize">step_robust_normalize()</h2>
 <p>下面我们以稳健规范化为例. 其中心化使用中位数, 尺度化使用四分位距.</p>
 <p>首先定义一个 step constructor, 其在内部调用 recipes 提供的 <code>step()</code> 来创建一个 step 对象:</p>
 <div>
@@ -648,8 +649,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY3JlZGl0X3JvYnVzdF9ub3Jt
 </div>
 <p>可以看到, 现在两个变量放缩的尺度不再显著受其中的异常值影响.</p>
 </section>
-<section id="元编程" class="level3">
-<h3 class="anchored" data-anchor-id="元编程">元编程</h3>
+<section id="元编程" class="level2">
+<h2 class="anchored" data-anchor-id="元编程">元编程</h2>
 <p>可以看到, 刚刚编写的几个函数具有很强的规律性, 如 <code>step_*_new()</code> 中只是简单调用了 <code>step()</code>, <code>step_*()</code> 中只是简单调用了 <code>add_step()</code>. 真正自定义的部分只包含在 <code>prep.step_*()</code> 和 <code>bake.step_*()</code> 中. 因此, 理论上可以通过元编程来自动生成这些函数. 以下是为任意 step constructor 生成对应的面向用户的 <code>step_*()</code> 函数的一个示例:</p>
 <div>
 <div id="webr-31" class="exercise-cell">
@@ -671,10 +672,10 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic3RlcF9yb2J1c3Rfbm9ybWFs
 <p>上述 <code>generate_step_user()</code> 只是一个启发性的例子. 对于其他函数/泛型方法的生成在理论上也是可行的.</p>
 </section>
 </section>
-<section id="练习" class="level2">
-<h2 class="anchored" data-anchor-id="练习">练习</h2>
-<section id="练习-1" class="level3">
-<h3 class="anchored" data-anchor-id="练习-1">练习 1</h3>
+<section id="练习" class="level1">
+<h1>练习</h1>
+<section id="练习-1" class="level2">
+<h2 class="anchored" data-anchor-id="练习-1">练习 1</h2>
 <p>使用 <code>modeldata::credit_data</code> 完成以下任务:</p>
 <ul>
 <li>去除缺失值, 并仅保留 <code>Income</code>、<code>Assets</code> 与 <code>Status</code> 这几个变量</li>
@@ -713,8 +714,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 </script>
 </div>
 </section>
-<section id="练习-2" class="level3">
-<h3 class="anchored" data-anchor-id="练习-2">练习 2</h3>
+<section id="练习-2" class="level2">
+<h2 class="anchored" data-anchor-id="练习-2">练习 2</h2>
 <p>使用 <code>modeldata::credit_data</code> 完成以下任务:</p>
 <ul>
 <li>去除缺失值, 并仅保留 <code>Income</code> 与 <code>Status</code> 这两个变量</li>
@@ -766,7 +767,6 @@ eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zNCIsImlubGluZSI6ZmFsc2UsIm1l
 <script type="vfs-file">
 W10=
 </script>
-</section>
 </section>
 </section>
 
