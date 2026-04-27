@@ -53,7 +53,7 @@ credit %>%
 
 - 使用 `dplyr::mutate()`
 - 使用 `recipes::step_normalize()`
-- 使用 `recipes::step_normalize()`
+- 使用 `recipes::step_mutate()`
 
 这里我们以前者为例:
 
