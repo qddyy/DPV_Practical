@@ -188,14 +188,23 @@ bind_rows(
 
 行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.
 
-`step_spatialsign` 可以实现行归一化:
+可以先使用 `step_mutate()` 计算出行和, 再除以行和以实现行归一化:
 
 ```{webr}
-credit_spatialsign <- 
+credit_row_normalized <- 
     recipe(~ ., data = credit) %>% 
-    step_spatialsign(all_numeric_predictors()) %>% 
+    step_mutate(
+        row_sum = rowSums(across(c(Income, Assets)))
+    ) %>%
+    step_mutate(
+        across(c(Income, Assets), \(x) x / row_sum)
+    ) %>% 
     prep() %>% 
     bake(new_data = NULL)
+
+credit_row_normalized %>% 
+    select(c(Income, Assets)) %>% 
+    rowSums()
 ```
 
 <!-- 堆叠柱状图展示一下和=1 -->
