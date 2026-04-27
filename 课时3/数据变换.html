@@ -431,13 +431,13 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYmluZF9yb3dzKFxuICAgIGNy
 <section id="行归一化" class="level3">
 <h3 class="anchored" data-anchor-id="行归一化">行归一化</h3>
 <p>行归一化将每个样本的多个特征缩放到一个特定范围内, 如 [0, 1] 或 [-1, 1]. 适用于只关心特征之间的相对比例，而完全不在乎数据的绝对大小时.</p>
-<p><code>step_spatialsign</code> 可以实现行归一化:</p>
+<p>可以先使用 <code>step_mutate()</code> 计算出行和, 再除以行和以实现行归一化:</p>
 <div>
 <div id="webr-13" class="exercise-cell">
 
 </div>
 <script type="webr-13-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY3JlZGl0X3NwYXRpYWxzaWduIDwtIFxuICAgIHJlY2lwZSh+IC4sIGRhdGEgPSBjcmVkaXQpICU+JSBcbiAgICBzdGVwX3NwYXRpYWxzaWduKGFsbF9udW1lcmljX3ByZWRpY3RvcnMoKSkgJT4lIFxuICAgIHByZXAoKSAlPiUgXG4gICAgYmFrZShuZXdfZGF0YSA9IE5VTEwpIn0=
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY3JlZGl0X3Jvd19ub3JtYWxpemVkIDwtIFxuICAgIHJlY2lwZSh+IC4sIGRhdGEgPSBjcmVkaXQpICU+JSBcbiAgICBzdGVwX211dGF0ZShcbiAgICAgICAgcm93X3N1bSA9IHJvd1N1bXMoYWNyb3NzKGMoSW5jb21lLCBBc3NldHMpKSlcbiAgICApICU+JVxuICAgIHN0ZXBfbXV0YXRlKFxuICAgICAgICBhY3Jvc3MoYyhJbmNvbWUsIEFzc2V0cyksIFxcKHgpIHggLyByb3dfc3VtKVxuICAgICkgJT4lIFxuICAgIHByZXAoKSAlPiUgXG4gICAgYmFrZShuZXdfZGF0YSA9IE5VTEwpXG5cbmNyZWRpdF9yb3dfbm9ybWFsaXplZCAlPiUgXG4gICAgc2VsZWN0KGMoSW5jb21lLCBBc3NldHMpKSAlPiUgXG4gICAgcm93U3VtcygpIn0=
 </script>
 </div>
 <!-- 堆叠柱状图展示一下和=1 -->
