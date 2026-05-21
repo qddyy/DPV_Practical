@@ -1,0 +1,414 @@
+---
+title: "数据清理"
+order: 1
+format: live-html
+toc: true
+webr:
+  packages:
+    - recipes
+    - modeldata
+    - magrittr
+    - tidyverse
+    - janitor
+    - dataReporter
+    - robustbase
+    - dbscan
+    - solitude
+    - e1071
+    - ggrepel
+    - performance
+    - see
+---
+
+```{webr}
+#| autorun: true
+library(magrittr)
+library(tidyverse)
+library(modeldata)
+```
+
+{{< include deliveries_dirty.qmd >}}
+
+# 脏数据清洗
+
+`modeldata::deliveries` 包含 10012 条单一餐厅订单记录, 变量包括配送耗时 `time_to_delivery`, 下单时间 `hour`, 下单时星期几 `day`, 配送距离 `distance`, 以及 27 种菜品数量 `item_01` ~ `item_27`.
+
+`deliveries_dirty` 是其"脏"版本, 我们在其上演示重复、无效与错误三类问题的检测与处理.
+
+```{webr}
+deliveries_dirty %>% dim()
+deliveries_dirty %>% str()
+```
+
+## 重复值
+
+完全相同的多条记录通常源于数据采集或合并时的失误, 直接用 `dplyr::distinct()` 即可去除.
+
+```{webr}
+deliveries_dirty %>%
+    distinct() %>%
+    nrow()
+```
+
+若想先审视一下到底哪些行重复, `janitor::get_dupes()` 比 `group_by() %>% filter(n() > 1)` 更方便
+
+```{webr}
+deliveries_dirty %>%
+    janitor::get_dupes() %>%
+    glimpse()
+```
+
+## 无效值
+
+无效值与分析目标无关, 或不符合字段含义, 如某些菜品数量是 NA, 应去除:
+
+```{webr}
+deliveries_dirty %>%
+    filter(!is.na(item_01)) %>%
+    nrow()
+```
+
+## 错误值
+
+错误值违反物理或基本逻辑约束的取值: 
+
+- `hour` 应取 0--23, 大于 23 即为录入错误
+- `time_to_delivery` 应为正数, 负数可能是测量误差或录入错误
+
+```{webr}
+deliveries_dirty %>%
+    filter(hour <= 23 & hour >= 0) %>%
+    filter(time_to_delivery >= 0) %>%
+    nrow()
+```
+
+## dataReporter
+
+检查脏数据中可能出现的问题往往是一项繁琐的工作. `dataReporter` 提供了一套一键式的自动化数据质量检查工具, 适合在数据清洗的初始阶段快速扫描全局问题.
+
+其主要提供 `summarize()`/`visualize()`/`check()` 三个函数, 分别给出数据摘要、可视化分布与执行问题检测.
+
+`summarize()` 给出每个变量的摘要统计 (类型、缺失数、分位数、最常见取值等), 为简洁起见只看三列:
+
+```{webr}
+deliveries_dirty %>%
+    select(time_to_delivery, hour, distance) %>%
+    dataReporter::summarize()
+```
+
+`visualize()` 为每个变量绘制合适的图形 (数值型画直方图, 类别型画条形图):
+
+```{webr}
+deliveries_dirty %>%
+    select(time_to_delivery, hour, distance) %>%
+    dataReporter::visualize()
+```
+
+`check()` 检查每个变量的常见问题, 包括离群值、唯一值过多、缺失编码异常等:
+
+```{webr}
+dataReporter::check(deliveries_dirty$time_to_delivery)
+```
+
+此外, 直接 `makeDataReport()` 就能生成一个包含这三部分的综合报告:
+
+```r
+dataReporter::makeDataReport(deliveries_dirty, output = "html", replace = TRUE)
+```
+
+# 离群值识别
+
+tidymodels 生态主要关注数据建模及建模前的预处理 (主要是特征工程). 虽然存在提供离群值识别 step 的第三方包 (如 [tidy.outliers](https://github.com/brunocarlin/tidy.outliers)), 但其功能较为有限, 且由个人维护. 因此, 各种离群值识别方法的实现目前仍依赖于特定的包.
+
+为便于演示与可视化, 我们从清理过后的 `deliveries_dirty` 中抽取 500 行子样本, 并选择两列连续变量 `time_to_delivery` 与 `distance`:
+
+```{webr}
+#| autorun: true
+
+deliveries_sub <- 
+    deliveries_dirty %>%
+    distinct() %>%
+    filter(!is.na(item_01)) %>%
+    filter(hour <= 23 & hour >= 0) %>%
+    filter(time_to_delivery >= 0) %>%
+    slice_sample(n = 500) %>%
+    select(time_to_delivery, distance)
+
+deliveries_sub %>% glimpse()
+```
+
+## 基于分布
+
+### 单变量
+
+#### Z 分数
+
+Z 分数即每个数据点减去均值除以标准差, 得到一个表示偏离程度的标准化分数. 通常其绝对值超过 3 即视为离群. 可使用 `base::scale()` 计算:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        z = scale(time_to_delivery)[, 1],
+        is_outlier = abs(z) > 3
+    ) %>%
+    count(is_outlier)
+```
+
+我们画出直方图展示离群值在分布中的位置:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        z = scale(time_to_delivery)[, 1],
+        is_outlier = abs(z) > 3
+    ) %>%
+    ggplot(aes(time_to_delivery, fill = is_outlier)) +
+    geom_histogram(bins = 40)
+```
+
+#### 修正 Z 分数
+
+Z 分数本身的均值与标准差本身就受离群值影响, 在重尾或污染数据下并不稳健. 修正 Z 分数 改用中位数与中位绝对偏差 (MAD) 代替均值与标准差, 更加稳健, 常用阈值是 3.5. 可使用 R 中 `stats::mad()` 计算:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        m_z = (time_to_delivery - median(time_to_delivery)) / mad(time_to_delivery),
+        is_outlier = abs(m_z) > 3.5
+    ) %>%
+    count(is_outlier)
+```
+
+我们同样画出直方图展示修正 Z 分数的离群值位置, 并用虚线标出阈值:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        m_z = (time_to_delivery - median(time_to_delivery)) / mad(time_to_delivery),
+        is_outlier = abs(m_z) > 3.5
+    ) %>%
+    ggplot(aes(m_z, fill = is_outlier)) +
+    geom_histogram(bins = 40) +
+    geom_vline(xintercept = c(-3.5, 3.5), linetype = "dashed")
+```
+
+#### 箱线图
+
+箱线图准则以四分位数与四分位距 (IQR) 划界: 落在下四分位数减 1.5 倍 IQR 与上四分位数加 1.5 倍 IQR 之外的点即视为离群. `grDevices::boxplot.stats()` 直接返回落在该区间之外的点:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        is_outlier = time_to_delivery %in% boxplot.stats(time_to_delivery)$out
+    ) %>%
+    count(is_outlier)
+```
+
+使用 `geom_boxplot()` 可视化时, 默认会把离群点标成单独的点, 画在箱线之外.
+
+```{webr}
+deliveries_sub %>%
+    ggplot(aes(y = time_to_delivery)) +
+    geom_boxplot(outlier.color = "red")
+```
+
+### 多变量
+
+#### 椭圆包络
+
+数据中每个点到分布中心的 **马氏距离** 衡量了它偏离中心的程度 (自动校正了各维度的尺度与相关性). 可使用 `stats::mahalanobis()` 直接计算.
+
+马氏距离的平方在多元正态下近似服从卡方分布, 检测异常值时取 0.975 分位数为阈值即可. 
+
+```{webr}
+features <- deliveries_sub %>% as.matrix()
+
+deliveries_sub %>%
+    mutate(
+        d2 = mahalanobis(features, colMeans(features), cov(features)),
+        is_outlier = d2 > qchisq(0.975, df = ncol(features))
+    ) %>%
+    count(is_outlier)
+```
+
+可以使用 `stat_ellipse()` 画出马氏距离等高线 (椭圆), 以直观展示离群点的位置:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        d2 = mahalanobis(features, colMeans(features), cov(features)),
+        is_outlier = d2 > qchisq(0.975, df = ncol(features))
+    ) %>%
+    ggplot(aes(distance, time_to_delivery)) +
+    geom_point(aes(color = is_outlier), alpha = 0.6) +
+    stat_ellipse(type = "norm", level = 0.975, color = "black")
+```
+
+#### MCD
+
+椭圆包络中, 均值与协方差矩阵本身受离群点影响 (经典统计量并不稳健, "蒙住眼"看一遍数据可能误把离群点拉进中心). MCD (Minimum Covariance Determinant) 在所有指定大小的子集中, 选取协方差矩阵行列式最小者, 据此给出稳健的中心与散布估计.
+
+R 中 `robustbase::covMcd()` 是其经典实现:
+
+```{webr}
+mcd <- robustbase::covMcd(features)
+
+deliveries_sub %>%
+    mutate(
+        d2 = mahalanobis(features, mcd$center, mcd$cov),
+        is_outlier = d2 > qchisq(0.975, df = ncol(features))
+    ) %>%
+    count(is_outlier)
+```
+
+把之前的结果与 MCD 估计的椭圆叠在一起, 可以看到 MCD 椭圆更紧凑, 揪出的离群点更多.
+
+```{webr}
+ellipse_pts <- function(center, cov_mat, level = 0.975, n = 200) {
+    r <- sqrt(qchisq(level, df = 2))
+    theta <- seq(0, 2 * pi, length.out = n)
+    unit <- cbind(cos(theta), sin(theta))
+    pts <- unit %*% chol(cov_mat) * r
+    tibble(
+        time_to_delivery = pts[, 1] + center[1],
+        distance = pts[, 2] + center[2]
+    )
+}
+
+deliveries_sub %>%
+    mutate(
+        d2 = mahalanobis(features, mcd$center, mcd$cov),
+        is_outlier = d2 > qchisq(0.975, df = ncol(features))
+    ) %>%
+    ggplot(aes(distance, time_to_delivery)) +
+    geom_point(aes(color = is_outlier), alpha = 0.6) +
+    geom_path(data = ellipse_pts(colMeans(features), cov(features)), linetype = "dashed") +
+    geom_path(data = ellipse_pts(mcd$center, mcd$cov), color = "blue")
+```
+
+## 基于距离/密度
+
+### LOF
+
+LOF (Local Outlier Factor) 比较每个点的局部密度与其 k 近邻的局部密度, 显著低于邻居即视为离群. LOF 值接近 1 表示与邻居密度相当, 显著大于 1 即为局部离群. 由于 LOF 依赖距离, 不同量纲的变量应先标准化. 包 `dbscan` 提供经典实现:
+
+```{webr}
+deliveries_sub %>%
+    mutate(
+        lof = dbscan::lof(scale(features), minPts = 20),
+        is_outlier = lof > 1.5
+    ) %>%
+    count(is_outlier)
+```
+
+由于 LOF 是连续分数, 我们用渐变色 + 点大小表示各观测的 LOF, 以下散点图中可见离群值具有较高的 LOF 分数
+
+```{webr}
+deliveries_sub %>%
+    mutate(lof = dbscan::lof(scale(features), minPts = 20)) %>%
+    ggplot(aes(distance, time_to_delivery, color = lof, size = lof)) +
+    geom_point(alpha = 0.7) +
+    scale_color_viridis_c(option = "magma", direction = -1) +
+    scale_size_continuous(range = c(1, 5))
+```
+
+## 基于模型
+
+### 孤立森林
+
+**孤立森林** (Isolation Forest) 通过随机选择特征与切分点构建一组孤立树. 由于离群点稀疏且远离其他点, 通常只需较少的切分即可被"孤立"出来, 据此得到 0 到 1 之间的异常分数, 越接近 1 越异常. 包 `solitude` 是 Liu, Ting & Zhou 原始论文的经典实现, 其底层借助 `ranger` 生长极端随机树, 接口为 R6 风格的 `isolationForest$new()`:
+
+```{webr}
+iso_model <- solitude::isolationForest$new(
+    num_trees = 100, sample_size = 256, nproc = 1
+)
+iso_model$fit(deliveries_sub)
+
+iso_scores <- iso_model$predict(deliveries_sub) %>% arrange(id)
+
+deliveries_sub %>%
+    mutate(
+        iso = iso_scores$anomaly_score,
+        is_outlier = iso > 0.6
+    ) %>%
+    count(is_outlier)
+```
+
+类似 LOF, 我们用渐变色显示连续的异常分数:
+
+```{webr}
+deliveries_sub %>%
+    mutate(iso = iso_scores$anomaly_score) %>%
+    ggplot(aes(distance, time_to_delivery, color = iso)) +
+    geom_point(alpha = 0.7, size = 2) +
+    scale_color_viridis_c(option = "magma", direction = -1)
+```
+
+### 单类支持向量机
+
+One-class SVM 在 (核映射后的) 特征空间中寻找一个超平面, 把大部分数据点与原点分开, 落在另一侧的即视为离群. 参数 `nu` 大致控制离群比例的上界.
+
+包 `e1071` (libsvm 的 R 接口) 通过 `type = "one-classification"` 提供实现:
+
+```{webr}
+ocsvm <- e1071::svm(
+    scale(features),
+    type = "one-classification",
+    nu = 0.05, kernel = "radial"
+)
+
+deliveries_sub %>%
+    mutate(
+        is_outlier = !predict(ocsvm, scale(features))
+    ) %>%
+    count(is_outlier)
+```
+
+为直观看到 OCSVM 学到的"边界", 我们在网格上预测一遍, 用填充色绘出决策区域:
+
+```{webr}
+scaled <- scale(features)
+ctr <- attr(scaled, "scaled:center")
+scl <- attr(scaled, "scaled:scale")
+
+grid <- expand_grid(
+    time_to_delivery = seq(min(features[, "time_to_delivery"]), max(features[, "time_to_delivery"]), length.out = 80),
+    distance = seq(min(features[, "distance"]), max(features[, "distance"]), length.out = 80)
+) %>%
+    select(time_to_delivery, distance)
+
+grid$inlier <- predict(
+    ocsvm, scale(as.matrix(grid), center = ctr, scale = scl)
+)
+
+deliveries_sub %>%
+    mutate(is_outlier = !predict(ocsvm, scale(features))) %>%
+    ggplot(aes(distance, time_to_delivery)) +
+    geom_tile(data = grid, aes(fill = inlier), alpha = 0.2) +
+    geom_point(aes(color = is_outlier), alpha = 0.7) +
+    scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "salmon"))
+```
+
+## performance::check_outliers()
+
+包 `performance::check_outliers()` 把上面绝大多数方法包装成统一接口, 并支持多方法投票.
+
+```{webr}
+deliveries_sub %>%
+    performance::check_outliers(
+        method = c("zscore_robust", "iqr", "mahalanobis", "mcd", "lof", "iforest")
+    )
+```
+
+`see::plot.check_outliers()` 提供了其可视化, 使用时直接把 `check_outliers()` 的结果传给 `plot()` 即可:
+
+```{webr}
+deliveries_sub %>%
+    performance::check_outliers(method = "mcd") %>%
+    plot()
+```
+
+## 更多方法
+
+- [`specleanr`](https://github.com/AnthonyBasooma/specleanr): 面向物种分布数据的离群值清洗, 集成了 15 余种识别方法.
+- [CRAN Task View: AnomalyDetection](https://github.com/pridiltal/ctv-AnomalyDetection): 社区维护的异常检测包索引, 覆盖时间序列、空间数据、流数据等场景.

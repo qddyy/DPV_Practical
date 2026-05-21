@@ -1,0 +1,24 @@
+```{webr}
+#| include: false
+#| autorun: true
+
+set.seed(1)
+deliveries_dirty <- modeldata::deliveries %>%
+    # 重复值: 复制 100 条记录
+    bind_rows(modeldata::deliveries %>% slice_sample(n = 100)) %>%
+    # 无效值: 将某些菜品数量设为NA
+    mutate(item_01 = if_else(
+        row_number() %in% sample(n(), 50),
+        NA_integer_, item_01
+    )) %>%
+    # 错误值: 将 50 个 time_to_delivery 取反 (负的耗时无意义)
+    mutate(time_to_delivery = if_else(
+        row_number() %in% sample(n(), 50),
+        -time_to_delivery, time_to_delivery
+    )) %>%
+    # 错误值: 将 30 个 hour 加 24 (超出 0--23 范围)
+    mutate(hour = if_else(
+        row_number() %in% sample(n(), 30),
+        hour + 24L, hour
+    ))
+```

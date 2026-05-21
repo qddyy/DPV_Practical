@@ -3,6 +3,7 @@ project:
   render:
     - "**/*.qmd"
     - "!课时3/step_lencode.qmd"
+    - "!课时4/deliveries_dirty.qmd"
 
 website:
   title: "数据处理与可视化-实践课程"
