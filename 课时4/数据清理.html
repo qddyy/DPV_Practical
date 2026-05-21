@@ -64,7 +64,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../课时4/deliveries_dirty.html" rel="next">
 <link href="../课时3/数据变换.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -230,12 +229,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">数据清理</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../课时4/deliveries_dirty.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deliveries Dirty</span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -312,7 +305,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGli
 
 </div>
 <script type="webr-2-contents">
-eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2V0LnNlZWQoMSlcbmRlbGl2ZXJpZXNfZGlydHkgPC0gbW9kZWxkYXRhOjpkZWxpdmVyaWVzICU+JVxuICAgICMg6YeN5aSN5YC8OiDlpI3liLYgMTAwIOadoeiusOW9lVxuICAgIGJpbmRfcm93cyhtb2RlbGRhdGE6OmRlbGl2ZXJpZXMgJT4lIHNsaWNlX3NhbXBsZShuID0gMTAwKSkgJT4lXG4gICAg5peg5pWI5YC8OiDlsIbmn5Dkupvoj5zlk4HmlbDph4/orr7kuLpOQVxuICAgIG11dGF0ZShpdGVtXzAxID0gaWZfZWxzZShcbiAgICAgICAgcm93X251bWJlcigpICVpbiUgc2FtcGxlKG4oKSwgNTApLFxuICAgICAgICBOQV9pbnRlZ2VyXywgaXRlbV8wMVxuICAgICkpICU+JVxuICAgICMg6ZSZ6K+v5YC8OiDlsIYgNTAg5LiqIHRpbWVfdG9fZGVsaXZlcnkg5Y+W5Y+NICjotJ/nmoTogJfml7bml6DmhI/kuYkpXG4gICAgbXV0YXRlKHRpbWVfdG9fZGVsaXZlcnkgPSBpZl9lbHNlKFxuICAgICAgICByb3dfbnVtYmVyKCkgJWluJSBzYW1wbGUobigpLCA1MCksXG4gICAgICAgIC10aW1lX3RvX2RlbGl2ZXJ5LCB0aW1lX3RvX2RlbGl2ZXJ5XG4gICAgKSkgJT4lXG4gICAgIyDplJnor6/lgLw6IOWwhiAzMCDkuKogaG91ciDliqAgMjQgKOi2heWHuiAwLS0yMyDojIPlm7QpXG4gICAgbXV0YXRlKGhvdXIgPSBpZl9lbHNlKFxuICAgICAgICByb3dfbnVtYmVyKCkgJWluJSBzYW1wbGUobigpLCAzMCksXG4gICAgICAgIGhvdXIgKyAyNEwsIGhvdXJcbiAgICApKSJ9
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2V0LnNlZWQoMSlcbmRlbGl2ZXJpZXNfZGlydHkgPC0gbW9kZWxkYXRhOjpkZWxpdmVyaWVzICU+JVxuICAgICMg6YeN5aSN5YC8OiDlpI3liLYgMTAwIOadoeiusOW9lVxuICAgIGJpbmRfcm93cyhtb2RlbGRhdGE6OmRlbGl2ZXJpZXMgJT4lIHNsaWNlX3NhbXBsZShuID0gMTAwKSkgJT4lXG4gICAgIyDml6DmlYjlgLw6IOWwhuafkOS6m+iPnOWTgeaVsOmHj+iuvuS4uk5BXG4gICAgbXV0YXRlKGl0ZW1fMDEgPSBpZl9lbHNlKFxuICAgICAgICByb3dfbnVtYmVyKCkgJWluJSBzYW1wbGUobigpLCA1MCksXG4gICAgICAgIE5BX2ludGVnZXJfLCBpdGVtXzAxXG4gICAgKSkgJT4lXG4gICAgIyDplJnor6/lgLw6IOWwhiA1MCDkuKogdGltZV90b19kZWxpdmVyeSDlj5blj40gKOi0n+eahOiAl+aXtuaXoOaEj+S5iSlcbiAgICBtdXRhdGUodGltZV90b19kZWxpdmVyeSA9IGlmX2Vsc2UoXG4gICAgICAgIHJvd19udW1iZXIoKSAlaW4lIHNhbXBsZShuKCksIDUwKSxcbiAgICAgICAgLXRpbWVfdG9fZGVsaXZlcnksIHRpbWVfdG9fZGVsaXZlcnlcbiAgICApKSAlPiVcbiAgICAjIOmUmeivr+WAvDog5bCGIDMwIOS4qiBob3VyIOWKoCAyNCAo6LaF5Ye6IDAtLTIzIOiMg+WbtClcbiAgICBtdXRhdGUoaG91ciA9IGlmX2Vsc2UoXG4gICAgICAgIHJvd19udW1iZXIoKSAlaW4lIHNhbXBsZShuKCksIDMwKSxcbiAgICAgICAgaG91ciArIDI0TCwgaG91clxuICAgICkpIn0=
 </script>
 </div>
 <section id="脏数据清洗" class="level1">
@@ -1238,9 +1231,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../课时4/deliveries_dirty.html" class="pagination-link" aria-label="Deliveries Dirty">
-        <span class="nav-page-text">Deliveries Dirty</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
