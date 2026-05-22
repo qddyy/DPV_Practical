@@ -252,7 +252,7 @@ deliveries_maha %>%
 
 #### MCD
 
-椭圆包络中, 均值与协方差矩阵本身受离群点影响 (经典统计量并不稳健, "蒙住眼"看一遍数据可能误把离群点拉进中心). MCD (Minimum Covariance Determinant) 在所有指定大小的子集中, 选取协方差矩阵行列式最小者, 据此给出稳健的中心与散布估计.
+椭圆包络中, 均值与协方差矩阵本身受离群点影响 (经典统计量并不稳健, "蒙住眼"看一遍数据可能误把离群点拉进中心). MCD (Minimum Covariance Determinant) 在所有指定大小 $h$ 的子集中, 选取协方差矩阵行列式最小者, 据此给出稳健的中心与散布估计.
 
 R 中 `robustbase::covMcd()` 是其经典实现:
 
@@ -290,6 +290,40 @@ deliveries_mcd %>%
     geom_path(data = ellipse_pts(colMeans(deliveries_mat), cov(deliveries_mat)), linetype = "dashed") +
     geom_path(data = ellipse_pts(mcd$center, mcd$cov), color = "blue")
 ```
+
+- $h$ 越小, 抗污染能力越强 (理论上 $h \approx n/2$ 时最大可承受约 50% 的污染), 但用来估计的样本少, 效率/精度低;
+- $h$ 越接近 $n$, 用的样本越多, 估计越光滑, 但越接近经典协方差, 越容易被离群点拉偏;
+
+在 `robustbase::covMcd()` 里, 这一参数通过 `alpha` 指定 ($h \approx \alpha n$), 默认为 0.5.
+
+下面同时拟合多个 `alpha`, 把对应的 0.975 椭圆叠在数据上观察其变化:
+
+```{webr}
+alphas <- c(0.5, 0.625, 0.75, 0.875, 1)
+
+mcd_ellipses <-
+    alphas %>%
+    map_dfr(\(a) {
+        if (a == 1) {
+            # alpha = 1 时 MCD 退化
+            center <- colMeans(deliveries_mat)
+            cov_mat <- cov(deliveries_mat)
+        } else {
+            m <- robustbase::covMcd(deliveries_mat, alpha = a)
+            center <- m$center
+            cov_mat <- m$cov
+        }
+        ellipse_pts(center, cov_mat) %>%
+            mutate(alpha = factor(a, levels = alphas))
+    })
+
+ggplot(deliveries_sub, aes(distance, time_to_delivery)) +
+    geom_point(alpha = 0.3) +
+    geom_path(data = mcd_ellipses, aes(color = alpha), linewidth = 0.9) +
+    scale_color_viridis_d(option = "C", end = 0.9)
+```
+
+可以看到, `alpha` 从 0.5 增长到 1 的过程中, MCD 椭圆从一个紧贴主体的小椭圆, 逐步膨胀至与经典椭圆几乎重合.
 
 ## 基于距离/密度
 
@@ -376,7 +410,7 @@ deliveries_ocsvm <-
 deliveries_ocsvm %>% count(is_outlier)
 ```
 
-为直观看到 OCSVM 学到的"边界", 我们在网格上预测一遍, 用填充色绘出决策区域:
+为直观看到 OCSVM 学到的边界, 我们在网格上预测一遍, 用填充色绘出决策区域:
 
 ```{webr}
 scaled <- scale(deliveries_mat)
@@ -401,6 +435,97 @@ deliveries_sub %>%
     geom_point(aes(color = is_outlier), alpha = 0.7) +
     scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "salmon"))
 ```
+
+#### nu 参数对决策边界的影响
+
+`nu` 的几何含义有两条等价的表述: (1) 训练集中被判为离群的样本比例的**上界**; (2) 支持向量比例的**下界**. 实际效果是: `nu` 越小, 决策边界越紧地裹住数据主体外, 判出的离群点更少; `nu` 越大, 边界向内收缩, 判出的离群点更多.
+
+我们在网格上对若干 `nu` 同时预测, 用分面图对比:
+
+```{webr}
+nus <- c(0.01, 0.05, 0.1, 0.3)
+
+grid_coords <- grid %>% select(time_to_delivery, distance)
+
+grid_nu <-
+    nus %>%
+    map_dfr(\(nu_val) {
+        m <- e1071::svm(
+            scaled, type = "one-classification",
+            nu = nu_val, kernel = "radial"
+        )
+        coords <- grid_coords
+        coords$inlier <- predict(
+            m, scale(as.matrix(coords), center = ctr, scale = scl)
+        )
+        coords$nu <- factor(
+            paste0("nu = ", nu_val),
+            levels = paste0("nu = ", nus)
+        )
+        coords
+    })
+
+ggplot() +
+    geom_tile(
+        data = grid_nu,
+        aes(distance, time_to_delivery, fill = inlier),
+        alpha = 0.3
+    ) +
+    geom_point(
+        data = deliveries_sub,
+        aes(distance, time_to_delivery),
+        alpha = 0.5, size = 0.7
+    ) +
+    facet_wrap(~ nu) +
+    scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "salmon"))
+```
+
+可以看到, 当 `nu = 0.01` 时几乎所有点都落在内点区; 而当 `nu = 0.3` 时, 模型把更多点判定为离群点.
+
+#### 核函数对决策边界的影响
+
+`kernel` 决定决策边界在原始空间中的形状. 常用的有四种:
+
+- `linear`: 决策边界在原始空间中就是一条直线/超平面
+- `polynomial`: 多项式核, 边界为多项式曲面
+- `radial` (RBF, 默认): 高斯核
+- `sigmoid`: 双曲正切核
+
+同样用网格预测做分面对比 (其他参数保持默认):
+
+```{webr}
+kernels <- c("linear", "polynomial", "radial", "sigmoid")
+
+grid_kernel <-
+    kernels %>%
+    map_dfr(\(k) {
+        m <- e1071::svm(
+            scaled, type = "one-classification",
+            nu = 0.05, kernel = k
+        )
+        coords <- grid_coords
+        coords$inlier <- predict(
+            m, scale(as.matrix(coords), center = ctr, scale = scl)
+        )
+        coords$kernel <- factor(k, levels = kernels)
+        coords
+    })
+
+ggplot() +
+    geom_tile(
+        data = grid_kernel,
+        aes(distance, time_to_delivery, fill = inlier),
+        alpha = 0.3
+    ) +
+    geom_point(
+        data = deliveries_sub,
+        aes(distance, time_to_delivery),
+        alpha = 0.5, size = 0.7
+    ) +
+    facet_wrap(~ kernel) +
+    scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "salmon"))
+```
+
 
 ## performance::check_outliers()
 
