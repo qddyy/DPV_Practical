@@ -145,7 +145,11 @@ deliveries_sub <-
     select(time_to_delivery, distance)
 
 deliveries_sub %>% glimpse()
+
+deliveries_mat <- deliveries_sub %>% as.matrix()
 ```
+
+这里我们额外构造了一个矩阵 `deliveries_mat`, 以满足后续某些方法的接口需要.
 
 ## 基于分布
 
@@ -227,24 +231,20 @@ deliveries_sub %>%
 马氏距离的平方在多元正态下近似服从卡方分布, 检测异常值时取 0.975 分位数为阈值即可. 
 
 ```{webr}
-features <- deliveries_sub %>% as.matrix()
-
-deliveries_sub %>%
+deliveries_maha <- 
+    deliveries_sub %>%
     mutate(
-        d2 = mahalanobis(features, colMeans(features), cov(features)),
-        is_outlier = d2 > qchisq(0.975, df = ncol(features))
-    ) %>%
-    count(is_outlier)
+        d2 = mahalanobis(deliveries_mat, colMeans(deliveries_mat), cov(deliveries_mat)),
+        is_outlier = d2 > qchisq(0.975, df = ncol(deliveries_mat))
+    )
+
+deliveries_maha %>% count(is_outlier)
 ```
 
 可以使用 `stat_ellipse()` 画出马氏距离等高线 (椭圆), 以直观展示离群点的位置:
 
 ```{webr}
-deliveries_sub %>%
-    mutate(
-        d2 = mahalanobis(features, colMeans(features), cov(features)),
-        is_outlier = d2 > qchisq(0.975, df = ncol(features))
-    ) %>%
+deliveries_maha %>%
     ggplot(aes(distance, time_to_delivery)) +
     geom_point(aes(color = is_outlier), alpha = 0.6) +
     stat_ellipse(type = "norm", level = 0.975, color = "black")
@@ -257,19 +257,22 @@ deliveries_sub %>%
 R 中 `robustbase::covMcd()` 是其经典实现:
 
 ```{webr}
-mcd <- robustbase::covMcd(features)
+mcd <- robustbase::covMcd(deliveries_mat)
 
-deliveries_sub %>%
+deliveries_mcd <- 
+    deliveries_sub %>%
     mutate(
-        d2 = mahalanobis(features, mcd$center, mcd$cov),
-        is_outlier = d2 > qchisq(0.975, df = ncol(features))
-    ) %>%
-    count(is_outlier)
+        d2 = mahalanobis(deliveries_mat, mcd$center, mcd$cov),
+        is_outlier = d2 > qchisq(0.975, df = ncol(deliveries_mat))
+    )
+
+deliveries_mcd %>% count(is_outlier)
 ```
 
-把之前的结果与 MCD 估计的椭圆叠在一起, 可以看到 MCD 椭圆更紧凑, 揪出的离群点更多.
+把之前的椭圆包络与 MCD 估计的椭圆叠在一起, 可以看到 MCD 椭圆更紧凑, 判定出的离群点更多.
 
 ```{webr}
+# 辅助函数: 给定中心与协方差矩阵, 生成椭圆边界上的点
 ellipse_pts <- function(center, cov_mat, level = 0.975, n = 200) {
     r <- sqrt(qchisq(level, df = 2))
     theta <- seq(0, 2 * pi, length.out = n)
@@ -281,14 +284,10 @@ ellipse_pts <- function(center, cov_mat, level = 0.975, n = 200) {
     )
 }
 
-deliveries_sub %>%
-    mutate(
-        d2 = mahalanobis(features, mcd$center, mcd$cov),
-        is_outlier = d2 > qchisq(0.975, df = ncol(features))
-    ) %>%
+deliveries_mcd %>%
     ggplot(aes(distance, time_to_delivery)) +
     geom_point(aes(color = is_outlier), alpha = 0.6) +
-    geom_path(data = ellipse_pts(colMeans(features), cov(features)), linetype = "dashed") +
+    geom_path(data = ellipse_pts(colMeans(deliveries_mat), cov(deliveries_mat)), linetype = "dashed") +
     geom_path(data = ellipse_pts(mcd$center, mcd$cov), color = "blue")
 ```
 
@@ -299,19 +298,20 @@ deliveries_sub %>%
 LOF (Local Outlier Factor) 比较每个点的局部密度与其 k 近邻的局部密度, 显著低于邻居即视为离群. LOF 值接近 1 表示与邻居密度相当, 显著大于 1 即为局部离群. 由于 LOF 依赖距离, 不同量纲的变量应先标准化. 包 `dbscan` 提供经典实现:
 
 ```{webr}
-deliveries_sub %>%
+deliveries_lof <- 
+    deliveries_sub %>%
     mutate(
-        lof = dbscan::lof(scale(features), minPts = 20),
+        lof = dbscan::lof(scale(deliveries_mat), minPts = 20),
         is_outlier = lof > 1.5
-    ) %>%
-    count(is_outlier)
+    )
+
+deliveries_lof %>% count(is_outlier)
 ```
 
 由于 LOF 是连续分数, 我们用渐变色 + 点大小表示各观测的 LOF, 以下散点图中可见离群值具有较高的 LOF 分数
 
 ```{webr}
-deliveries_sub %>%
-    mutate(lof = dbscan::lof(scale(features), minPts = 20)) %>%
+deliveries_lof %>%
     ggplot(aes(distance, time_to_delivery, color = lof, size = lof)) +
     geom_point(alpha = 0.7) +
     scale_color_viridis_c(option = "magma", direction = -1) +
@@ -322,9 +322,11 @@ deliveries_sub %>%
 
 ### 孤立森林
 
-**孤立森林** (Isolation Forest) 通过随机选择特征与切分点构建一组孤立树. 由于离群点稀疏且远离其他点, 通常只需较少的切分即可被"孤立"出来, 据此得到 0 到 1 之间的异常分数, 越接近 1 越异常. 包 `solitude` 是 Liu, Ting & Zhou 原始论文的经典实现, 其底层借助 `ranger` 生长极端随机树, 接口为 R6 风格的 `isolationForest$new()`:
+孤立森林通过随机选择特征与切分点构建一组孤立树. 由于离群点稀疏且远离其他点, 通常只需较少的切分即可被"孤立"出来, 据此得到 0 到 1 之间的异常分数.
 
-```{webr}
+`solitude` 包是 Liu, Ting & Zhou 原始论文的经典实现, 接口为 R6 风格. 由于课件使用的 webR 环境不支持其内部对 ranger 的使用, 这里仅展示代码.
+
+```r
 iso_model <- solitude::isolationForest$new(
     num_trees = 100, sample_size = 256, nproc = 1
 )
@@ -340,15 +342,17 @@ deliveries_sub %>%
     count(is_outlier)
 ```
 
-类似 LOF, 我们用渐变色显示连续的异常分数:
+类似 LOF, 我们用颜色表示异常分数:
 
-```{webr}
+```r
 deliveries_sub %>%
     mutate(iso = iso_scores$anomaly_score) %>%
     ggplot(aes(distance, time_to_delivery, color = iso)) +
     geom_point(alpha = 0.7, size = 2) +
     scale_color_viridis_c(option = "magma", direction = -1)
 ```
+
+[isotree](https://CRAN.R-project.org/package=isotree) 包是孤立森林的另一个高性能实现, 同时也提供了更多变体实现.
 
 ### 单类支持向量机
 
@@ -358,37 +362,40 @@ One-class SVM 在 (核映射后的) 特征空间中寻找一个超平面, 把大
 
 ```{webr}
 ocsvm <- e1071::svm(
-    scale(features),
+    scale(deliveries_mat),
     type = "one-classification",
     nu = 0.05, kernel = "radial"
 )
 
-deliveries_sub %>%
+deliveries_ocsvm <- 
+    deliveries_sub %>%
     mutate(
-        is_outlier = !predict(ocsvm, scale(features))
-    ) %>%
-    count(is_outlier)
+        is_outlier = !predict(ocsvm, scale(deliveries_mat))
+    )
+
+deliveries_ocsvm %>% count(is_outlier)
 ```
 
 为直观看到 OCSVM 学到的"边界", 我们在网格上预测一遍, 用填充色绘出决策区域:
 
 ```{webr}
-scaled <- scale(features)
+scaled <- scale(deliveries_mat)
 ctr <- attr(scaled, "scaled:center")
 scl <- attr(scaled, "scaled:scale")
 
 grid <- expand_grid(
-    time_to_delivery = seq(min(features[, "time_to_delivery"]), max(features[, "time_to_delivery"]), length.out = 80),
-    distance = seq(min(features[, "distance"]), max(features[, "distance"]), length.out = 80)
-) %>%
-    select(time_to_delivery, distance)
-
-grid$inlier <- predict(
-    ocsvm, scale(as.matrix(grid), center = ctr, scale = scl)
+    time_to_delivery = deliveries_mat[, "time_to_delivery"] %>% {seq(min(.), max(.), length.out = 80)},
+    distance = deliveries_mat[, "distance"] %>% {seq(min(.), max(.), length.out = 80)}
 )
 
+grid$inlier <- 
+    ocsvm %>% 
+    predict(
+        scale(as.matrix(grid), center = ctr, scale = scl)
+    )
+
 deliveries_sub %>%
-    mutate(is_outlier = !predict(ocsvm, scale(features))) %>%
+    mutate(is_outlier = !predict(ocsvm, scale(deliveries_mat))) %>%
     ggplot(aes(distance, time_to_delivery)) +
     geom_tile(data = grid, aes(fill = inlier), alpha = 0.2) +
     geom_point(aes(color = is_outlier), alpha = 0.7) +
@@ -414,11 +421,27 @@ deliveries_sub %>%
     plot()
 ```
 
+### easystats
+
+[easystats](https://easystats.github.io/easystats/) 是一系列 R 包的集合, 旨在提供一个统一且一致的框架来在 R 中完成数据处理、建模、诊断、解释和可视化在内的完整分析流程. 它包含多个子包:
+
+- datawizard: 提供了各种数据处理工具, 如数据清洗、转换、可视化等. 
+- performance: 提供了各种模型诊断工具, 包括离群值检测、模型拟合优度评估等. 
+- see: 提供了与 `performance` 包紧密集成的可视化工具, 可以用来直观展示模型预测/诊断结果等
+- parameters: 用于提取和处理模型参数, 支持多种模型类型. 
+- insight: 提供了一个统一的接口来提取模型信息, 如数据、参数、拟合统计量等. 
+- effectsize: 用于计算和解释效应量, 支持多种统计测试和模型类型. 
+- correlation: 提供了各种相关性分析工具, 包括相关矩阵、部分相关等. 
+- modelbased: 提供了一个统一的接口来提取和处理模型结果, 支持多种模型类型. 
+- report: 用于生成分析报告, 支持多种输出格式, 如 HTML、PDF 等.
+- bayestestR: 专注于贝叶斯统计分析, 提供了各种工具来解释和可视化贝叶斯模型的结果. 
+
+与 tidymodels 生态不同的是, easystats 更加关注统计模型而不是机器学习模型. 此外, 其主要提供的功能也更侧重于模型诊断和解释, 以及生成分析报告.
+
 ## 更多方法
 
-- [`specleanr`](https://github.com/AnthonyBasooma/specleanr): 面向物种分布数据的离群值清洗, 集成了 15 余种识别方法.
 - [CRAN Task View: AnomalyDetection](https://github.com/pridiltal/ctv-AnomalyDetection): 社区维护的异常检测包索引, 覆盖时间序列、空间数据、流数据等场景.
-
+- [specleanr](https://github.com/AnthonyBasooma/specleanr): 面向物种分布数据的离群值清洗, 集成了 15 余种识别方法.
 
 # 练习
 
@@ -452,9 +475,9 @@ library(robustbase)
 
 ## 练习 2
 
-使用 R 内置的 `datasets::faithful` 数据集 (272 行, 喷发时长 `eruptions` 与喷发间隔 `waiting`) 完成以下任务:
+使用 R 内置的 `datasets::faithful` 数据集 (272 行, 包含喷发时长 `eruptions` 与喷发间隔 `waiting` 两个变量) 完成以下任务:
 
-- 距离/密度类方法对量纲敏感, 在使用前先对数据标准化
+- 对数据作标准化
 - 至少实现以下 3 种离群值识别方法, 并统计各自判出的离群数:
     - MCD 稳健马氏距离 (`robustbase::covMcd()`, 作为基于分布的方法的代表)
     - LOF (`dbscan::lof()`)
