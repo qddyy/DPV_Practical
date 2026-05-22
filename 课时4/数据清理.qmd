@@ -569,7 +569,7 @@ deliveries_sub %>%
 
 ## 更多方法
 
-- [CRAN Task View: AnomalyDetection](https://github.com/pridiltal/ctv-AnomalyDetection): 社区维护的异常检测包索引, 覆盖时间序列、空间数据、流数据等场景.
+- [CRAN Task View: AnomalyDetection](https://CRAN.R-project.org/view=AnomalyDetection): 社区维护的异常检测包索引, 覆盖时间序列、空间数据、流数据等场景.
 - [specleanr](https://github.com/AnthonyBasooma/specleanr): 面向物种分布数据的离群值清洗, 集成了 15 余种识别方法.
 
 # 练习
