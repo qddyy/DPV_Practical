@@ -458,6 +458,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZGF0YVJlcG9ydGVyOjpjaGVj
 </div>
 <p>此外, 直接 <code>makeDataReport()</code> 就能生成一个包含这三部分的综合报告:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>dataReporter<span class="sc">::</span><span class="fu">makeDataReport</span>(deliveries_dirty, <span class="at">output =</span> <span class="st">"html"</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>类似性质的 R 包还有很多, 如 <a href="https://CRAN.R-project.org/package=DataExplorer">DataExplorer</a>. 这些工具的优点是快速, 但缺点是灵活性较差, 可能无法覆盖特定领域或特定数据集的特殊问题.</p>
+<p>在实际使用中, 一个常见的需求是将领域知识注入数据清洗流程. 因此, 存在专门的数据质量检查工具包, 如 <a href="https://CRAN.R-project.org/package=pointblank">pointblank</a>, <a href="https://CRAN.R-project.org/package=assertr">assertr</a> 等.</p>
 </section>
 </section>
 <section id="离群值识别" class="level1">

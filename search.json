@@ -37,7 +37,7 @@
     "href": "课时4/数据清理.html#datareporter",
     "title": "数据清理",
     "section": "dataReporter",
-    "text": "dataReporter\n检查脏数据中可能出现的问题往往是一项繁琐的工作. dataReporter 提供了一套一键式的自动化数据质量检查工具, 适合在数据清洗的初始阶段快速扫描全局问题.\n其主要提供 summarize()/visualize()/check() 三个函数, 分别给出数据摘要、可视化分布与执行问题检测.\nsummarize() 给出每个变量的摘要统计 (类型、缺失数、分位数、最常见取值等), 为简洁起见只看三列:\n\n\n\n\n\n\nvisualize() 为每个变量绘制合适的图形 (数值型画直方图, 类别型画条形图):\n\n\n\n\n\n\ncheck() 检查每个变量的常见问题, 包括离群值、唯一值过多、缺失编码异常等:\n\n\n\n\n\n\n此外, 直接 makeDataReport() 就能生成一个包含这三部分的综合报告:\ndataReporter::makeDataReport(deliveries_dirty, output = \"html\", replace = TRUE)",
+    "text": "dataReporter\n检查脏数据中可能出现的问题往往是一项繁琐的工作. dataReporter 提供了一套一键式的自动化数据质量检查工具, 适合在数据清洗的初始阶段快速扫描全局问题.\n其主要提供 summarize()/visualize()/check() 三个函数, 分别给出数据摘要、可视化分布与执行问题检测.\nsummarize() 给出每个变量的摘要统计 (类型、缺失数、分位数、最常见取值等), 为简洁起见只看三列:\n\n\n\n\n\n\nvisualize() 为每个变量绘制合适的图形 (数值型画直方图, 类别型画条形图):\n\n\n\n\n\n\ncheck() 检查每个变量的常见问题, 包括离群值、唯一值过多、缺失编码异常等:\n\n\n\n\n\n\n此外, 直接 makeDataReport() 就能生成一个包含这三部分的综合报告:\ndataReporter::makeDataReport(deliveries_dirty, output = \"html\", replace = TRUE)\n类似性质的 R 包还有很多, 如 DataExplorer. 这些工具的优点是快速, 但缺点是灵活性较差, 可能无法覆盖特定领域或特定数据集的特殊问题.\n在实际使用中, 一个常见的需求是将领域知识注入数据清洗流程. 因此, 存在专门的数据质量检查工具包, 如 pointblank, assertr 等.",
     "crumbs": [
       "课时4",
       "数据清理"
