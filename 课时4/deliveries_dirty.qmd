@@ -22,3 +22,45 @@ deliveries_dirty <- modeldata::deliveries %>%
         hour + 24L, hour
     ))
 ```
+
+```{webr}
+#| include: false
+#| autorun: true
+
+set.seed(2024)
+
+ames_clean <- modeldata::ames %>%
+    select(
+        Lot_Area, Year_Built, Year_Sold, Gr_Liv_Area,
+        Full_Bath, Bedroom_AbvGr, Sale_Price, Neighborhood) %>%
+    slice_sample(n = 800)
+
+ames_dirty <- ames_clean
+
+# 1. 重复记录
+ames_dirty <- bind_rows(ames_dirty, ames_clean[sample(800, 20), ])
+m <- nrow(ames_dirty)
+
+# 2. 无效值 NA
+ames_dirty$Sale_Price[sample(m, 15)]  <- NA
+ames_dirty$Gr_Liv_Area[sample(m, 10)] <- NA
+
+# 3. 缺失哨兵值
+ames_dirty$Lot_Area[sample(m, 12)] <- -1
+
+# 4. 逻辑错误
+e <- sample(m, 8)
+ames_dirty$Year_Built[e] <- ames_dirty$Year_Sold[e] + sample(1:5, 8, replace = TRUE)
+
+# 5. 取值越界
+ames_dirty$Year_Sold[sample(m, 5)]  <- 2099
+ames_dirty$Sale_Price[sample(m, 5)] <- 0
+
+# 6. 类别文本不一致
+ames_dirty$Neighborhood <- as.character(ames_dirty$Neighborhood)
+u <- sample(m, 60); ames_dirty$Neighborhood[u] <- toupper(ames_dirty$Neighborhood[u])
+s <- sample(m, 40); ames_dirty$Neighborhood[s] <- paste0("  ", ames_dirty$Neighborhood[s], " ")
+
+# 7. 打乱行序
+ames_dirty <- ames_dirty[sample(m), ]
+```
