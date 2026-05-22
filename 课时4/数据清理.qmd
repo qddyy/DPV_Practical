@@ -126,6 +126,10 @@ dataReporter::check(deliveries_dirty$time_to_delivery)
 dataReporter::makeDataReport(deliveries_dirty, output = "html", replace = TRUE)
 ```
 
+类似性质的 R 包还有很多, 如 [DataExplorer](https://CRAN.R-project.org/package=DataExplorer). 这些工具的优点是快速, 但缺点是灵活性较差, 可能无法覆盖特定领域或特定数据集的特殊问题.
+
+在实际使用中, 一个常见的需求是将领域知识注入数据清洗流程. 因此, 存在专门的数据质量检查工具包, 如 [pointblank](https://CRAN.R-project.org/package=pointblank), [assertr](https://CRAN.R-project.org/package=assertr) 等.
+
 # 离群值识别
 
 tidymodels 生态主要关注数据建模及建模前的预处理 (主要是特征工程). 虽然存在提供离群值识别 step 的第三方包 (如 [tidy.outliers](https://github.com/brunocarlin/tidy.outliers)), 但其功能较为有限, 且由个人维护. 因此, 各种离群值识别方法的实现目前仍依赖于特定的包.
