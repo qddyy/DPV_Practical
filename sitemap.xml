@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时4/数据清理.html</loc>
-    <lastmod>2026-05-22T04:51:16.135Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时2/数据重塑.html</loc>
-    <lastmod>2026-05-22T04:51:16.134Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时1/tidyverse介绍.html</loc>
-    <lastmod>2026-05-22T04:51:16.134Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时1/R基础.html</loc>
-    <lastmod>2026-05-22T04:51:16.133Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/index.html</loc>
-    <lastmod>2026-05-22T04:51:16.133Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时1/R语言介绍.html</loc>
-    <lastmod>2026-05-22T04:51:16.134Z</lastmod>
-  </url>
-  <url>
-    <loc>https://qddyy.github.io/DPV_Practical/课时2/ggplot2介绍.html</loc>
-    <lastmod>2026-05-22T04:51:16.134Z</lastmod>
+    <loc>https://qddyy.github.io/DPV_Practical/课时5/缺失值处理.html</loc>
+    <lastmod>2026-06-11T20:45:09.013Z</lastmod>
   </url>
   <url>
     <loc>https://qddyy.github.io/DPV_Practical/课时3/数据变换.html</loc>
-    <lastmod>2026-05-22T04:51:16.135Z</lastmod>
+    <lastmod>2026-06-11T20:45:09.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时2/ggplot2介绍.html</loc>
+    <lastmod>2026-06-11T20:45:09.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时1/R语言介绍.html</loc>
+    <lastmod>2026-06-11T20:45:09.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/index.html</loc>
+    <lastmod>2026-06-11T20:45:09.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时1/R基础.html</loc>
+    <lastmod>2026-06-11T20:45:09.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时1/tidyverse介绍.html</loc>
+    <lastmod>2026-06-11T20:45:09.012Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时2/数据重塑.html</loc>
+    <lastmod>2026-06-11T20:45:09.013Z</lastmod>
+  </url>
+  <url>
+    <loc>https://qddyy.github.io/DPV_Practical/课时4/数据清理.html</loc>
+    <lastmod>2026-06-11T20:45:09.013Z</lastmod>
   </url>
 </urlset>
