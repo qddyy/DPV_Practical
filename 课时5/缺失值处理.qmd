@@ -1,0 +1,356 @@
+---
+title: "缺失值处理"
+order: 1
+format: live-html
+toc: true
+webr:
+  packages:
+    - recipes
+    - modeldata
+    - magrittr
+    - tidyverse
+    - naniar
+    - UpSetR
+    - mice
+    - randomForest
+    - rsample
+    - gower
+---
+
+```{webr}
+#| autorun: true
+library(magrittr)
+library(tidyverse)
+library(modeldata)
+library(naniar)
+library(recipes)
+```
+
+缺失值处理通常按四个步骤进行: 识别缺失值, 探究缺失机制, 探索缺失模式, 处理缺失值. 相关概念已在理论课中介绍, 本节只演示各步骤在 R 中的实现.
+
+# 识别缺失值
+
+## 特殊编码
+
+很多数据集中, 缺失值被编码成特殊取值 (如 999、unknown). 用一份模拟的电商用户数据演示:
+
+```{webr}
+#| autorun: true
+users <- tribble(
+    ~user_id, ~age, ~coupon, ~spouse_income,     ~source,
+    1001,     23,   0,       "5000",             "App",
+    1002,     999,  10,      "8000",             "Web",
+    1003,     35,   NA,      "12000",            "unknown",
+    1004,     41,   0,       "not applicable",   "App"
+)
+users
+```
+
+`dplyr::na_if()` 把单个特殊取值替换为 NA:
+
+```{webr}
+users %>%
+    mutate(
+        age = na_if(age, 999),
+        source = na_if(source, "unknown")
+    )
+```
+
+`naniar::replace_with_na()` 一次性替换多列的多个特殊取值:
+
+```{webr}
+users %>%
+    replace_with_na(replace = list(age = c(999, -999), source = "unknown"))
+```
+
+## 正常空缺
+
+正常空缺 (如未婚者的配偶收入) 不是缺失值, 不应机械插补, 常转化为指示变量 + 数值列的组合:
+
+```{webr}
+users %>%
+    mutate(
+        has_spouse = spouse_income != "not applicable",
+        spouse_income = spouse_income = as.numeric(na_if(spouse_income, "not applicable"))
+    )
+```
+
+# 探究缺失机制
+
+可能的缺失机制包括 MCAR (完全随机缺失), MAR (随机缺失), MNAR (非随机缺失).
+
+Little (1988) 的卡方检验可用于检验 MCAR 假设, `naniar::mcar_test()` 提供实现. 以含真实缺失的 `modeldata::credit_data` 为例:
+
+```{webr}
+credit <- modeldata::credit_data %>% as_tibble() %T>% print()
+```
+
+```{webr}
+credit %>% 
+    select(Age, Income, Assets, Debt, Amount) %>% 
+    mcar_test()
+```
+
+$p$ 值极小, 拒绝 MCAR 假设.
+
+# 探索缺失模式
+
+变量角度, `naniar::miss_var_summary()` 给出每个变量的缺失数与缺失比例:
+
+```{webr}
+naniar::miss_var_summary(credit)
+```
+
+样本角度, `naniar::miss_case_table()` 按每个样本缺失的变量个数汇总:
+
+```{webr}
+naniar::miss_case_table(credit)
+```
+
+`naniar::vis_miss()` 把整个缺失指示矩阵画出来, 黑色表示缺失:
+
+```{webr}
+naniar::vis_miss(credit)
+```
+
+`naniar::gg_miss_upset()` 展示各缺失组合的频数, 用于观察多个变量是否经常一起缺失:
+
+```{webr}
+naniar::gg_miss_upset(credit)
+```
+
+# 处理缺失值
+
+## 删除缺失值
+
+**行删除法**用 `tidyr::drop_na()`
+
+```{webr}
+credit %>%
+    drop_na() %>%
+    nrow()
+```
+
+**列删除法**: `recipes::step_filter_missing()`
+
+```{webr}
+recipe(Status ~ ., data = credit) %>%
+    step_filter_missing(all_predictors(), threshold = 0.05) %>%
+    prep() %>%
+    tidy(number = 1)
+```
+
+**成对删除法**: 在每次分析时只使用相关变量完整的样本, 如使用 `cor()` 计算相关系数时指定 `use = "pairwise.complete.obs"`:
+
+```{webr}
+credit %>%
+    select(Income, Assets, Debt) %>%
+    cor(use = "pairwise.complete.obs")
+```
+
+## 转换缺失值
+
+recipes 提供两个对应的 step:
+
+`step_indicate_na()` 为指定变量生成缺失指示变量, 适用于把连续变量 "是否缺失" 本身的信息保留下来, 通常与插补配合使用:
+
+```{webr}
+recipe(Status ~ ., data = credit) %>%
+    step_indicate_na(Income, Assets, Debt) %>%
+    prep() %>%
+    bake(new_data = NULL) %>%
+    select(Income, Assets, Debt, starts_with("na_ind"))
+```
+
+`step_unknown()` 把因子变量的缺失直接作为一个新类别 `"unknown"`, 适用于分类变量:
+
+```{webr}
+recipe(Status ~ ., data = credit) %>%
+    step_unknown(Home, Marital, Job) %>%
+    prep() %>%
+    bake(new_data = NULL) %>%
+    count(Home)
+```
+
+## 插补缺失值
+
+我们使用 R 内置的 `datasets::airquality` (`Ozone` 与 `Solar.R` 存在真实缺失):
+
+```{webr}
+air <- datasets::airquality %>% as_tibble()
+
+miss_var_summary(air)
+```
+
+### 均值、中位数与众数
+
+recipes 提供 `step_impute_mean()`、`step_impute_median()` 与 `step_impute_mode()`. 这里用中位数插补:
+
+```{webr}
+air_median <-
+    recipe(~ ., data = air) %>%
+    step_impute_median(Ozone, Solar.R) %>%
+    prep() %>%
+    bake(new_data = NULL)
+
+air_median
+```
+
+### 分组插补
+
+分组插补先把样本分组, 再用组内中心值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 `step_impute_linear()` 实现:
+
+```{webr}
+air_month <- air %>% mutate(Month = factor(Month))
+
+recipe(~ ., data = air_month) %>%
+    step_impute_linear(Ozone, impute_with = c(Month)) %>%
+    prep() %>%
+    bake(new_data = NULL)
+```
+
+### K 近邻插补
+
+recipes 的 `step_impute_knn()` 实现 KNN 插补 (内部使用 Gower 距离, 天然支持混合类型变量与含缺失的距离计算):
+
+```{webr}
+air_knn <-
+    recipe(~ ., data = air) %>%
+    step_impute_knn(Ozone, Solar.R, neighbors = 5) %>%
+    prep() %>%
+    bake(new_data = NULL)
+
+air_knn
+```
+
+#### *插补中的数据泄露
+
+插补是建模流程的一部分: 应先划分训练集和测试集, 只用训练集拟合插补规则, 再应用到测试集. recipes 的 `prep()`/`bake()` 设计正是为此:
+
+```{webr}
+library(rsample)
+
+set.seed(2026)
+air_split <- initial_split(air)
+
+rec_trained <-
+    recipe(~ ., data = training(air_split)) %>%
+    step_impute_median(Ozone, Solar.R) %>%
+    prep()
+
+# 测试集使用的是训练集的中位数, 而非测试集自身的中位数
+rec_trained %>% bake(new_data = testing(air_split))
+```
+
+### 回归插补
+
+回归插补用 recipes 的 `step_impute_linear()` 实现, `impute_with` 指定用于预测的变量:
+
+```{webr}
+#| autorun: true
+air_lm <-
+    recipe(~ ., data = air) %>%
+    step_impute_linear(Ozone, impute_with = c(Wind, Temp)) %>%
+    prep() %>%
+    bake(new_data = NULL)
+
+air_lm
+```
+
+基于模型的插补可能越界, 例如产生负的臭氧浓度:
+
+```{webr}
+air_lm %$% sum(Ozone < 0)
+```
+
+### 缺失森林
+
+缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 [missForest](https://CRAN.R-project.org/package=missForest) 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示代码:
+
+```r
+missForest::missForest(as.data.frame(mf_data))
+```
+
+### 多重插补与 MICE
+
+mice 包实现了 MICE 框架.
+
+`mice::md.pattern()` 给出缺失模式矩阵 (蓝色为观测, 红色为缺失):
+
+```{webr}
+mice::md.pattern(air)
+```
+
+`mice::mice()` 执行多重插补, `m` 指定生成的完整数据集个数, `maxit` 为链式迭代轮数:
+
+```{webr}
+air_mice <- mice::mice(air, m = 5, method = "pmm", maxit = 10, seed = 2026, printFlag = FALSE)
+
+air_mice
+```
+
+`mice::densityplot()` 把插补值的分布 (红) 与观测值的分布 (蓝) 画在一起, 用于诊断插补质量:
+
+```{webr}
+mice::densityplot(air_mice, ~ Ozone)
+```
+
+用 `mice::complete()` 提取插补后的完整数据集:
+
+```{webr}
+mice::complete(air_mice, 1) %>% as_tibble()
+```
+
+### PMM
+
+预测均值匹配 (PMM) 是 `mice()` 对连续变量的默认方法 (即上面的 `method = "pmm"`). 由于插补值取自真实观测值, PMM 天然避免了负臭氧这类越界问题, 可以直接验证:
+
+```{webr}
+imputed_ozone <- mice::complete(air_mice, 1)$Ozone[is.na(air$Ozone)]
+
+all(imputed_ozone %in% air$Ozone[!is.na(air$Ozone)])
+```
+
+# 练习
+
+## 练习 1
+
+使用 `modeldata::credit_data` 完成以下缺失值探索与处理任务:
+
+- 用 `naniar::miss_var_summary()` 与 `naniar::miss_case_table()` 分别从变量与样本角度汇总缺失情况
+- 用 `naniar::gg_miss_upset()` 观察哪些变量经常一起缺失
+- 对数值变量子集 (如 `Income`、`Assets`、`Debt`、`Age`、`Amount`) 执行 `naniar::mcar_test()`, 报告能否拒绝 MCAR 假设
+- 划分训练集与测试集; 在训练集上构建 recipe: 对因子变量使用 `step_unknown()`, 对数值变量分别尝试 `step_impute_median()` 与 `step_impute_knn()`, 并用 `step_indicate_na()` 保留 `Income` 的缺失指示变量; `prep()` 后 `bake()` 到测试集
+- 用 `ggplot2` 比较两种插补方式下测试集 `Income` 插补值的分布差异
+
+```{webr}
+library(modeldata)
+library(naniar)
+library(recipes)
+library(rsample)
+library(tidyverse)
+
+data("credit_data")
+set.seed(2026)
+
+# 请在此补充代码
+```
+
+## 练习 2
+
+使用 mice 包内置的 `nhanes` 数据集完成以下多重插补任务:
+
+- 用 `mice::md.pattern()` 查看缺失模式, 数一数共有几种模式、完整样本有几行
+- 用 `mice()` 执行多重插补 (`method = "pmm"`), 分别取 `m = 5` 与 `m = 50`
+- 用 `densityplot()` 诊断 `chl` 的插补值分布是否与观测值分布相近
+- 验证 PMM 的插补值是否全部来自 `chl` 的已观测取值
+
+```{webr}
+library(mice)
+library(tidyverse)
+
+data("nhanes")
+set.seed(2026)
+
+# 请在此补充代码
+```
