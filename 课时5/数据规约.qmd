@@ -1,0 +1,452 @@
+---
+title: "数据规约"
+order: 2
+format: live-html
+toc: true
+webr:
+  packages:
+    - recipes
+    - modeldata
+    - magrittr
+    - tidyverse
+    - glmnet
+    - infotheo
+    - minerva
+    - kernlab
+    - vegan
+    - Rtsne
+    - rsample
+    - MASS
+    - caret
+---
+
+```{webr}
+#| autorun: true
+library(magrittr)
+library(tidyverse)
+library(modeldata)
+library(recipes)
+```
+
+# 特征选择
+
+## 过滤法
+
+### 无监督过滤法
+
+#### 缺失比例高
+
+recipes 包的 `step_filter_missing()` 按缺失比例阈值删除变量. 以含缺失值的 `modeldata::credit_data` 为例, 删除缺失比例超过 5% 的变量:
+
+```{webr}
+credit <- modeldata::credit_data %>% as_tibble()
+```
+
+```{webr}
+rec_miss <-
+    recipe(Status ~ ., data = credit) %>%
+    step_filter_missing(all_predictors(), threshold = 0.05) %>%
+    prep()
+
+# 查看第一个 step 中被删除的变量
+tidy(rec_miss, number = 1)
+```
+
+#### 变异性小
+
+recipes 包提供 `step_zv()` (删除零方差变量) 与更实用的 `step_nzv()` (删除近零方差变量):
+
+```{webr}
+recipe(~ ., data = modeldata::ames) %>%
+    step_nzv(all_numeric()) %>%
+    prep() %>%
+    tidy(number = 1)
+```
+
+#### 强相关
+
+recipes 包的 `step_corr()` 实现了删除强相关变量的贪心算法. 取阈值 0.8, 查看它删除了哪些变量:
+
+```{webr}
+recipe(Sale_Price ~ ., data = modeldata::ames) %>%
+    step_corr(all_numeric_predictors(), threshold = 0.8) %>%
+    prep() %>%
+    tidy(number = 1)
+```
+
+### 有监督过滤法
+
+#### 显著性检验
+
+根据 $X$ 与 $Y$ 的类型选择相应的独立性检验. 构造一个二分类因变量 `expensive` 以演示三类检验:
+
+```{webr}
+ames_sup <-
+    modeldata::ames %>%
+    mutate(expensive = factor(Sale_Price > median(Sale_Price), labels = c("no", "yes")))
+```
+
+```{webr}
+# 定量 X, 定量 Y: 相关系数显著性检验
+ames_sup %$% cor.test(Gr_Liv_Area, Sale_Price)
+```
+
+```{webr}
+# 定性 X, 定量 Y: ANOVA
+aov(Sale_Price ~ Neighborhood, data = ames_sup) %>% summary()
+```
+
+```{webr}
+# 定性 X, 定性 Y: 卡方检验
+ames_sup %$% chisq.test(Central_Air, expensive)
+```
+
+同时检验多个变量时需校正多重比较, `p.adjust()` 提供 Bonferroni、Benjamini-Hochberg 等方法:
+
+```{webr}
+ames_num <- modeldata::ames %>% dplyr::select(where(is.numeric))
+num_preds <- ames_num %>% dplyr::select(-Sale_Price)
+
+map_dbl(num_preds, \(x) cor.test(x, ames_num$Sale_Price)$p.value) %>%
+    enframe(name = "variable", value = "p") %>%
+    mutate(
+        p_bonferroni = p.adjust(p, method = "bonferroni"),
+        p_BH = p.adjust(p, method = "BH")
+    ) %>%
+    arrange(p)
+```
+
+#### 相关性指标
+
+互信息用 `infotheo` 包计算 (先离散化). 对每个数值变量计算其与 `Sale_Price` 的互信息并排序:
+
+```{webr}
+disc <- infotheo::discretize(ames_num)
+
+map_dbl(
+    setdiff(names(disc), "Sale_Price"),
+    \(v) infotheo::mutinformation(disc[[v]], disc[["Sale_Price"]])
+) %>%
+    set_names(setdiff(names(disc), "Sale_Price")) %>%
+    enframe(name = "variable", value = "mi") %>%
+    arrange(desc(mi))
+```
+
+MIC 用 `minerva` 包计算 (开销较大, 这里抽取 500 行):
+
+```{webr}
+set.seed(2026)
+ames_mic <- ames_num %>% slice_sample(n = 500)
+
+map_dbl(
+    setdiff(names(ames_mic), "Sale_Price"),
+    \(v) as.numeric(minerva::mine(ames_mic[[v]], ames_mic$Sale_Price)$MIC)
+) %>%
+    set_names(setdiff(names(ames_mic), "Sale_Price")) %>%
+    enframe(name = "variable", value = "mic") %>%
+    arrange(desc(mic))
+```
+
+#### 有监督离散化
+
+有监督离散化的实现已在上一节[数据变换](../课时3/数据变换.html)中介绍.
+
+## 封装法
+
+下面以 `Sale_Price` 为因变量, 以 `ames_num` 中的数值变量为候选, 用线性回归作为评价模型:
+
+```{webr}
+full_model <- lm(Sale_Price ~ ., data = ames_num)
+null_model <- lm(Sale_Price ~ 1, data = ames_num)
+```
+
+### 向前选择
+
+`MASS::stepAIC()` 提供逐步选择
+
+```{webr}
+forward <-
+    MASS::stepAIC(
+        null_model,
+        scope = list(lower = formula(null_model), upper = formula(full_model)),
+        direction = "forward", trace = 0
+    )
+
+formula(forward)
+```
+
+### 向后选择
+
+```{webr}
+backward <- MASS::stepAIC(full_model, direction = "backward", trace = 0)
+
+formula(backward)
+```
+
+### 递归特征删除
+
+`caret::rfe()` 提供递归特征删除 (RFE) 的实现, `functions = lmFuncs` 指定用线性模型评价, `sizes` 指定要考察的变量子集大小, `rfeControl` 指定重采样方式:
+
+```{webr}
+library(caret)
+
+ctrl <- rfeControl(functions = lmFuncs, method = "cv", number = 5)
+
+rfe_result <- rfe(
+    x = ames_num %>% dplyr::select(-Sale_Price),
+    y = ames_num$Sale_Price,
+    sizes = 1:11,
+    rfeControl = ctrl
+)
+
+rfe_result
+```
+
+`predictors()` 取出最终选中的变量, `ggplot()` 画出模型表现随子集大小的变化:
+
+```{webr}
+predictors(rfe_result)
+```
+
+```{webr}
+ggplot(rfe_result)
+```
+
+## 嵌入法
+
+`glmnet` 包统一实现了带正则化的线性模型: `alpha = 1` 对应 LASSO, `alpha = 0` 对应 Ridge, 中间值对应 Elastic Net. 先把自变量标准化, 因变量取房价的对数, 并定义一个绘制系数路径的辅助函数:
+
+```{webr}
+ames_x <- ames_num %>% dplyr::select(-Sale_Price) %>% scale() %>% as.matrix()
+ames_y <- log10(ames_num$Sale_Price)
+
+plot_coef_path <- function(fit) {
+    fit$beta %>%
+        as.matrix() %>%
+        as_tibble(rownames = "variable") %>%
+        pivot_longer(-variable, names_to = "step", values_to = "coef") %>%
+        mutate(lambda = fit$lambda[as.integer(str_remove(step, "s")) + 1]) %>%
+        ggplot(aes(log(lambda), coef, color = variable)) +
+        geom_line() +
+        theme(legend.position = "none")
+}
+```
+
+### LASSO
+
+```{webr}
+lasso_fit <- glmnet::glmnet(ames_x, ames_y, alpha = 1)
+plot_coef_path(lasso_fit)
+```
+
+`cv.glmnet()` 用交叉验证选择 $\lambda$, 在 `lambda.min` 处查看被保留 (系数非零) 的变量:
+
+```{webr}
+set.seed(2026)
+cv_lasso <- glmnet::cv.glmnet(ames_x, ames_y, alpha = 1)
+
+coef(cv_lasso, s = "lambda.min") %>%
+    as.matrix() %>%
+    as_tibble(rownames = "variable") %>%
+    set_names(c("variable", "coef")) %>%
+    filter(coef != 0, variable != "(Intercept)")
+```
+
+### Ridge
+
+```{webr}
+ridge_fit <- glmnet::glmnet(ames_x, ames_y, alpha = 0)
+plot_coef_path(ridge_fit)
+```
+
+### Elastic Net
+
+```{webr}
+enet_fit <- glmnet::glmnet(ames_x, ames_y, alpha = 0.5)
+plot_coef_path(enet_fit)
+```
+
+在 tidymodels 生态中, 这些模型可以通过 `parsnip::linear_reg(penalty, mixture)` 配合 `glmnet` 引擎统一调用.
+
+# 特征提取
+
+我们以 `modeldata::cells` (56 个数值特征, 二分类标签 `class`) 演示降维:
+
+```{webr}
+cells_X <- modeldata::cells %>% dplyr::select(-case, -class)
+cells_label <- modeldata::cells$class
+
+dim(cells_X)
+```
+
+## 线性
+
+### PCA
+
+用基础函数 `stats::prcomp()` 实现 (先标准化), 把样本投影到前两个主成分上并按类别着色:
+
+```{webr}
+pca <- prcomp(cells_X, scale. = TRUE)
+
+pca$x[, 1:2] %>%
+    as_tibble() %>%
+    mutate(class = cells_label) %>%
+    ggplot(aes(PC1, PC2, color = class)) +
+    geom_point(alpha = 0.4)
+```
+
+在 recipes 中可以用 `step_pca()` 把 PCA 嵌入预处理流程, `num_comp` 指定保留的主成分个数:
+
+```{webr}
+recipe(~ ., data = cells_X) %>%
+    step_normalize(all_numeric_predictors()) %>%
+    step_pca(all_numeric_predictors(), num_comp = 2) %>%
+    prep() %>%
+    bake(new_data = NULL)
+```
+
+### TSVD
+
+用基础函数 `base::svd()` 实现, 对中心化后的数据取前 $k$ 个成分, 以 $U_k D_k$ 作为低维表示:
+
+```{webr}
+M <- scale(cells_X, center = TRUE, scale = FALSE)
+sv <- svd(M)
+
+k <- 2
+embedding <- sv$u[, 1:k] %*% diag(sv$d[1:k])
+
+embedding %>%
+    set_colnames(c("SV1", "SV2")) %>%
+    as_tibble() %>%
+    mutate(class = cells_label) %>%
+    ggplot(aes(SV1, SV2, color = class)) +
+    geom_point(alpha = 0.4)
+```
+
+## 非线性
+
+非线性方法用经典的**瑞士卷**数据演示, 颜色表示沿曲面展开方向的真实坐标:
+
+```{webr}
+set.seed(2026)
+n <- 600
+phi <- runif(n, 1.5 * pi, 4.5 * pi)
+height <- runif(n, 0, 20)
+
+swiss <- tibble(
+    x = phi * cos(phi),
+    y = height,
+    z = phi * sin(phi),
+    color = phi
+)
+swiss_X <- swiss %>% dplyr::select(c(x, y, z)) %>% as.matrix()
+```
+
+### Kernel PCA
+
+`kernlab::kpca()` 提供实现, 这里用高斯核 (RBF), 嵌入坐标用 `kernlab::rotated()` 提取:
+
+```{webr}
+kp <- kernlab::kpca(
+    swiss_X,
+    kernel = "rbfdot", kpar = list(sigma = 0.002), features = 2
+)
+
+kernlab::rotated(kp) %>%
+    set_colnames(c("KPC1", "KPC2")) %>%
+    as_tibble() %>%
+    mutate(color = swiss$color) %>%
+    ggplot(aes(KPC1, KPC2, color = color)) +
+    geom_point() +
+    scale_color_viridis_c()
+```
+
+核宽度参数 `sigma` 对结果影响很大, 需要针对数据调整.
+
+### Isomap
+
+`vegan::isomap()` 提供实现, 输入为距离矩阵, `k` 为构建近邻图的近邻数:
+
+```{webr}
+iso <- vegan::isomap(dist(swiss_X), k = 30, ndim = 2)
+
+iso$points[, 1:2] %>%
+    set_colnames(c("ISO1", "ISO2")) %>%
+    as_tibble() %>%
+    mutate(color = swiss$color) %>%
+    ggplot(aes(ISO1, ISO2, color = color)) +
+    geom_point() +
+    scale_color_viridis_c()
+```
+
+### t-SNE
+
+`Rtsne` 包提供实现, 嵌入坐标在结果的 `$Y` 中:
+
+```{webr}
+set.seed(2026)
+ts <- Rtsne::Rtsne(swiss_X, perplexity = 50, check_duplicates = FALSE)
+
+ts$Y %>%
+    set_colnames(c("TSNE1", "TSNE2")) %>%
+    as_tibble() %>%
+    mutate(color = swiss$color) %>%
+    ggplot(aes(TSNE1, TSNE2, color = color)) +
+    geom_point() +
+    scale_color_viridis_c()
+```
+
+t-SNE 的结果依赖 `perplexity` 等参数与随机初始化, 且具有容易过度离散化的特点.
+
+# 练习
+
+## 练习 1
+
+使用 `modeldata::ames` 完成以下特征选择任务:
+
+- 仅保留数值型变量, 并以 `Sale_Price` 为因变量
+- 划分训练集与测试集
+- **无监督过滤**: 在训练集上用 `step_nzv()` 与 `step_corr()` (阈值 0.85) 构建 recipe, 记录被删除的变量, 并 `bake()` 到测试集
+- **有监督过滤**: 对每个数值自变量与 `Sale_Price` 作相关检验, 用 Benjamini-Hochberg 方法校正 $p$ 值, 选出校正后 $p < 0.01$ 的变量
+- **嵌入法**: 在训练集上用 `glmnet::cv.glmnet()` 拟合 LASSO, 取 `lambda.min` 处系数非零的变量
+- 比较上述三种方式选出的变量集合, 用 `ggplot2` 可视化它们的重叠情况 (如各变量被几种方法同时选中)
+
+```{webr}
+library(modeldata)
+library(rsample)
+library(recipes)
+library(glmnet)
+library(tidyverse)
+
+data("ames")
+set.seed(2026)
+
+# 请在此补充代码
+```
+
+## 练习 2
+
+使用 `modeldata::cells` 完成以下特征提取任务:
+
+- 仅保留 56 个数值特征, 并标准化
+- 分别使用以下方法将数据降到 2 维:
+  - PCA (`prcomp()`)
+  - Kernel PCA (`kernlab::kpca()`)
+  - t-SNE (`Rtsne::Rtsne()`)
+- 对每种方法, 用 `ggplot2` 画出二维嵌入散点图, 并按 `class` 着色
+- 比较四种方法对两类细胞的分离效果
+- 对 PCA 结果, 画出累计方差解释比例随主成分个数变化的曲线, 判断需要多少个主成分才能解释 80% 的方差
+
+```{webr}
+library(modeldata)
+library(kernlab)
+library(Rtsne)
+library(umap)
+library(tidyverse)
+
+data("cells")
+set.seed(2026)
+
+# 请在此补充代码
+```

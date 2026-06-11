@@ -35,7 +35,6 @@ library(recipes)
 很多数据集中, 缺失值被编码成特殊取值 (如 999、unknown). 用一份模拟的电商用户数据演示:
 
 ```{webr}
-#| autorun: true
 users <- tribble(
     ~user_id, ~age, ~coupon, ~spouse_income,     ~source,
     1001,     23,   0,       "5000",             "App",
@@ -247,7 +246,6 @@ rec_trained %>% bake(new_data = testing(air_split))
 回归插补用 recipes 的 `step_impute_linear()` 实现, `impute_with` 指定用于预测的变量:
 
 ```{webr}
-#| autorun: true
 air_lm <-
     recipe(~ ., data = air) %>%
     step_impute_linear(Ozone, impute_with = c(Wind, Temp)) %>%
