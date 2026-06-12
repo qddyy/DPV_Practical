@@ -309,11 +309,10 @@ recipe(~ ., data = cells_X) %>%
 
 ### TSVD
 
-用基础函数 `base::svd()` 实现, 对中心化后的数据取前 $k$ 个成分, 以 $U_k D_k$ 作为低维表示:
+用基础函数 `base::svd()` 实现, 取前 $k = 2$ 个奇异值, 以 其对应的奇异向量构建低维表示:
 
 ```{webr}
-M <- scale(cells_X, center = TRUE, scale = FALSE)
-sv <- svd(M)
+sv <- svd(cells_X)
 
 k <- 2
 embedding <- sv$u[, 1:k] %*% diag(sv$d[1:k])
