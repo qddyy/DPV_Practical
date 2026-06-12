@@ -70,7 +70,7 @@ users %>%
 users %>%
     mutate(
         has_spouse = spouse_income != "not applicable",
-        spouse_income = spouse_income = as.numeric(na_if(spouse_income, "not applicable"))
+        spouse_income = as.numeric(na_if(spouse_income, "not applicable"))
     )
 ```
 
@@ -197,7 +197,7 @@ air_median
 
 ### 分组插补
 
-分组插补先把样本分组, 再用组内中心值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 `step_impute_linear()` 实现:
+分组插补先把样本分组, 再用组内均值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 `step_impute_linear()` 实现:
 
 ```{webr}
 air_month <- air %>% mutate(Month = factor(Month))
@@ -263,13 +263,13 @@ air_lm %$% sum(Ozone < 0)
 
 ### 缺失森林
 
-缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 [missForest](https://CRAN.R-project.org/package=missForest) 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示代码:
+缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 [missForest](https://CRAN.R-project.org/package=missForest) 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示基本用法:
 
 ```r
-missForest::missForest(as.data.frame(mf_data))
+missForest::missForest(as.data.frame(<your_data>))
 ```
 
-### 多重插补与 MICE
+### MICE
 
 mice 包实现了 MICE 框架.
 

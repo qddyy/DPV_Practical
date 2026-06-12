@@ -259,6 +259,8 @@ ridge_fit <- glmnet::glmnet(ames_x, ames_y, alpha = 0)
 plot_coef_path(ridge_fit)
 ```
 
+Ridge 主要用于缓解共线性和降低方差，一般不产生精确的零系数，因此不能像 LASSO 那样直接用于变量筛选.
+
 ### Elastic Net
 
 ```{webr}
@@ -397,7 +399,11 @@ ts$Y %>%
     scale_color_viridis_c()
 ```
 
-t-SNE 的结果依赖 `perplexity` 等参数与随机初始化, 且具有容易过度离散化的特点.
+t-SNE 的结果依赖 `perplexity` 困惑度参数与随机初始化, 且具有容易过度离散化的特点.
+
+### umap
+
+继 t-SNE 后, umap (Uniform Manifold Approximation and Projection) 是另一种流行的非线性降维方法. `uwot::umap()` 提供了一个 Rcpp 原生实现. 由于其也不被 webR 支持, 此处不作演示, 同学们可自行了解.
 
 # 练习
 
@@ -435,14 +441,13 @@ set.seed(2026)
   - Kernel PCA (`kernlab::kpca()`)
   - t-SNE (`Rtsne::Rtsne()`)
 - 对每种方法, 用 `ggplot2` 画出二维嵌入散点图, 并按 `class` 着色
-- 比较四种方法对两类细胞的分离效果
+- 比较三种方法对两类细胞的分离效果
 - 对 PCA 结果, 画出累计方差解释比例随主成分个数变化的曲线, 判断需要多少个主成分才能解释 80% 的方差
 
 ```{webr}
 library(modeldata)
 library(kernlab)
 library(Rtsne)
-library(umap)
 library(tidyverse)
 
 data("cells")
