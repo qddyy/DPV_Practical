@@ -748,7 +748,7 @@
     "href": "课时5/数据规约.html#线性",
     "title": "数据规约",
     "section": "线性",
-    "text": "线性\n\nPCA\n用基础函数 stats::prcomp() 实现 (先标准化), 把样本投影到前两个主成分上并按类别着色:\n\n\n\n\n\n\n在 recipes 中可以用 step_pca() 把 PCA 嵌入预处理流程, num_comp 指定保留的主成分个数:\n\n\n\n\n\n\n\n\nTSVD\n用基础函数 base::svd() 实现, 对中心化后的数据取前 \\(k\\) 个成分, 以 \\(U_k D_k\\) 作为低维表示:",
+    "text": "线性\n\nPCA\n用基础函数 stats::prcomp() 实现 (先标准化), 把样本投影到前两个主成分上并按类别着色:\n\n\n\n\n\n\n在 recipes 中可以用 step_pca() 把 PCA 嵌入预处理流程, num_comp 指定保留的主成分个数:\n\n\n\n\n\n\n\n\nTSVD\n用基础函数 base::svd() 实现, 取前 \\(k = 2\\) 个奇异值, 以 其对应的奇异向量构建低维表示:",
     "crumbs": [
       "课时5",
       "数据规约"
