@@ -59,7 +59,7 @@
     "href": "课时5/缺失值处理.html#插补缺失值",
     "title": "缺失值处理",
     "section": "插补缺失值",
-    "text": "插补缺失值\n我们使用 R 内置的 datasets::airquality (Ozone 与 Solar.R 存在真实缺失):\n\n\n\n\n\n\n\n均值、中位数与众数\nrecipes 提供 step_impute_mean()、step_impute_median() 与 step_impute_mode(). 这里用中位数插补:\n\n\n\n\n\n\n\n\n分组插补\n分组插补先把样本分组, 再用组内中心值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 step_impute_linear() 实现:\n\n\n\n\n\n\n\n\nK 近邻插补\nrecipes 的 step_impute_knn() 实现 KNN 插补 (内部使用 Gower 距离, 天然支持混合类型变量与含缺失的距离计算):\n\n\n\n\n\n\n\n*插补中的数据泄露\n插补是建模流程的一部分: 应先划分训练集和测试集, 只用训练集拟合插补规则, 再应用到测试集. recipes 的 prep()/bake() 设计正是为此:\n\n\n\n\n\n\n\n\n\n回归插补\n回归插补用 recipes 的 step_impute_linear() 实现, impute_with 指定用于预测的变量:\n\n\n\n\n\n\n基于模型的插补可能越界, 例如产生负的臭氧浓度:\n\n\n\n\n\n\n\n\n缺失森林\n缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 missForest 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示代码:\nmissForest::missForest(as.data.frame(mf_data))\n\n\n多重插补与 MICE\nmice 包实现了 MICE 框架.\nmice::md.pattern() 给出缺失模式矩阵 (蓝色为观测, 红色为缺失):\n\n\n\n\n\n\nmice::mice() 执行多重插补, m 指定生成的完整数据集个数, maxit 为链式迭代轮数:\n\n\n\n\n\n\nmice::densityplot() 把插补值的分布 (红) 与观测值的分布 (蓝) 画在一起, 用于诊断插补质量:\n\n\n\n\n\n\n用 mice::complete() 提取插补后的完整数据集:\n\n\n\n\n\n\n\n\nPMM\n预测均值匹配 (PMM) 是 mice() 对连续变量的默认方法 (即上面的 method = \"pmm\"). 由于插补值取自真实观测值, PMM 天然避免了负臭氧这类越界问题, 可以直接验证:",
+    "text": "插补缺失值\n我们使用 R 内置的 datasets::airquality (Ozone 与 Solar.R 存在真实缺失):\n\n\n\n\n\n\n\n均值、中位数与众数\nrecipes 提供 step_impute_mean()、step_impute_median() 与 step_impute_mode(). 这里用中位数插补:\n\n\n\n\n\n\n\n\n分组插补\n分组插补先把样本分组, 再用组内均值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 step_impute_linear() 实现:\n\n\n\n\n\n\n\n\nK 近邻插补\nrecipes 的 step_impute_knn() 实现 KNN 插补 (内部使用 Gower 距离, 天然支持混合类型变量与含缺失的距离计算):\n\n\n\n\n\n\n\n*插补中的数据泄露\n插补是建模流程的一部分: 应先划分训练集和测试集, 只用训练集拟合插补规则, 再应用到测试集. recipes 的 prep()/bake() 设计正是为此:\n\n\n\n\n\n\n\n\n\n回归插补\n回归插补用 recipes 的 step_impute_linear() 实现, impute_with 指定用于预测的变量:\n\n\n\n\n\n\n基于模型的插补可能越界, 例如产生负的臭氧浓度:\n\n\n\n\n\n\n\n\n缺失森林\n缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 missForest 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示基本用法:\nmissForest::missForest(as.data.frame(&lt;your_data&gt;))\n\n\nMICE\nmice 包实现了 MICE 框架.\nmice::md.pattern() 给出缺失模式矩阵 (蓝色为观测, 红色为缺失):\n\n\n\n\n\n\nmice::mice() 执行多重插补, m 指定生成的完整数据集个数, maxit 为链式迭代轮数:\n\n\n\n\n\n\nmice::densityplot() 把插补值的分布 (红) 与观测值的分布 (蓝) 画在一起, 用于诊断插补质量:\n\n\n\n\n\n\n用 mice::complete() 提取插补后的完整数据集:\n\n\n\n\n\n\n\n\nPMM\n预测均值匹配 (PMM) 是 mice() 对连续变量的默认方法 (即上面的 method = \"pmm\"). 由于插补值取自真实观测值, PMM 天然避免了负臭氧这类越界问题, 可以直接验证:",
     "crumbs": [
       "课时5",
       "缺失值处理"
@@ -737,7 +737,7 @@
     "href": "课时5/数据规约.html#嵌入法",
     "title": "数据规约",
     "section": "嵌入法",
-    "text": "嵌入法\nglmnet 包统一实现了带正则化的线性模型: alpha = 1 对应 LASSO, alpha = 0 对应 Ridge, 中间值对应 Elastic Net. 先把自变量标准化, 因变量取房价的对数, 并定义一个绘制系数路径的辅助函数:\n\n\n\n\n\n\n\nLASSO\n\n\n\n\n\n\ncv.glmnet() 用交叉验证选择 \\(\\lambda\\), 在 lambda.min 处查看被保留 (系数非零) 的变量:\n\n\n\n\n\n\n\n\nRidge\n\n\n\n\n\n\n\n\nElastic Net\n\n\n\n\n\n\n在 tidymodels 生态中, 这些模型可以通过 parsnip::linear_reg(penalty, mixture) 配合 glmnet 引擎统一调用.",
+    "text": "嵌入法\nglmnet 包统一实现了带正则化的线性模型: alpha = 1 对应 LASSO, alpha = 0 对应 Ridge, 中间值对应 Elastic Net. 先把自变量标准化, 因变量取房价的对数, 并定义一个绘制系数路径的辅助函数:\n\n\n\n\n\n\n\nLASSO\n\n\n\n\n\n\ncv.glmnet() 用交叉验证选择 \\(\\lambda\\), 在 lambda.min 处查看被保留 (系数非零) 的变量:\n\n\n\n\n\n\n\n\nRidge\n\n\n\n\n\n\nRidge 主要用于缓解共线性和降低方差，一般不产生精确的零系数，因此不能像 LASSO 那样直接用于变量筛选.\n\n\nElastic Net\n\n\n\n\n\n\n在 tidymodels 生态中, 这些模型可以通过 parsnip::linear_reg(penalty, mixture) 配合 glmnet 引擎统一调用.",
     "crumbs": [
       "课时5",
       "数据规约"
@@ -759,7 +759,7 @@
     "href": "课时5/数据规约.html#非线性",
     "title": "数据规约",
     "section": "非线性",
-    "text": "非线性\n非线性方法用经典的瑞士卷数据演示, 颜色表示沿曲面展开方向的真实坐标:\n\n\n\n\n\n\n\nKernel PCA\nkernlab::kpca() 提供实现, 这里用高斯核 (RBF), 嵌入坐标用 kernlab::rotated() 提取:\n\n\n\n\n\n\n核宽度参数 sigma 对结果影响很大, 需要针对数据调整.\n\n\nIsomap\nvegan::isomap() 提供实现, 输入为距离矩阵, k 为构建近邻图的近邻数:\n\n\n\n\n\n\n\n\nt-SNE\nRtsne 包提供实现, 嵌入坐标在结果的 $Y 中:\n\n\n\n\n\n\nt-SNE 的结果依赖 perplexity 等参数与随机初始化, 且具有容易过度离散化的特点.",
+    "text": "非线性\n非线性方法用经典的瑞士卷数据演示, 颜色表示沿曲面展开方向的真实坐标:\n\n\n\n\n\n\n\nKernel PCA\nkernlab::kpca() 提供实现, 这里用高斯核 (RBF), 嵌入坐标用 kernlab::rotated() 提取:\n\n\n\n\n\n\n核宽度参数 sigma 对结果影响很大, 需要针对数据调整.\n\n\nIsomap\nvegan::isomap() 提供实现, 输入为距离矩阵, k 为构建近邻图的近邻数:\n\n\n\n\n\n\n\n\nt-SNE\nRtsne 包提供实现, 嵌入坐标在结果的 $Y 中:\n\n\n\n\n\n\nt-SNE 的结果依赖 perplexity 困惑度参数与随机初始化, 且具有容易过度离散化的特点.\n\n\numap\n继 t-SNE 后, umap (Uniform Manifold Approximation and Projection) 是另一种流行的非线性降维方法. uwot::umap() 提供了一个 Rcpp 原生实现. 由于其也不被 webR 支持, 此处不作演示, 同学们可自行了解.",
     "crumbs": [
       "课时5",
       "数据规约"
@@ -781,7 +781,7 @@
     "href": "课时5/数据规约.html#练习-2",
     "title": "数据规约",
     "section": "练习 2",
-    "text": "练习 2\n使用 modeldata::cells 完成以下特征提取任务:\n\n仅保留 56 个数值特征, 并标准化\n分别使用以下方法将数据降到 2 维:\n\nPCA (prcomp())\nKernel PCA (kernlab::kpca())\nt-SNE (Rtsne::Rtsne())\n\n对每种方法, 用 ggplot2 画出二维嵌入散点图, 并按 class 着色\n比较四种方法对两类细胞的分离效果\n对 PCA 结果, 画出累计方差解释比例随主成分个数变化的曲线, 判断需要多少个主成分才能解释 80% 的方差",
+    "text": "练习 2\n使用 modeldata::cells 完成以下特征提取任务:\n\n仅保留 56 个数值特征, 并标准化\n分别使用以下方法将数据降到 2 维:\n\nPCA (prcomp())\nKernel PCA (kernlab::kpca())\nt-SNE (Rtsne::Rtsne())\n\n对每种方法, 用 ggplot2 画出二维嵌入散点图, 并按 class 着色\n比较三种方法对两类细胞的分离效果\n对 PCA 结果, 画出累计方差解释比例随主成分个数变化的曲线, 判断需要多少个主成分才能解释 80% 的方差",
     "crumbs": [
       "课时5",
       "数据规约"

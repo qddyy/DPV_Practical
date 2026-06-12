@@ -291,6 +291,7 @@ window.Quarto = {
   <li><a href="#kernel-pca" id="toc-kernel-pca" class="nav-link" data-scroll-target="#kernel-pca">Kernel PCA</a></li>
   <li><a href="#isomap" id="toc-isomap" class="nav-link" data-scroll-target="#isomap">Isomap</a></li>
   <li><a href="#t-sne" id="toc-t-sne" class="nav-link" data-scroll-target="#t-sne">t-SNE</a></li>
+  <li><a href="#umap" id="toc-umap" class="nav-link" data-scroll-target="#umap">umap</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#练习" id="toc-练习" class="nav-link" data-scroll-target="#练习">练习</a>
@@ -561,6 +562,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2V0LnNlZWQoMjAyNilcbmN2
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmlkZ2VfZml0IDwtIGdsbW5ldDo6Z2xtbmV0KGFtZXNfeCwgYW1lc195LCBhbHBoYSA9IDApXG5wbG90X2NvZWZfcGF0aChyaWRnZV9maXQpIn0=
 </script>
 </div>
+<p>Ridge 主要用于缓解共线性和降低方差，一般不产生精确的零系数，因此不能像 LASSO 那样直接用于变量筛选.</p>
 </section>
 <section id="elastic-net" class="level3">
 <h3 class="anchored" data-anchor-id="elastic-net">Elastic Net</h3>
@@ -670,7 +672,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaXNvIDwtIHZlZ2FuOjppc29t
 eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2V0LnNlZWQoMjAyNilcbnRzIDwtIFJ0c25lOjpSdHNuZShzd2lzc19YLCBwZXJwbGV4aXR5ID0gNTAsIGNoZWNrX2R1cGxpY2F0ZXMgPSBGQUxTRSlcblxudHMkWSAlPiVcbiAgICBzZXRfY29sbmFtZXMoYyhcIlRTTkUxXCIsIFwiVFNORTJcIikpICU+JVxuICAgIGFzX3RpYmJsZSgpICU+JVxuICAgIG11dGF0ZShjb2xvciA9IHN3aXNzJGNvbG9yKSAlPiVcbiAgICBnZ3Bsb3QoYWVzKFRTTkUxLCBUU05FMiwgY29sb3IgPSBjb2xvcikpICtcbiAgICBnZW9tX3BvaW50KCkgK1xuICAgIHNjYWxlX2NvbG9yX3ZpcmlkaXNfYygpIn0=
 </script>
 </div>
-<p>t-SNE 的结果依赖 <code>perplexity</code> 等参数与随机初始化, 且具有容易过度离散化的特点.</p>
+<p>t-SNE 的结果依赖 <code>perplexity</code> 困惑度参数与随机初始化, 且具有容易过度离散化的特点.</p>
+</section>
+<section id="umap" class="level3">
+<h3 class="anchored" data-anchor-id="umap">umap</h3>
+<p>继 t-SNE 后, umap (Uniform Manifold Approximation and Projection) 是另一种流行的非线性降维方法. <code>uwot::umap()</code> 提供了一个 Rcpp 原生实现. 由于其也不被 webR 支持, 此处不作演示, 同学们可自行了解.</p>
 </section>
 </section>
 </section>
@@ -708,7 +714,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 <li>t-SNE (<code>Rtsne::Rtsne()</code>)</li>
 </ul></li>
 <li>对每种方法, 用 <code>ggplot2</code> 画出二维嵌入散点图, 并按 <code>class</code> 着色</li>
-<li>比较四种方法对两类细胞的分离效果</li>
+<li>比较三种方法对两类细胞的分离效果</li>
 <li>对 PCA 结果, 画出累计方差解释比例随主成分个数变化的曲线, 判断需要多少个主成分才能解释 80% 的方差</li>
 </ul>
 <div>
@@ -716,7 +722,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEp
 
 </div>
 <script type="webr-33-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEpXG5saWJyYXJ5KGtlcm5sYWIpXG5saWJyYXJ5KFJ0c25lKVxubGlicmFyeSh1bWFwKVxubGlicmFyeSh0aWR5dmVyc2UpXG5cbmRhdGEoXCJjZWxsc1wiKVxuc2V0LnNlZWQoMjAyNilcblxuIyDor7flnKjmraTooaXlhYXku6PnoIEifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShtb2RlbGRhdGEpXG5saWJyYXJ5KGtlcm5sYWIpXG5saWJyYXJ5KFJ0c25lKVxubGlicmFyeSh0aWR5dmVyc2UpXG5cbmRhdGEoXCJjZWxsc1wiKVxuc2V0LnNlZWQoMjAyNilcblxuIyDor7flnKjmraTooaXlhYXku6PnoIEifQ==
 </script>
 </div>
 

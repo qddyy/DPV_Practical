@@ -312,7 +312,7 @@ window.Quarto = {
   <li><a href="#k-近邻插补" id="toc-k-近邻插补" class="nav-link" data-scroll-target="#k-近邻插补">K 近邻插补</a></li>
   <li><a href="#回归插补" id="toc-回归插补" class="nav-link" data-scroll-target="#回归插补">回归插补</a></li>
   <li><a href="#缺失森林" id="toc-缺失森林" class="nav-link" data-scroll-target="#缺失森林">缺失森林</a></li>
-  <li><a href="#多重插补与-mice" id="toc-多重插补与-mice" class="nav-link" data-scroll-target="#多重插补与-mice">多重插补与 MICE</a></li>
+  <li><a href="#mice" id="toc-mice" class="nav-link" data-scroll-target="#mice">MICE</a></li>
   <li><a href="#pmm" id="toc-pmm" class="nav-link" data-scroll-target="#pmm">PMM</a></li>
   </ul></li>
   </ul></li>
@@ -395,7 +395,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNlcnMgJT4lXG4gICAgcmVw
 
 </div>
 <script type="webr-5-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNlcnMgJT4lXG4gICAgbXV0YXRlKFxuICAgICAgICBoYXNfc3BvdXNlID0gc3BvdXNlX2luY29tZSAhPSBcIm5vdCBhcHBsaWNhYmxlXCIsXG4gICAgICAgIHNwb3VzZV9pbmNvbWUgPSBzcG91c2VfaW5jb21lID0gYXMubnVtZXJpYyhuYV9pZihzcG91c2VfaW5jb21lLCBcIm5vdCBhcHBsaWNhYmxlXCIpKVxuICAgICkifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidXNlcnMgJT4lXG4gICAgbXV0YXRlKFxuICAgICAgICBoYXNfc3BvdXNlID0gc3BvdXNlX2luY29tZSAhPSBcIm5vdCBhcHBsaWNhYmxlXCIsXG4gICAgICAgIHNwb3VzZV9pbmNvbWUgPSBhcy5udW1lcmljKG5hX2lmKHNwb3VzZV9pbmNvbWUsIFwibm90IGFwcGxpY2FibGVcIikpXG4gICAgKSJ9
 </script>
 </div>
 </section>
@@ -540,7 +540,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYWlyX21lZGlhbiA8LVxuICAg
 </section>
 <section id="分组插补" class="level3">
 <h3 class="anchored" data-anchor-id="分组插补">分组插补</h3>
-<p>分组插补先把样本分组, 再用组内中心值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 <code>step_impute_linear()</code> 实现:</p>
+<p>分组插补先把样本分组, 再用组内均值插补. 其等价于以分组变量 (转为因子) 为唯一自变量的回归插补, 因此可以用 <code>step_impute_linear()</code> 实现:</p>
 <div>
 <div id="webr-19" class="exercise-cell">
 
@@ -597,11 +597,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYWlyX2xtICUkJSBzdW0oT3pv
 </section>
 <section id="缺失森林" class="level3">
 <h3 class="anchored" data-anchor-id="缺失森林">缺失森林</h3>
-<p>缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 <a href="https://CRAN.R-project.org/package=missForest">missForest</a> 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示代码:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>missForest<span class="sc">::</span><span class="fu">missForest</span>(<span class="fu">as.data.frame</span>(mf_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>缺失森林按缺失比例从小到大排列变量, 初始插补后用随机森林轮流建模、反复更新, 直到前后两轮插补值变化足够小. CRAN 上的 <a href="https://CRAN.R-project.org/package=missForest">missForest</a> 包是原始论文作者的实现. 由于其依赖 ranger 包, 而课件使用的 webR 环境不支持该包, 这里仅展示基本用法:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>missForest<span class="sc">::</span><span class="fu">missForest</span>(<span class="fu">as.data.frame</span>(<span class="sc">&lt;</span>your_data<span class="sc">&gt;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="多重插补与-mice" class="level3">
-<h3 class="anchored" data-anchor-id="多重插补与-mice">多重插补与 MICE</h3>
+<section id="mice" class="level3">
+<h3 class="anchored" data-anchor-id="mice">MICE</h3>
 <p>mice 包实现了 MICE 框架.</p>
 <p><code>mice::md.pattern()</code> 给出缺失模式矩阵 (蓝色为观测, 红色为缺失):</p>
 <div>
